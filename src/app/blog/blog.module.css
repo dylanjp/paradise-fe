@@ -1,0 +1,155 @@
+/* blog.module.css */
+
+@font-face {
+  font-family: "TechMono";
+  src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
+}
+
+.page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* move content toward the top */
+    padding-top: 8vh; /* healthy spacing from the top of the viewport */
+    min-height: 100vh;
+    color: #00ffff;
+    font-family: "TechMono";
+    text-align: center;
+  }
+  
+  .title {
+    font-size: 3rem;
+    text-shadow: 0 0 10px #00ffff;
+    margin-bottom: 24px; /* space between h1 and the CTA links */
+  }
+  
+  .text {
+    font-size: 1.5rem;
+  }
+  
+  .ctas {
+  font-family: "TechMono";
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  align-items: center;
+    margin-top: 8px; /* removed negative lift and added modest top gap */
+}
+
+.ctas div {
+  appearance: none;
+  border-radius: 128px;
+  height: 48px;
+  padding: 0 20px;
+  border: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+.navLink {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 15px;
+  font-size: 18px;
+  color: #FF00FF;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.navLink::before {
+  margin-right: 8px;
+  font-size: 16px;
+  transition: transform 0.3s ease;
+}
+
+.navLink::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid #FF00FF;
+  border-bottom: 2px solid #FF00FF;
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.navLink:hover {
+  color: rgb(255, 247, 5);
+}
+
+.navLink:hover::after {
+  width: 50%;
+  height: 50%;
+}
+
+.navLink:hover::before {
+  transform: rotate(360deg);
+}
+
+/* visual active state when a category is selected */
+.navActive {
+  background: rgba(255, 0, 255, 0.06);
+  color: rgb(255, 247, 5);
+  border: 1px solid rgba(255, 0, 255, 0.18);
+}
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+/* layout for blog tiles grid */
+.list {
+  width: 100%;
+  max-width: 1200px;
+  margin: 36px auto 80px;
+  padding: 0 20px;
+}
+
+.grid {
+  display: grid;
+  /* force a single column so each BlogTile is a full-width row */
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.blog-content {
+  font-family: system-ui, sans-serif;
+  line-height: 1.7;
+  white-space: pre-wrap; /* 👈 preserve multiple newlines */
+}
+
+.blog-content p {
+  margin-bottom: 1em;
+}
+
+.blog-content a {
+  color: #61dafb;
+  text-decoration: none;
+}
+
+.blog-content a:hover {
+  text-decoration: underline;
+}
+
+.blog-content img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+/* Hide CTA links on very small screens to avoid layout issues */
+@media (max-width: 650px) {
+  .ctas {
+    display: none;
+  }
+}
+  
