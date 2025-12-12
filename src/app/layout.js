@@ -12,8 +12,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Dylan John Pratt",
-  description: "Dylan's Personal Website",
+  title: "PARADISE",
+  description: "Pratt’s Automated Residential And Data Integration System Engine",
   icons: {
     icon: '/favicon.ico',
   },
