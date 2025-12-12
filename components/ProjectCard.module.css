@@ -1,0 +1,67 @@
+@font-face {
+  font-family: "TechMono";
+  src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* The card itself */
+.card {
+  font-family: "TechMono";
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #00ffff;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  opacity: 0;
+  transform: translateY(20px); /* Initial position for animation */
+  animation: fadeInUp 0.8s ease-out forwards; /* Animation applied here */
+}
+
+/* Staggered animation delays */
+.card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.card:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+/* Hover effect for the card */
+.card:hover {
+  font-family: "TechMono";
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #00ffff;
+}
+
+/* Image container for the card */
+.cardImage {
+  width: 100%;
+  height: 250px; /* fixed height for uniformity */
+  object-fit: cover; /* ensures the image fills the container */
+  display: block;
+}
+
+/* Title of the project card */
+.cardTitle {
+  font-family: "TechMono";
+  font-size: 1.2rem;
+  color: #00ffff;
+  padding: 10px;
+  text-align: center;
+  margin: 0; /* Remove extra spacing below if needed */
+}

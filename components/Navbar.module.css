@@ -1,0 +1,237 @@
+@font-face {
+  font-family: "TechMono";
+  src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 20px;
+  z-index: 100;
+  font-family: "TechMono";
+  flex-wrap: wrap;
+}
+
+/* Retro Home Icon Styles */
+.retroIcon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid #00ffff;
+  box-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 20px #00ffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulseGlow 2s infinite alternate ease-in-out, rotateCircle 4s linear infinite;
+  position: relative;
+  font-size: 10px;
+  line-height: 1;
+  text-align: center;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+.retroIcon:hover {
+  border-color: #ff00ff;
+  box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+}
+
+.innerText {
+  font-size: 10px;
+  line-height: 1;
+  text-align: center;
+  overflow: hidden;
+  display: block;
+  color: #00ffff;
+  transition: color 0.3s ease-in-out;
+}
+
+.retroIcon:hover .innerText {
+  color: #ff00ff;
+}
+
+.retroIcon::before {
+  content: "";
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  border: 2px dashed rgba(0, 255, 255, 0.5);
+  animation: rotateDashed 3s linear infinite;
+}
+
+/* Center Links Container (Desktop) */
+.centerLinks {
+  display: flex;
+  gap: 20px;
+}
+
+.navLink {
+  color: #00ffff;
+  text-decoration: none;
+  font-size: 18px;
+  position: relative;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.activeNavLink {
+  color: #ffff00;
+}
+
+.activeNavLink::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 2px;
+  background-color: purple;
+}
+
+.navLink:hover {
+  color: #ff00ff;
+  transform: scale(1.1);
+  text-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff;
+}
+
+/* Social Icons & Version for Desktop */
+.socialsDesktop {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.icon {
+  font-size: 32px;
+  color: #00ffff;
+  transition: color 0.3s, transform 0.2s;
+}
+
+.icon:hover {
+  color: #ff00ff;
+  transform: scale(1.1);
+}
+
+.version {
+  font-size: 14px;
+  color: #00ffff;
+  padding-left: 10px;
+}
+
+/* Mobile Controls: Version & Hamburger Icon */
+.mobileControls {
+  display: none;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Hamburger Icon */
+.hamburger {
+  font-size: 24px;
+  color: #00ffff;
+  cursor: pointer;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.hamburger:hover {
+  color: #ff00ff;
+  transform: scale(1.1);
+}
+
+/* Mobile Pop-out Submenu */
+.mobileMenu {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0;
+  gap: 10px;
+  z-index: 200;
+  border-top: 1px solid #00ffff;
+  animation: slideDown 0.3s ease-in-out;
+}
+
+.mobileNavLink {
+  color: #00ffff;
+  text-decoration: none;
+  font-size: 18px;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.activeMobileNavLink {
+  color: #ffff00;
+  border-bottom: 2px solid purple;
+}
+
+.mobileNavLink:hover {
+  color: #ff00ff;
+  transform: scale(1.1);
+}
+
+/* Mobile Social Icons (in mobile menu) */
+.mobileSocials {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+/* Animations */
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff;
+  }
+  100% {
+    box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
+  }
+}
+
+@keyframes rotateCircle {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotateDashed {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .centerLinks {
+    display: none;
+  }
+  .socialsDesktop {
+    display: none;
+  }
+  .mobileControls {
+    display: flex;
+  }
+}

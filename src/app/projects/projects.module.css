@@ -1,0 +1,131 @@
+@font-face {
+  font-family: "TechMono";
+  src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
+}
+
+/* Main page container */
+.page {
+  font-family: "TechMono";
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: #00ffff;
+  font-family: "Orbitron", sans-serif;
+  text-align: center;
+  padding: 40px;
+  gap: 32px;
+  position: relative; /* Ensure content stays in place */
+  z-index: 2; /* Ensure it's above the background */
+}
+
+/* Background section, remains static and unaffected by animation */
+.pageBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #000; /* Or any background you prefer */
+  z-index: -1; /* Ensure background stays behind the content */
+}
+
+/* Content section that will be animated */
+/* Reduced top margin so content doesn't push Navbar */
+.pageContent {
+  animation: pageLoad 0.8s ease-out;
+  z-index: 1; /* Ensure content stays above background */
+  margin-top: 20px;
+}
+
+/* Title styling */
+.title {
+  font-family: "TechMono";
+  font-size: 3rem;
+  text-shadow: 0 0 10px #00ffff;
+}
+
+/* Text styling */
+.text {
+  font-size: 1.5rem;
+  font-family: "TechMono";
+}
+
+/* Grid for project cards */
+.grid {
+  font-family: "TechMono";
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  width: 100%;
+  max-width: 1500px;
+  padding: 20px;
+}
+
+/* Animation for page load */
+@keyframes pageLoad {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staggered animation for ProjectCard tiles */
+.projectCard {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.projectCard:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.projectCard:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.projectCard:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+/* Animation for each project card */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive tweaks for mobile devices */
+@media (max-width: 768px) {
+  /* Reduce overall page padding and gap */
+  .page {
+    padding: 20px;
+    gap: 16px;
+  }
+
+  /* Scale down the title and text sizes */
+  .title {
+    font-size: 2.5rem;
+  }
+  .text {
+    font-size: 1.2rem;
+  }
+
+  /* Change grid layout to single-column for mobile */
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 10px;
+  }
+}
