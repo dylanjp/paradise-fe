@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FaCamera, FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 import { SiImmich } from "react-icons/si";
 import { SiPlex } from "react-icons/si";
 import { SiHomeassistant } from "react-icons/si";
@@ -52,28 +52,28 @@ export default function Navbar() {
         {/* Right Side for Desktop: Social Icons & Version */}
         <div className={styles.socialsDesktop}>
           <a
-            href="http://192.168.1.241:2283/photos"
+            href={process.env.NEXT_PUBLIC_IMMICH_URL}
             target="_blank"
             className={styles.icon}
           >
             <SiImmich />
           </a>
           <a
-            href="http://192.168.1.241:32400/web/index.html#!/"
+            href={process.env.NEXT_PUBLIC_PLEX_URL}
             target="_blank"
             className={styles.icon}
           >
             <SiPlex />
           </a>
           <a
-            href="http://homeassistant.local:8123/lovelace/0"
+            href={process.env.NEXT_PUBLIC_HOME_ASSISTANT_URL}
             target="_blank"
             className={styles.icon}
           >
             <SiHomeassistant />
           </a>
           <a
-            href="https://192.168.1.1/protect/dashboard/all"
+            href={process.env.NEXT_PUBLIC_PROTECT_URL}
             target="_blank"
             className={styles.icon}
           >
@@ -121,28 +121,28 @@ export default function Navbar() {
             {/* Social Icons at the bottom of the mobile menu */}
             <div className={styles.mobileSocials}>
               <a
-                href="http://192.168.1.241:2283/photos"
+                href={process.env.NEXT_PUBLIC_IMMICH_URL}
                 target="_blank"
                 className={styles.icon}
               >
                 <SiImmich />
               </a>
               <a
-                href="http://192.168.1.241:32400/web/index.html#!/"
+                href={process.env.NEXT_PUBLIC_PLEX_URL}
                 target="_blank"
                 className={styles.icon}
               >
                 <SiPlex />
               </a>
               <a
-                href="http://homeassistant.local:8123/lovelace/0"
+                href={process.env.NEXT_PUBLIC_HOME_ASSISTANT_URL}
                 target="_blank"
                 className={styles.icon}
               >
                 <SiHomeassistant />
               </a>
               <a
-                href="https://192.168.1.1/protect/dashboard/all"
+                href={process.env.NEXT_PUBLIC_PROTECT_URL}
                 target="_blank"
                 className={styles.icon}
               >
