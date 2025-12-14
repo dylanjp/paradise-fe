@@ -1,7 +1,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  
+
   /* Animation Infrastructure - CSS Custom Properties */
   --animation-stagger-delay: 150ms;
   --animation-fade-duration: 600ms;

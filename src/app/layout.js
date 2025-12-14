@@ -13,9 +13,10 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "PARADISE",
-  description: "Pratt’s Automated Residential And Data Integration System Engine",
+  description:
+    "Pratt’s Automated Residential And Data Integration System Engine",
   icons: {
-    icon: '/favicon.ico',
+    icon: "/favicon.ico",
   },
 };
 

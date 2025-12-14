@@ -23,11 +23,16 @@
   height: 50px;
   border-radius: 50%;
   border: 2px solid #00ffff;
-  box-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 20px #00ffff;
+  box-shadow:
+    0 0 5px #00ffff,
+    0 0 10px #00ffff,
+    0 0 20px #00ffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: pulseGlow 2s infinite alternate ease-in-out, rotateCircle 4s linear infinite;
+  animation:
+    pulseGlow 2s infinite alternate ease-in-out,
+    rotateCircle 4s linear infinite;
   position: relative;
   font-size: 10px;
   line-height: 1;
@@ -38,7 +43,10 @@
 
 .retroIcon:hover {
   border-color: #ff00ff;
-  box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+  box-shadow:
+    0 0 10px #ff00ff,
+    0 0 20px #ff00ff,
+    0 0 30px #ff00ff;
 }
 
 .innerText {
@@ -76,7 +84,9 @@
   text-decoration: none;
   font-size: 18px;
   position: relative;
-  transition: color 0.3s, transform 0.3s;
+  transition:
+    color 0.3s,
+    transform 0.3s;
 }
 
 .activeNavLink {
@@ -96,7 +106,9 @@
 .navLink:hover {
   color: #ff00ff;
   transform: scale(1.1);
-  text-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff;
+  text-shadow:
+    0 0 10px #ff00ff,
+    0 0 20px #00ffff;
 }
 
 /* Social Icons & Version for Desktop */
@@ -109,7 +121,9 @@
 .icon {
   font-size: 32px;
   color: #00ffff;
-  transition: color 0.3s, transform 0.2s;
+  transition:
+    color 0.3s,
+    transform 0.2s;
 }
 
 .icon:hover {
@@ -135,7 +149,9 @@
   font-size: 24px;
   color: #00ffff;
   cursor: pointer;
-  transition: color 0.3s, transform 0.3s;
+  transition:
+    color 0.3s,
+    transform 0.3s;
 }
 
 .hamburger:hover {
@@ -164,7 +180,9 @@
   color: #00ffff;
   text-decoration: none;
   font-size: 18px;
-  transition: color 0.3s, transform 0.3s;
+  transition:
+    color 0.3s,
+    transform 0.3s;
 }
 
 .activeMobileNavLink {
@@ -187,10 +205,15 @@
 /* Animations */
 @keyframes pulseGlow {
   0% {
-    box-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff;
+    box-shadow:
+      0 0 5px #00ffff,
+      0 0 10px #00ffff;
   }
   100% {
-    box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
+    box-shadow:
+      0 0 10px #00ffff,
+      0 0 20px #00ffff,
+      0 0 30px #00ffff;
   }
 }
 

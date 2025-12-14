@@ -1,92 +1,97 @@
 /* not-found.module.css */
 @font-face {
-    font-family: "TechMono";
-    src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
-  }
+  font-family: "TechMono";
+  src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
+}
 
 .page {
-    font-family: "TechMono";
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    color: #00ffff;
-    font-family: 'Orbitron', sans-serif;
-    text-align: center;
+  font-family: "TechMono";
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: #00ffff;
+  font-family: "Orbitron", sans-serif;
+  text-align: center;
+}
+
+.title {
+  font-family: "TechMono";
+  font-size: 3rem;
+  text-shadow: 0 0 10px #00ffff;
+}
+
+.text {
+  font-family: "TechMono";
+  font-size: 1.5rem;
+}
+
+.modalOverlay {
+  font-family: "TechMono";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  font-family: "TechMono";
+  background: black;
+  border: 2px solid #00ffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px #00ffff;
+  animation: fadeIn 0.5s ease-in-out;
+  max-width: 400px;
+  text-align: center;
+}
+
+.modalTitle {
+  font-family: "TechMono";
+  font-size: 2rem;
+  margin-bottom: 10px;
+  text-shadow: 0 0 5px #00ffff;
+}
+
+.modalText {
+  font-family: "TechMono";
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.closeButton {
+  font-family: "TechMono";
+  background: black;
+  border: 2px solid #00ffff;
+  color: #00ffff;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  text-transform: uppercase;
+  box-shadow: 0 0 10px #00ffff;
+  transition: all 0.3s;
+}
+
+.closeButton:hover {
+  background: #00ffff;
+  color: black;
+  box-shadow: 0 0 20px #00ffff;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
   }
-  
-  .title {
-    font-family: "TechMono";
-    font-size: 3rem;
-    text-shadow: 0 0 10px #00ffff;
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
-  
-  .text {
-    font-family: "TechMono";
-    font-size: 1.5rem;
-  }
-  
-  .modalOverlay {
-    font-family: "TechMono";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  
-  .modal {
-    font-family: "TechMono";
-    background: black;
-    border: 2px solid #00ffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px #00ffff;
-    animation: fadeIn 0.5s ease-in-out;
-    max-width: 400px;
-    text-align: center;
-  }
-  
-  .modalTitle {
-    font-family: "TechMono";
-    font-size: 2rem;
-    margin-bottom: 10px;
-    text-shadow: 0 0 5px #00ffff;
-  }
-  
-  .modalText {
-    font-family: "TechMono";
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-  }
-  
-  .closeButton {
-    font-family: "TechMono";
-    background: black;
-    border: 2px solid #00ffff;
-    color: #00ffff;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 1rem;
-    text-transform: uppercase;
-    box-shadow: 0 0 10px #00ffff;
-    transition: all 0.3s;
-  }
-  
-  .closeButton:hover {
-    background: #00ffff;
-    color: black;
-    box-shadow: 0 0 20px #00ffff;
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
-  }
-  
+}

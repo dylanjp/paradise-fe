@@ -69,16 +69,22 @@
 .retroName {
   font-family: "Orbitron";
   font-size: 48px;
-  color: #00F8F8; /* Neon cyan */
-  text-shadow: 0 0 2px #00F8F8, 0 0 4px #00F8F8, 0 0 8px #FF00FF; /* Synthwave glow */
+  color: #00f8f8; /* Neon cyan */
+  text-shadow:
+    0 0 2px #00f8f8,
+    0 0 4px #00f8f8,
+    0 0 8px #ff00ff; /* Synthwave glow */
   text-align: center;
 }
 
 .retroSubTitle {
   font-family: "TechMono";
   font-size: 24px;
-  color: #00F8F8; /* Neon cyan */
-  text-shadow: 0 0 2px #00F8F8, 0 0 2px #00F8F8, 0 0 2px #00F8F8; /* Synthwave glow */
+  color: #00f8f8; /* Neon cyan */
+  text-shadow:
+    0 0 2px #00f8f8,
+    0 0 2px #00f8f8,
+    0 0 2px #00f8f8; /* Synthwave glow */
   text-align: center;
   margin-top: -25px; /* Adjust this value to bring it closer */
   font-weight: lighter;
@@ -100,7 +106,10 @@
   padding: 0 20px;
   border: none;
   border: 1px solid transparent;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -116,7 +125,7 @@
   align-items: center;
   padding: 10px 15px;
   font-size: 18px;
-  color: #FF00FF;
+  color: #ff00ff;
   text-decoration: none;
   transition: color 0.3s ease;
 }
@@ -134,9 +143,11 @@
   right: 0;
   width: 10px;
   height: 10px;
-  border-right: 2px solid #FF00FF;
-  border-bottom: 2px solid #FF00FF;
-  transition: width 0.3s ease, height 0.3s ease;
+  border-right: 2px solid #ff00ff;
+  border-bottom: 2px solid #ff00ff;
+  transition:
+    width 0.3s ease,
+    height 0.3s ease;
 }
 
 .navLink:hover {
@@ -263,8 +274,6 @@ a.secondary {
   }
 }
 
-
-  
 @media (prefers-color-scheme: dark) {
   .logo {
     filter: invert();

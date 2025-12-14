@@ -22,7 +22,9 @@
   border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
   opacity: 0;
   transform: translateY(20px); /* Initial position for animation */
   animation: fadeInUp 0.8s ease-out forwards; /* Animation applied here */

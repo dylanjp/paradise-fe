@@ -1,158 +1,178 @@
-
 .tile {
-	display: flex;
-	gap: 20px;
-	padding: 20px 20px 10px;
-	border-radius: 12px;
-	background: linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.35));
-	border: 2px solid rgba(0,200,255,0.12);
-	box-shadow: 0 6px 30px rgba(0,200,255,0.04), inset 0 0 40px rgba(0,200,255,0.02);
-	align-items: center;
-	min-height: 160px;
-	transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
-	cursor: pointer; 
-	position: relative; 
-	overflow: visible; 
+  display: flex;
+  gap: 20px;
+  padding: 20px 20px 10px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.35));
+  border: 2px solid rgba(0, 200, 255, 0.12);
+  box-shadow:
+    0 6px 30px rgba(0, 200, 255, 0.04),
+    inset 0 0 40px rgba(0, 200, 255, 0.02);
+  align-items: center;
+  min-height: 160px;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+  cursor: pointer;
+  position: relative;
+  overflow: visible;
 }
 
 /* load-time tron-like glow (runs once per tile, staggered via --anim-delay) */
 @keyframes tronGlow {
-	0% {
-		box-shadow: 0 2px 8px rgba(0,200,255,0.02), inset 0 0 10px rgba(0,200,255,0.01);
-		border-color: rgba(0,200,255,0.10);
-	}
-	45% {
-		box-shadow: 0 30px 90px rgba(0,200,255,0.18), inset 0 0 120px rgba(0,200,255,0.12);
-		border-color: rgba(0,200,255,0.7);
-	}
-	100% {
-		box-shadow: 0 6px 30px rgba(0,200,255,0.04), inset 0 0 40px rgba(0,200,255,0.02);
-		border-color: rgba(0,200,255,0.12);
-	}
+  0% {
+    box-shadow:
+      0 2px 8px rgba(0, 200, 255, 0.02),
+      inset 0 0 10px rgba(0, 200, 255, 0.01);
+    border-color: rgba(0, 200, 255, 0.1);
+  }
+  45% {
+    box-shadow:
+      0 30px 90px rgba(0, 200, 255, 0.18),
+      inset 0 0 120px rgba(0, 200, 255, 0.12);
+    border-color: rgba(0, 200, 255, 0.7);
+  }
+  100% {
+    box-shadow:
+      0 6px 30px rgba(0, 200, 255, 0.04),
+      inset 0 0 40px rgba(0, 200, 255, 0.02);
+    border-color: rgba(0, 200, 255, 0.12);
+  }
 }
 
 .tile {
-	/* run glow animation once on mount; delay is set per-tile via --anim-delay */
-	animation: tronGlow 900ms cubic-bezier(.2,.9,.3,1) var(--anim-delay, 0ms) both;
+  /* run glow animation once on mount; delay is set per-tile via --anim-delay */
+  animation: tronGlow 900ms cubic-bezier(0.2, 0.9, 0.3, 1)
+    var(--anim-delay, 0ms) both;
 }
 
 .imageWrap {
-	flex: 0 0 260px;
-	max-width: 260px;
-	padding: 10px;
-	border-radius: 10px;
-	background: linear-gradient(180deg, rgba(0,20,30,0.6), rgba(0,0,0,0.6));
-	border: 2px solid rgba(0,255,255,0.12);
-	box-shadow: 0 0 24px rgba(0,255,255,0.06);
-	display: flex;
-	align-items: center;
-	justify-content: center;
+  flex: 0 0 260px;
+  max-width: 260px;
+  padding: 10px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(0, 20, 30, 0.6), rgba(0, 0, 0, 0.6));
+  border: 2px solid rgba(0, 255, 255, 0.12);
+  box-shadow: 0 0 24px rgba(0, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .image {
-	width: 100%;
-	height: 140px;
-	object-fit: cover;
-	border-radius: 6px;
-	display: block;
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
 }
 
 .imagePlaceholder {
-	color: #00ffff;
-	opacity: 0.6;
+  color: #00ffff;
+  opacity: 0.6;
 }
 
 .content {
-	flex: 1 1 auto;
-	display: flex;
-	flex-direction: column;
-	min-width: 0;
-	height: 100%;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
 }
 
 .title {
-	margin: 0 0 8px 0;
-	color: #00f5ff;
-	font-size: 1.4rem;
-	line-height: 1.15;
-	text-shadow: 0 0 10px rgba(0,245,255,0.14);
+  margin: 0 0 8px 0;
+  color: #00f5ff;
+  font-size: 1.4rem;
+  line-height: 1.15;
+  text-shadow: 0 0 10px rgba(0, 245, 255, 0.14);
 }
 
 .desc {
-	margin: 0;
-	color: #da2cf2;
-	opacity: 0.95;
-	font-size: 1.05rem;
-	flex: 1 1 auto;
-	display: flex;
-	align-items: center;
-	justify-content: center; 
-	text-align: center; 
-	padding: 4px 0;
+  margin: 0;
+  color: #da2cf2;
+  opacity: 0.95;
+  font-size: 1.05rem;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4px 0;
 }
 
 .bottomRow {
-	margin-top: auto; 
-	margin-bottom: 0;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	gap: 12px;
+  margin-top: auto;
+  margin-bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
 }
 
 .date {
-	color: #00c9ff;
-	font-size: 0.95rem;
+  color: #00c9ff;
+  font-size: 0.95rem;
 }
 
 .tags {
-	display: flex;
-	gap: 8px;
-	align-items: center;
-	flex-wrap: wrap;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .tag {
-	border: 1px solid rgba(255,0,255,0.12);
-	color: #ff00ff;
-	padding: 4px 10px;
-	border-radius: 999px;
-	font-size: 0.85rem;
-	background: rgba(255,0,255,0.02);
-	text-shadow: 0 0 6px rgba(255,0,255,0.05);
+  border: 1px solid rgba(255, 0, 255, 0.12);
+  color: #ff00ff;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  background: rgba(255, 0, 255, 0.02);
+  text-shadow: 0 0 6px rgba(255, 0, 255, 0.05);
 }
 
 /* hover / focus styles to intensify blue glow */
 .tile:hover,
 .tile:focus {
   transform: translateY(-6px);
-  border-color: rgba(0,200,255,0.6);
-  box-shadow: 0 18px 60px rgba(0,200,255,0.12), inset 0 0 60px rgba(0,200,255,0.06);
+  border-color: rgba(0, 200, 255, 0.6);
+  box-shadow:
+    0 18px 60px rgba(0, 200, 255, 0.12),
+    inset 0 0 60px rgba(0, 200, 255, 0.06);
 }
 
 .tile:focus {
-  outline: 2px solid rgba(0,200,255,0.14);
+  outline: 2px solid rgba(0, 200, 255, 0.14);
   outline-offset: 4px;
 }
 
 .tile::before {
-	content: "";
-	position: absolute;
-	inset: -10px;
-	border-radius: 16px;
-	pointer-events: none;
-	opacity: 0;
-	transform: scale(0.98);
-	transition: opacity 220ms ease, transform 220ms cubic-bezier(.2,.9,.3,1);
-	background: radial-gradient(closest-side, rgba(0,200,255,0.28), rgba(0,200,255,0.08) 40%, transparent 60%);
-	filter: blur(10px);
-	mix-blend-mode: screen;
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border-radius: 16px;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.98);
+  transition:
+    opacity 220ms ease,
+    transform 220ms cubic-bezier(0.2, 0.9, 0.3, 1);
+  background: radial-gradient(
+    closest-side,
+    rgba(0, 200, 255, 0.28),
+    rgba(0, 200, 255, 0.08) 40%,
+    transparent 60%
+  );
+  filter: blur(10px);
+  mix-blend-mode: screen;
 }
 
 .tile:hover::before,
 .tile:focus::before {
-	opacity: 1;
-	transform: scale(1);
+  opacity: 1;
+  transform: scale(1);
 }
 
 .fullLink {
@@ -167,44 +187,44 @@
 /* responsive: stack vertically on small screens */
 /* responsive: stack vertically on small screens */
 @media (max-width: 780px) {
-	.tile {
-		flex-direction: column;
-		align-items: stretch;
-		gap: 14px;
-		min-height: auto;
-	}
+  .tile {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    min-height: auto;
+  }
 
-	.fullLink {
-		flex-direction: column;
-		align-items: stretch;
-	}
+  .fullLink {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
-	.imageWrap {
-		flex: 0 0 auto;
-		width: 100%;
-		max-width: 100%;
-		padding: 8px;
-	}
+  .imageWrap {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 100%;
+    padding: 8px;
+  }
 
-	.image {
-		width: 100%;
-		height: auto;
-		max-height: 240px;
-		object-fit: cover;
-		border-radius: 8px;
-	}
+  .image {
+    width: 100%;
+    height: auto;
+    max-height: 240px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
 
-	.content {
-		width: 100%;
-		text-align: center;
-		padding: 0 6px 10px;
-	}
+  .content {
+    width: 100%;
+    text-align: center;
+    padding: 0 6px 10px;
+  }
 
-	.bottomRow {
-		width: 100%;
-		flex-wrap: wrap;
-		justify-content: center;
-		gap: 10px;
-		margin-top: 10px;
-	}
+  .bottomRow {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
 }
