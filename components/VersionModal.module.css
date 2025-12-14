@@ -96,7 +96,10 @@
   font-size: 1rem;
   text-transform: uppercase;
   box-shadow: 0 0 10px #00ffff;
-  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+  transition:
+    background 0.3s,
+    color 0.3s,
+    box-shadow 0.3s;
 }
 
 .closeButton:hover {

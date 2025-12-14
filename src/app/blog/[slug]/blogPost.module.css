@@ -8,19 +8,25 @@
   line-height: 1.7;
   white-space: pre-wrap; /* preserve all newlines */
   font-family: "TechMono";
-  color: #00F8F8; /* Neon cyan */
-  transition: filter 0.6s ease, opacity 0.6s ease;
+  color: #00f8f8; /* Neon cyan */
+  transition:
+    filter 0.6s ease,
+    opacity 0.6s ease;
   filter: blur(0);
   opacity: 1;
 }
 
 /* small glow so text pops while decoding */
 .deciphering {
-  text-shadow: 0 0 6px #00ffff, 0 0 12px #00ffff;
+  text-shadow:
+    0 0 6px #00ffff,
+    0 0 12px #00ffff;
 }
 
 .decoded {
-  text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+  text-shadow:
+    0 0 10px #00ffff,
+    0 0 20px #00ffff;
 }
 
 .invisibleChar {
@@ -53,21 +59,21 @@
 }
 
 .blogContent a {
-  color: #FF00FF;
+  color: #ff00ff;
   text-decoration: none;
 }
 
 .blogContent h1 {
-  color: #FF00FF;
+  color: #ff00ff;
   text-align: center;
 }
 
 .blogContent h2 {
-  color: #FF00FF;
+  color: #ff00ff;
 }
 
 .blogContent h3 {
-  color: #FF00FF;
+  color: #ff00ff;
 }
 
 .blogContent a:hover {

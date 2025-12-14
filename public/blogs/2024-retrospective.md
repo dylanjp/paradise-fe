@@ -4,7 +4,8 @@
 
 Welcome to my first annual retrospective. I’m writing this to reflect on the past year– celebrating progress and using those insights to refine my plans for 2025. The few times I’ve tried to start a journal have ended up with uninteresting daily updates that I end up deleting. This is my attempt at documenting some life in a more meaningful and interesting way.
 
-This was a big year for the Pratt family. I told Kate that I’ve dubbed it the “Year of Change”. This year had extreme highs, that were the result of a lot of work, stress and growth. I’m excited to share the milestones and memories that made 2024 such a remarkable year.  
+This was a big year for the Pratt family. I told Kate that I’ve dubbed it the “Year of Change”. This year had extreme highs, that were the result of a lot of work, stress and growth. I’m excited to share the milestones and memories that made 2024 such a remarkable year.
+
 ## Part 1: Family
 
 ### New Baby, New Home, New Adventures!
@@ -26,8 +27,8 @@ When our bid was first accepted, we were told the house would likely be finished
 ![Website Screenshot](/blogimages/2024-airbnb.png)
 Pictures of our Airbnb “Castle of Cards” located in Idaho Falls, Idaho
 
-We had been running our little Airbnb experiment for nearly three years at that point. I had earned Superhost status, Kate had a blast designing the space, and we both learned a lot about running a business. After Lizzy was born, we hired a property manager to handle the day-to-day operations, but it still took up a significant chunk of my time. When we found out Kate was expecting again, we decided to explore selling it—ideally in 2025. Those plans were accelerated once we decided to buy a house. The property sold surprisingly fast—and for a price better than we’d expected. So, no complaints!  
-  
+We had been running our little Airbnb experiment for nearly three years at that point. I had earned Superhost status, Kate had a blast designing the space, and we both learned a lot about running a business. After Lizzy was born, we hired a property manager to handle the day-to-day operations, but it still took up a significant chunk of my time. When we found out Kate was expecting again, we decided to explore selling it—ideally in 2025. Those plans were accelerated once we decided to buy a house. The property sold surprisingly fast—and for a price better than we’d expected. So, no complaints!
+
 Then we had to empty the house. Kate rented the biggest U-Haul she could find, and in just one weekend, we completely cleared it out. I managed to bribe Luke into helping, and he was an absolute lifesaver—there’s no way I could have done it all by myself, especially with Kate being pregnant. Dad also pitched in for two of the days, which made a huge difference. Coincidentally, the weekend we emptied the house was also the Lewis family reunion, so when we needed a break, it was nice to catch up with family. Lizzy had a blast running around while I loaded the truck. I’m still not sure how we pulled it off, but somehow, we got it all done in a weekend.
 
 The following months were a bit calmer. Kate's parents finished their mission in Pocatello, Idaho, and after talking with Jake, they decided to buy the lots next to ours. We were thrilled to have more family (and babysitters!) close by. Visiting the house each week and watching the progress was exciting. There was a bit of drama with some water damage, but Edge Homes resolved it by replacing all the affected drywall. For our anniversary, Kate and I had a wonderful getaway at Grand America. It was so much fun and exactly the break we needed before the whirlwind of moving and welcoming a new baby.
@@ -44,15 +45,13 @@ John Dylan Pratt was born at 11:32 PM, weighing 7 lbs 13 oz. His delivery was a 
 
 ![Website Screenshot](/blogimages/2024-chole.png)
 
-My parents adopted Chloe as a puppy in 2016, and she’s been living with me since 2018. She kept me company all through COVID, was there when I met Kate, and was super excited to move into Kate’s home after we got married. She was a sweet friend to Lizzy, and I’m grateful that she got to meet John before she passed away. In the months leading up to John’s birth, Chloe started throwing up more than usual. I had her seen by several different vets, but they all told me she was healthy, especially for her age. However, once we came home from the hospital with John, Chloe started throwing up multiple times a day and had a hard time keeping food and water down. I ended up taking her to the animal emergency room a couple of times to try and get her enough fluids. I thought we’d have at least another 3 or 4 years together, and I was so sad that she passed away right when I finally got a yard for her to call her own. 
+My parents adopted Chloe as a puppy in 2016, and she’s been living with me since 2018. She kept me company all through COVID, was there when I met Kate, and was super excited to move into Kate’s home after we got married. She was a sweet friend to Lizzy, and I’m grateful that she got to meet John before she passed away. In the months leading up to John’s birth, Chloe started throwing up more than usual. I had her seen by several different vets, but they all told me she was healthy, especially for her age. However, once we came home from the hospital with John, Chloe started throwing up multiple times a day and had a hard time keeping food and water down. I ended up taking her to the animal emergency room a couple of times to try and get her enough fluids. I thought we’d have at least another 3 or 4 years together, and I was so sad that she passed away right when I finally got a yard for her to call her own.
 
 Ultimately, her vet recommended we put her down before things deteriorated any further. Her last couple of days were pretty peaceful. She was able to lounge in our new yard in the afternoon, and at night, I would sit in her room with her and watch Batman cartoons—a routine we’d gotten into after vet visits. Luke came with me when it was time to put her down. I’ll always be grateful for that.
 
 Chloe was an extremely special dog and I’m so happy that she was a part of my family. For a few years she was the only family I had around. I’ll forever be grateful for that. She set a great example on how to be happy and excited for each new day.
 
 I ended up keeping very busy after Chloe’s death, which was probably a good thing. Kate developed an infection from some retained tissue after giving birth, and she had to have surgery. Thankfully, she recovered very quickly afterward. After that, I focused on getting the townhouse ready to rent. Despite it being a slow time of year for rentals, we were able to find tenants after about a month. That finally closed the chapter on moving a bunch of stuff between different properties, and we could finally enjoy being in our new home with our new baby as a family.
-
-  
 
 ### Lizzy 2024
 
@@ -72,17 +71,16 @@ Kate continues to be the best part of my life. She’s an amazing mother and the
 
 A big highlight of the year was Thanksgiving. Kate had been planning for months to host some of her friends from Austria, and in our new house, we had plenty of space to welcome them. It was so special to have both our families and her friends together for the holiday. Hosting Thanksgiving for the first time in our own home was a memorable experience, and Kate did an incredible job bringing it all together.
 
-At Christmas, she went all out and spoiled me way too much—I'm pretty sure she found a gift for every hobby I have! I love Kate. She truly is the best. 
+At Christmas, she went all out and spoiled me way too much—I'm pretty sure she found a gift for every hobby I have! I love Kate. She truly is the best.
 
 ### Kate and Dylan’s Media Goals 2024
 
-  ![Website Screenshot](/blogimages/2024-mediagoal.png)
-  
+![Website Screenshot](/blogimages/2024-mediagoal.png)
 
 Every year, Kate and I do a “Media Challenge.” When we got married, we wanted a fun way to share experiences that have been important to us throughout our lives. So, at the start of each year, we each pick something for the other to complete by the end of the year. It’s usually a film, book, or video game, but we’re open to other types of experiences too. This year, we each choose shows to watch together. Kate picked “Anne of Green Gables” for me, and I chose “Chuck” for her.
 
-I picked Chuck for Kate because it’s one of my all-time favorite shows. It’s funny, geeky, and I feel like the main character, Chuck, shares a lot of my hobbies and sense of humor. When I asked Kate what she thought of Chuck, here’s what she said:  
-  
+I picked Chuck for Kate because it’s one of my all-time favorite shows. It’s funny, geeky, and I feel like the main character, Chuck, shares a lot of my hobbies and sense of humor. When I asked Kate what she thought of Chuck, here’s what she said:
+
 “Chuck was such a good spy comedy! So many fun adventures with the intersect leading the charge. I think my favorite aspect was all the supporting characters and how they became funnier and funnier with each season. I didn’t love how Chuck was a little wimpy at the beginning or how Sarah totally forgot everything at the end. 
 
 Watching the show gave me some interesting insights into the things younger Dylan valued and found funny. I also didn’t realize how deep his love was for tall blondes. Probably more important than the show though was the fact that I loved having regular dedicated time to spend with Dylan!”
@@ -142,7 +140,7 @@ After deep cleaning, I managed to save the GPU. The motherboard wasn’t so luck
 At the end of 2023, I had some leftover computer parts and used them to build a home server. My first goal was to turn it into a Plex server for two reasons. First, I wanted to create my own personal streaming service. I’ve been feeling some serious subscription fatigue— it seems like everything requires a subscription these days. I just want to own my content. My second goal was to improve how we back up and share our family photos.
 
 The start of the year was spent gathering and organizing photos from phones, computers, and other devices, along with ripping our collection of DVDs and Blu-rays. Sorting through the photos took a long time, and to be honest, there’s still some work left to do. I was able to write a few scripts that helped automate parts of the process, and I also set up a cloud backup to Amazon in case the server ever gives out. In 2025, I’d like to automate this even further so our phones automatically back up to the server without manual effort. I’ll also need to find a better way to handle video storage since the files are too large for the cloud.
-  
+
 On the streaming side, the Plex server is now hosting hundreds of movies, including a lot of 4K content. It’s been incredibly satisfying to have a system that works even when the internet goes down. Looking ahead to 2025, I’d like to push the server’s limits further—maybe even share the library with family. However, I’ll need to stress test both the server and my home network to see how well it can handle the load.
 
 Speaking of home networking, I’ve really gotten into both networking and home automation this year. Once we started house hunting, I began thinking about my ideal smart home setup. Learning and tinkering with networking gear has been a lot of fun, and I had plenty of opinions about where I wanted Ethernet connections while building the house. Since moving in, I’ve laid the groundwork for a solid network with Wi-Fi 7 and have started building out our home security system with cameras. Staying true to my anti-subscription mindset, all the camera footage is stored locally on hard drives in the mechanical room.
@@ -157,21 +155,21 @@ This year, I got to meet my favorite author, Brandon Sanderson! Since he lives i
 
 In September, he released The Most Boring Book Ever, a new children’s book, and held a release event at a local elementary school. The tickets were super affordable, so we went as a family—and it was a blast! Lizzy especially loved the “red dragon” in the story and still talks about how much she likes it. At the end of the event, we got to wait in line and meet him while he signed a couple of our books. We ended up chatting with him about Evermore, and I thanked him for reading the letter I wrote a few years back during one of his YouTube livestreams. He was incredibly kind, and we got a nice family picture together. We also got to meet Kazu Kibuishi, the illustrator of the book, who was just as friendly. He even drew special pictures for Lizzy and the soon-to-arrive John!
 
-Then, in December, I had the chance to attend Dragonsteel Nexus, the convention Brandon hosts every year! When tickets went on sale, they sold out in under an hour and even crashed the ticket site—but thankfully, some friends managed to grab us tickets! It was my first time attending a convention, and the experience made me want to try out others in the future. Kate was feeling sick during parts of the event, so I ended up taking Luke with me one of the days. It was a blast! I picked up a bunch of Cosmere merch, fully embraced the nerdiness, and even scored a copy of the new Stormlight book at the event. I’m currently on chapter 57—and so far, it’s awesome! 
+Then, in December, I had the chance to attend Dragonsteel Nexus, the convention Brandon hosts every year! When tickets went on sale, they sold out in under an hour and even crashed the ticket site—but thankfully, some friends managed to grab us tickets! It was my first time attending a convention, and the experience made me want to try out others in the future. Kate was feeling sick during parts of the event, so I ended up taking Luke with me one of the days. It was a blast! I picked up a bunch of Cosmere merch, fully embraced the nerdiness, and even scored a copy of the new Stormlight book at the event. I’m currently on chapter 57—and so far, it’s awesome!
 
 ## Part 4: Arts and Entertainment
 
 To wrap things up, here’s a quick rundown of the books I read, movies I watched, and other experiences I had this year. Honestly, it felt like a pretty slow year for movies—I can’t think of any particularly memorable ones I watched. I also didn’t really watch much TV.
 
 For books, the big highlight was Wind and Truth, the new Stormlight Archive novel. I haven’t finished it yet, but so far, it’s been amazing. I also read Nothing to Envy: Ordinary Lives in North Korea, which was a bit outside my usual genre. Normally, I stick to fantasy fiction since I enjoy using reading as a form of escapism. However, Kate started reading it and told me about it, so I decided to give it a try. For some reason, I found it incredibly captivating. The author does an excellent job sharing the personal stories of the North Koreans she interviewed, and I felt like it was a powerful, eye-opening read. Fair warning, though—many of the stories are pretty heartbreaking.
-  
+
 ![Website Screenshot](/blogimages/2024-books.png)
-  
+
 For video games, the most notable new experience this year was definitely the Elden Ring DLC. FROM SOFTWARE continues to prove why they’re one of the best in the industry—the expansion felt like a full-blown sequel. I had a blast playing it both solo and co-op with Luke. He even helped me beat the final boss, which was a pretty fun moment. I also played The Legend of Zelda: Echoes of Wisdom. It was a fun puzzle game, and I really loved the art style.
 
 Earlier in the year, I did a replay of Paper Mario and the Thousand-Year Door, which was funny because the Switch remaster was announced right afterward. Currently, I’m working through a PC port of Majora’s Mask when I can find the time.
 
- ![Website Screenshot](/blogimages/2024-games.png) 
+![Website Screenshot](/blogimages/2024-games.png)
 
 ## Part 5: Conclusion & 2025
 

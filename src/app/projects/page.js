@@ -15,11 +15,13 @@ export default function ProjectsPage() {
   return (
     <div className={styles.page}>
       {/* Static Background */}
-      <div className={styles.pageBackground}><Background /></div>
+      <div className={styles.pageBackground}>
+        <Background />
+      </div>
 
       {/* Navbar moved outside animated container */}
       <Navbar />
-      
+
       <div className={styles.pageContent}>
         <h1 className={styles.title}>Projects</h1>
 
@@ -39,7 +41,10 @@ export default function ProjectsPage() {
         )}
 
         {selectedProject && (
-          <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
+          <ProjectModal
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
+          />
         )}
       </div>
     </div>

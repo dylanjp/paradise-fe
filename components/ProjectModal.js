@@ -6,7 +6,6 @@ import PrimaryButton from "./PrimaryButton";
 import TechnologyTag from "./TechnologyTag";
 
 export default function ProjectModal({ project, onClose }) {
-
   const handleClose = () => {
     onClose();
   };
@@ -17,17 +16,21 @@ export default function ProjectModal({ project, onClose }) {
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>
-        <img src={project.image} alt={project.title} className={styles.modalImage} />
+        <img
+          src={project.image}
+          alt={project.title}
+          className={styles.modalImage}
+        />
         <h2 className={styles.modalTitle}>{project.title}</h2>
-          {/* Technology Tags Section */}
+        {/* Technology Tags Section */}
         {project.technologies && project.technologies.length > 0 && (
           <div className={styles.technologySection}>
             <div className={styles.technologyTags}>
               {project.technologies.map((tech, index) => (
-                <TechnologyTag 
-                  key={index} 
-                  name={tech.name} 
-                  color={tech.color} 
+                <TechnologyTag
+                  key={index}
+                  name={tech.name}
+                  color={tech.color}
                 />
               ))}
             </div>

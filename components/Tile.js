@@ -12,9 +12,7 @@ export default function Tile({ tileData }) {
         <img src={imageSrc} alt={title} className={styles.tileImage} />
       )}
 
-      {type === "text" && (
-        <p className={styles.tileText}>{content}</p>
-      )}
+      {type === "text" && <p className={styles.tileText}>{content}</p>}
 
       {type === "list" && (
         <ul className={styles.tileList}>

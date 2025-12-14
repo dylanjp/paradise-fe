@@ -46,9 +46,11 @@ export default function BlogTile({ blog, index = 0 }: Props) {
           "0 18px 60px rgba(0,200,255,0.12), inset 0 0 60px rgba(0,200,255,0.06)",
         borderColor: "rgba(0,200,255,0.6)",
       }}
-      style={{
-        ["--anim-delay" as any]: `${index * 80}ms`,
-      } as React.CSSProperties}
+      style={
+        {
+          ["--anim-delay" as any]: `${index * 80}ms`,
+        } as React.CSSProperties
+      }
     >
       <Link href={`/blog/${slug || ""}`} className={styles.fullLink}>
         <div className={styles.imageWrap} aria-hidden>

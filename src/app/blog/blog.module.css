@@ -6,34 +6,34 @@
 }
 
 .page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start; /* move content toward the top */
-    padding-top: 8vh; /* healthy spacing from the top of the viewport */
-    min-height: 100vh;
-    color: #00ffff;
-    font-family: "TechMono";
-    text-align: center;
-  }
-  
-  .title {
-    font-size: 3rem;
-    text-shadow: 0 0 10px #00ffff;
-    margin-bottom: 24px; /* space between h1 and the CTA links */
-  }
-  
-  .text {
-    font-size: 1.5rem;
-  }
-  
-  .ctas {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* move content toward the top */
+  padding-top: 8vh; /* healthy spacing from the top of the viewport */
+  min-height: 100vh;
+  color: #00ffff;
+  font-family: "TechMono";
+  text-align: center;
+}
+
+.title {
+  font-size: 3rem;
+  text-shadow: 0 0 10px #00ffff;
+  margin-bottom: 24px; /* space between h1 and the CTA links */
+}
+
+.text {
+  font-size: 1.5rem;
+}
+
+.ctas {
   font-family: "TechMono";
   display: flex;
   gap: 18px;
   justify-content: center;
   align-items: center;
-    margin-top: 8px; /* removed negative lift and added modest top gap */
+  margin-top: 8px; /* removed negative lift and added modest top gap */
 }
 
 .ctas div {
@@ -58,7 +58,7 @@
   align-items: center;
   padding: 10px 15px;
   font-size: 18px;
-  color: #FF00FF;
+  color: #ff00ff;
   text-decoration: none;
   transition: color 0.3s ease;
 }
@@ -76,9 +76,11 @@
   right: 0;
   width: 10px;
   height: 10px;
-  border-right: 2px solid #FF00FF;
-  border-bottom: 2px solid #FF00FF;
-  transition: width 0.3s ease, height 0.3s ease;
+  border-right: 2px solid #ff00ff;
+  border-bottom: 2px solid #ff00ff;
+  transition:
+    width 0.3s ease,
+    height 0.3s ease;
 }
 
 .navLink:hover {
@@ -100,11 +102,17 @@
   color: rgb(255, 247, 5);
   border: 1px solid rgba(255, 0, 255, 0.18);
 }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
   }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 
 /* layout for blog tiles grid */
 .list {
@@ -152,4 +160,3 @@
     display: none;
   }
 }
-  

@@ -18,7 +18,8 @@ export default function VersionModal({ onClose }) {
           {versionData.map(({ version, releaseDate, notes }) => (
             <div key={version} className={styles.versionSection}>
               <h3 className={styles.versionTitle}>
-                {version} <span className={styles.releaseDate}>({releaseDate})</span>
+                {version}{" "}
+                <span className={styles.releaseDate}>({releaseDate})</span>
               </h3>
               <ul className={styles.noteList}>
                 {notes.map((note, index) => (

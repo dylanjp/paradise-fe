@@ -4,128 +4,141 @@
 }
 
 .modalOverlay {
-    font-family: "TechMono";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.85);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    animation: modalFadeIn 0.5s ease-out;
-  }
-  
-  .modal {
-    font-family: "TechMono";
-    background: black;
-    border: 2px solid #00ffff;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 600px;
-    width: 90%;
-    text-align: center;
-    box-shadow: 0 0 20px #00ffff;
-    animation: modalPopIn 0.5s ease-out;
-  }
-  
-  .modalImage {
-    width: 100%;
-    /* Removed fixed height and object-fit */
-    border-radius: 5px;
-    margin-bottom: 20px;
-  }
-  
-  .modalTitle {
-    font-family: "TechMono";
-    font-size: 2rem;
-    color: #00ffff;
-    margin-bottom: 10px;
-    text-shadow: 0 0 5px #00ffff;
-  }
-  
-  .modalDescription {
-    font-family: "TechMono";
-    font-size: 1.2rem;
-    color: #00ffff;
-    margin-bottom: 20px;
-  }
+  font-family: "TechMono";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: modalFadeIn 0.5s ease-out;
+}
 
-  .technologySection {
-    margin-bottom: 20px;
-  }
+.modal {
+  font-family: "TechMono";
+  background: black;
+  border: 2px solid #00ffff;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 0 20px #00ffff;
+  animation: modalPopIn 0.5s ease-out;
+}
 
-  .technologyTags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .buttonRow {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-  
-  .learnMoreButton {
-    font-size: 1rem;
-    color: #ff00ff;
-    text-decoration: none;
-    border: 1px solid #ff00ff;
-    padding: 10px 20px;
-    text-transform: uppercase;
-    transition: background 0.3s, color 0.3s;
-  }
-  
-  .learnMoreButton:hover {
-    background: #ff00ff;
-    color: black;
-  }
-  
-  .closeButton {
-    font-family: "TechMono";
-    background: black;
-    border: 2px solid #00ffff;
-    color: #00ffff;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 1rem;
-    text-transform: uppercase;
-    box-shadow: 0 0 10px #00ffff;
-    transition: background 0.3s, color 0.3s, box-shadow 0.3s;
-  }
-  
-  .closeButton:hover {
-    background: #00ffff;
-    color: black;
-    box-shadow: 0 0 20px #00ffff;
-  }
+.modalImage {
+  width: 100%;
+  /* Removed fixed height and object-fit */
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
 
-  .comingSoonBanner {
-    font-size: 1rem;
-    color: #ff00ff;
-    border: 1px solid #ff00ff;
-    padding: 10px 20px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.modalTitle {
+  font-family: "TechMono";
+  font-size: 2rem;
+  color: #00ffff;
+  margin-bottom: 10px;
+  text-shadow: 0 0 5px #00ffff;
+}
+
+.modalDescription {
+  font-family: "TechMono";
+  font-size: 1.2rem;
+  color: #00ffff;
+  margin-bottom: 20px;
+}
+
+.technologySection {
+  margin-bottom: 20px;
+}
+
+.technologyTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttonRow {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.learnMoreButton {
+  font-size: 1rem;
+  color: #ff00ff;
+  text-decoration: none;
+  border: 1px solid #ff00ff;
+  padding: 10px 20px;
+  text-transform: uppercase;
+  transition:
+    background 0.3s,
+    color 0.3s;
+}
+
+.learnMoreButton:hover {
+  background: #ff00ff;
+  color: black;
+}
+
+.closeButton {
+  font-family: "TechMono";
+  background: black;
+  border: 2px solid #00ffff;
+  color: #00ffff;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  text-transform: uppercase;
+  box-shadow: 0 0 10px #00ffff;
+  transition:
+    background 0.3s,
+    color 0.3s,
+    box-shadow 0.3s;
+}
+
+.closeButton:hover {
+  background: #00ffff;
+  color: black;
+  box-shadow: 0 0 20px #00ffff;
+}
+
+.comingSoonBanner {
+  font-size: 1rem;
+  color: #ff00ff;
+  border: 1px solid #ff00ff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Modal entrance animations */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
   }
-  
-  
-  /* Modal entrance animations */
-  @keyframes modalFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+  to {
+    opacity: 1;
   }
-  
-  @keyframes modalPopIn {
-    from { transform: scale(0.9); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes modalPopIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
   }
-  
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

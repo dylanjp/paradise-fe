@@ -14,19 +14,14 @@ export default function BlogPage() {
   const router = useRouter();
 
   const categories = useMemo(
-    () => [
-      "Technology / Software",
-      "Game Development",
-      "Reviews",
-      "Personal",
-    ],
-    []
+    () => ["Technology / Software", "Game Development", "Reviews", "Personal"],
+    [],
   );
 
   const filteredBlogs = useMemo(() => {
     if (!selectedCategory) return blogs;
     return blogs.filter(
-      (b) => Array.isArray(b.tags) && b.tags.includes(selectedCategory)
+      (b) => Array.isArray(b.tags) && b.tags.includes(selectedCategory),
     );
   }, [selectedCategory]);
 
@@ -50,9 +45,7 @@ export default function BlogPage() {
               className={`${styles.navLink} ${
                 selectedCategory === c ? styles.navActive : ""
               }`}
-              onClick={() =>
-                setSelectedCategory((s) => (s === c ? null : c))
-              }
+              onClick={() => setSelectedCategory((s) => (s === c ? null : c))}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ")
                   setSelectedCategory((s) => (s === c ? null : c));

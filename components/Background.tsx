@@ -16,11 +16,12 @@ const Background = () => {
           height: "100%",
           zIndex: -1,
           overflow: "hidden",
-          background: "radial-gradient(circle, rgba(10,10,30,1) 20%, rgba(0,0,0,1) 80%)",
+          background:
+            "radial-gradient(circle, rgba(10,10,30,1) 20%, rgba(0,0,0,1) 80%)",
         }}
       >
         {/* Puffs Animation */}
-        <Puffs color="hsla(180, 100%, 50%, 0.2)" quantity={30}/>
+        <Puffs color="hsla(180, 100%, 50%, 0.2)" quantity={30} />
 
         {/* Glowing Grid */}
         <div
