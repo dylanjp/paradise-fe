@@ -5,11 +5,11 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Background from "@/components/Background";
 import Navbar from "@/components/Navbar";
-import styles from "./blog.module.css";
+import styles from "./docs.module.css";
 import BlogTile from "@/components/BlogTile";
 import blogs from "@/data/blogData";
 
-export default function BlogPage() {
+export default function DocumentationPage() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const router = useRouter();
 
@@ -35,7 +35,7 @@ export default function BlogPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
       >
-        <h1 className={styles.title}>BLOG</h1>
+        <h1 className={styles.title}>HOME DOCUMENTATION</h1>
         <div className={styles.ctas}>
           {categories.map((c) => (
             <div
@@ -66,7 +66,7 @@ export default function BlogPage() {
                 key={b.id ?? b.title}
                 blog={b}
                 index={i}
-                onClick={() => router.push(`/blog/${b.id}`)}
+                onClick={() => router.push(`/home/${b.id}`)}
               />
             ))}
         </div>

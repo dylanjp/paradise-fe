@@ -52,7 +52,7 @@ export default function BlogTile({ blog, index = 0 }: Props) {
         } as React.CSSProperties
       }
     >
-      <Link href={`/blog/${slug || ""}`} className={styles.fullLink}>
+      <Link href={`/home/${slug || ""}`} className={styles.fullLink}>
         <div className={styles.imageWrap} aria-hidden>
           {image ? (
             <img src={image} alt={title} className={styles.image} />

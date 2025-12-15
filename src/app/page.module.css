@@ -241,7 +241,7 @@ a.secondary {
     margin-top: 0;
     gap: clamp(16px, 2.5vw, 18px);
   }
-  
+
   /* Mobile navigation button styling with accessibility compliance */
   .ctas button {
     display: flex;
@@ -289,7 +289,7 @@ a.secondary {
     margin-top: 0;
     gap: clamp(12px, 2vw, 16px);
   }
-  
+
   /* Mobile navigation button styling with accessibility compliance */
   .ctas button {
     display: flex;
