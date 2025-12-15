@@ -206,28 +206,146 @@ a.secondary {
   }
 }
 
-@media (max-width: 600px) {
+/* Intermediate screen sizes (601px-710px) - Enhanced spacing and alignment */
+@media (max-width: 710px) and (min-width: 601px) {
   .page {
-    padding: 32px;
+    padding: clamp(32px, 5vw, 40px);
     padding-bottom: 80px;
+    gap: clamp(48px, 8vw, 64px);
   }
   .main {
     align-items: center;
+    gap: clamp(20px, 3vw, 24px);
+  }
+  /* Smooth typography scaling for intermediate sizes */
+  .retroName {
+    font-size: clamp(36px, 6.5vw, 48px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0;
+  }
+  .retroSubTitle {
+    font-size: clamp(20px, 3.8vw, 24px);
+    white-space: normal;
+    line-height: 1.2;
+    margin-top: clamp(-15px, -2vw, -20px);
+    margin-bottom: 0;
+    max-width: 90vw;
+    word-wrap: break-word;
+  }
+  /* Navigation adjustments with proper spacing */
+  .ctas {
+    justify-content: center;
+    align-items: center;
+    margin-top: 0;
+    gap: clamp(16px, 2.5vw, 18px);
+  }
+  
+  /* Mobile navigation button styling with accessibility compliance */
+  .ctas button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    min-width: 140px;
+    min-height: 48px; /* Ensures 44px+ touch target */
+    height: 48px;
+    border-radius: 4px;
+    font-size: clamp(16px, 2.5vw, 18px);
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 12px 24px; /* Adequate padding for touch targets */
+  }
+}
+
+/* Mobile view - Hide subtitle and fix spacing (≤600px) */
+@media (max-width: 600px) {
+  .page {
+    padding: clamp(24px, 4vw, 32px);
+    padding-bottom: 80px;
+    gap: clamp(40px, 6vw, 48px);
+  }
+  .main {
+    align-items: center;
+    gap: clamp(24px, 4vw, 32px);
+  }
+  /* Title styling for mobile */
+  .retroName {
+    font-size: clamp(36px, 8vw, 36px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0;
+  }
+  /* Hide subtitle on mobile */
+  .retroSubTitle {
+    display: none;
+  }
+  /* Navigation adjustments for mobile button with proper spacing */
+  .ctas {
+    justify-content: center;
+    align-items: center;
+    margin-top: 0;
+    gap: clamp(12px, 2vw, 16px);
+  }
+  
+  /* Mobile navigation button styling with accessibility compliance */
+  .ctas button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    min-width: 120px;
+    min-height: 48px; /* Ensures 44px+ touch target */
+    height: 48px;
+    border-radius: 4px;
+    font-size: clamp(16px, 2.5vw, 18px);
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 12px 20px; /* Adequate padding for touch targets */
+  }
+}
+
+/* Small screen adjustments (401px-500px) - Subtitle still hidden */
+@media (max-width: 500px) and (min-width: 401px) {
+  .page {
+    padding: clamp(20px, 3.5vw, 24px);
+    padding-bottom: 70px;
+    gap: clamp(32px, 5vw, 40px);
+  }
+  .main {
+    align-items: center;
+    gap: clamp(20px, 3vw, 24px);
   }
   .main ol {
     text-align: center;
   }
-  /* Keep CTA links in a horizontal row without wrapping */
+  /* Enhanced fluid typography for smaller screens */
+  .retroName {
+    font-size: clamp(36px, 7vw, 36px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0;
+  }
+  /* Keep subtitle hidden on small screens */
+  .retroSubTitle {
+    display: none;
+  }
+  /* Navigation adjustments with proper spacing */
   .ctas {
     flex-direction: row;
     flex-wrap: nowrap;
-    gap: 10px;
+    gap: clamp(8px, 1.5vw, 12px);
     justify-content: center;
+    margin-top: 0;
   }
   .ctas a {
-    font-size: 14px;
-    height: 40px;
-    padding: 0 16px;
+    font-size: clamp(13px, 2.8vw, 14px);
+    min-height: 44px; /* Accessibility compliance */
+    height: 44px;
+    padding: 0 clamp(12px, 2.5vw, 16px);
   }
   a.secondary {
     min-width: auto;
@@ -237,40 +355,36 @@ a.secondary {
     align-items: center;
     justify-content: center;
   }
-  /* Fluid typography for titles */
-  .retroName {
-    font-size: clamp(24px, 8vw, 48px);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .retroSubTitle {
-    font-size: clamp(16px, 4vw, 24px);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
 }
 
-/* Additional adjustments for very small screens (max-width: 400px) */
+/* Additional adjustments for very small screens (≤400px) */
 @media (max-width: 400px) {
   .page {
     padding: 16px;
     padding-bottom: 60px;
+    gap: clamp(24px, 6vw, 32px);
   }
+  .main {
+    gap: clamp(20px, 4vw, 24px);
+  }
+  /* Further refined typography for very small screens */
+  .retroName {
+    font-size: clamp(36px, 9vw, 36px);
+    margin-bottom: 0;
+  }
+  /* Keep subtitle hidden on very small screens */
+  .retroSubTitle {
+    display: none;
+  }
+  /* Navigation adjustments for very small screens */
   .ctas {
-    gap: 5px;
+    gap: clamp(8px, 2vw, 12px);
+    margin-top: 0;
   }
   .ctas a {
     font-size: clamp(12px, 4vw, 14px);
     height: 36px;
     padding: 0 8px;
-  }
-  .retroName {
-    font-size: clamp(20px, 10vw, 40px);
-  }
-  .retroSubTitle {
-    font-size: clamp(14px, 5vw, 20px);
   }
 }
 
@@ -278,4 +392,13 @@ a.secondary {
   .logo {
     filter: invert();
   }
+}
+/* Custom styling for mobile navigation button on homepage */
+.mobileNavButton {
+  /* Make the button shorter in height and width */
+  height: 36px !important;
+  min-height: 36px !important;
+  min-width: 100px !important;
+  padding: 8px 16px !important;
+  font-size: 14px !important;
 }
