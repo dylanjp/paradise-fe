@@ -7,7 +7,7 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { SiImmich } from "react-icons/si";
 import { SiPlex } from "react-icons/si";
 import { SiHomeassistant } from "react-icons/si";
-import { SiLetsencrypt } from "react-icons/si";
+import { SiLetsencrypt, SiMailboxdotorg } from "react-icons/si";
 import VersionModal from "@/components/VersionModal";
 import versionData from "@/data/versionData";
 import styles from "./Navbar.module.css";
@@ -15,10 +15,10 @@ import styles from "./Navbar.module.css";
 export default function Navbar() {
   const pathname = usePathname();
   const pages = [
-    { name: "Projects", href: "/projects/" },
-    { name: "Blog", href: "/blog/" },
-    { name: "Resume", href: "/resume/" },
-    { name: "About", href: "/about/" },
+    { name: "Task Management", href: "/projects/" },
+    { name: "Notification Manager", href: "/blog/" },
+    { name: "House Management", href: "/resume/" },
+    { name: "Print Center", href: "/about/" },
   ];
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -33,21 +33,6 @@ export default function Navbar() {
         <Link href="/" className={styles.retroIcon}>
           <span className={styles.innerText}>PARADISE</span>
         </Link>
-
-        {/* Center Links for Desktop: Only show if not on the home page */}
-        {pathname !== "/" && (
-          <div className={styles.centerLinks}>
-            {pages.map((page) => (
-              <Link
-                key={page.href}
-                href={page.href}
-                className={`${styles.navLink} ${pathname === page.href ? styles.activeNavLink : ""}`}
-              >
-                {page.name}
-              </Link>
-            ))}
-          </div>
-        )}
 
         {/* Right Side for Desktop: Social Icons & Version */}
         <div className={styles.socialsDesktop}>
@@ -80,6 +65,13 @@ export default function Navbar() {
             <SiLetsencrypt />
           </a>
           <span
+            className={styles.icon}
+            onClick={() => setShowVersionModal(true)}
+            style={{ cursor: "pointer" }}
+          >
+            <SiMailboxdotorg />
+          </span>
+          <span
             className={styles.version}
             onClick={() => setShowVersionModal(true)}
             style={{ cursor: "pointer" }}
@@ -90,6 +82,14 @@ export default function Navbar() {
 
         {/* Mobile Controls: Version & Hamburger Icon */}
         <div className={styles.mobileControls}>
+          {/* The message center icon should only appear if you have an unread notification */}
+          {/* <span
+            className={styles.icon}
+            onClick={() => setShowVersionModal(true)}
+            style={{ cursor: "pointer" }}
+          >
+            <SiMailboxdotorg />
+          </span> */}
           <span
             className={styles.version}
             onClick={() => setShowVersionModal(true)}

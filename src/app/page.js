@@ -21,11 +21,11 @@ export default function Home() {
     detectViewportWidth();
 
     // Add event listener for window resize events
-    window.addEventListener('resize', detectViewportWidth);
+    window.addEventListener("resize", detectViewportWidth);
 
     // Cleanup event listener on component unmount
     return () => {
-      window.removeEventListener('resize', detectViewportWidth);
+      window.removeEventListener("resize", detectViewportWidth);
     };
   }, []);
 
@@ -49,7 +49,7 @@ export default function Home() {
               <Link href="./projects/" className={styles.navLink}>
                 Notification Manager
               </Link>
-              <Link href="./blog/" className={styles.navLink}>
+              <Link href="./home/" className={styles.navLink}>
                 House Management
               </Link>
               <Link href="./projects/" className={styles.navLink}>
