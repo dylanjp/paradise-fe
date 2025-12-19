@@ -2,6 +2,27 @@
   --background: #ffffff;
   --foreground: #171717;
 
+  /* TRON Ares Red Color Palette */
+  /* Primary Red Colors */
+  --tron-red-primary: #F80206;      /* Main brand color */
+  --tron-red-light: #FF1A1A;        /* Lighter variant for text */
+  --tron-red-medium: #FF0D0D;       /* Medium variant for highlights */
+  --tron-red-dark: #FF0D0D;         /* Darker variant for metadata - updated for accessibility */
+  
+  /* Secondary Complementary Colors */
+  --tron-orange-primary: #FF6600;   /* Main accent color */
+  --tron-orange-light: #FF7733;     /* Light accent variant */
+  --tron-orange-medium: #FF4400;    /* Medium accent variant */
+  
+  /* Interactive State Colors */
+  --tron-yellow-active: #FFFF00;    /* Active/highlight states */
+  --tron-red-hover: #FF3333;        /* Hover state enhancement */
+  
+  /* Glow Effect Colors */
+  --glow-red-primary: #F80206;      /* Primary glow color */
+  --glow-red-intense: #FF0000;      /* Intense glow for hover states */
+  --glow-orange: #FF6600;           /* Secondary glow color */
+
   /* Animation Infrastructure - CSS Custom Properties */
   --animation-stagger-delay: 150ms;
   --animation-fade-duration: 600ms;
@@ -16,6 +37,60 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+}
+
+/* Browser Compatibility Fallbacks */
+/* These classes provide fallback support for browsers that don't support CSS custom properties */
+.tron-text-primary {
+  color: #F80206; /* Fallback */
+  color: var(--tron-red-primary, #F80206);
+}
+
+.tron-text-light {
+  color: #FF1A1A; /* Fallback */
+  color: var(--tron-red-light, #FF1A1A);
+}
+
+.tron-text-medium {
+  color: #FF0D0D; /* Fallback */
+  color: var(--tron-red-medium, #FF0D0D);
+}
+
+.tron-text-dark {
+  color: #FF0D0D; /* Fallback - updated for accessibility */
+  color: var(--tron-red-dark, #FF0D0D);
+}
+
+.tron-text-orange {
+  color: #FF6600; /* Fallback */
+  color: var(--tron-orange-primary, #FF6600);
+}
+
+.tron-border-primary {
+  border-color: #F80206; /* Fallback */
+  border-color: var(--tron-red-primary, #F80206);
+}
+
+.tron-glow-primary {
+  text-shadow: 
+    0 0 5px #F80206,
+    0 0 10px #F80206,
+    0 0 20px #F80206; /* Fallback */
+  text-shadow: 
+    0 0 5px var(--glow-red-primary, #F80206),
+    0 0 10px var(--glow-red-primary, #F80206),
+    0 0 20px var(--glow-red-primary, #F80206);
+}
+
+.tron-glow-intense {
+  text-shadow: 
+    0 0 10px #FF0000,
+    0 0 20px #FF0000,
+    0 0 30px #FF0000; /* Fallback */
+  text-shadow: 
+    0 0 10px var(--glow-red-intense, #FF0000),
+    0 0 20px var(--glow-red-intense, #FF0000),
+    0 0 30px var(--glow-red-intense, #FF0000);
 }
 
 /* Prefers Reduced Motion Support for Animation Variables */

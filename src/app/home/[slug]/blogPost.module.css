@@ -8,7 +8,7 @@
   line-height: 1.7;
   white-space: pre-wrap; /* preserve all newlines */
   font-family: "TechMono";
-  color: #00f8f8; /* Neon cyan */
+  color: var(--tron-orange-primary, #FF6600); /* Amber/orange for body text */
   transition:
     filter 0.6s ease,
     opacity 0.6s ease;
@@ -19,14 +19,14 @@
 /* small glow so text pops while decoding */
 .deciphering {
   text-shadow:
-    0 0 6px #00ffff,
-    0 0 12px #00ffff;
+    0 0 6px var(--glow-orange, #FF6600),
+    0 0 12px var(--glow-orange, #FF6600);
 }
 
 .decoded {
   text-shadow:
-    0 0 10px #00ffff,
-    0 0 20px #00ffff;
+    0 0 10px var(--glow-orange, #FF6600),
+    0 0 20px var(--glow-orange, #FF6600);
 }
 
 .invisibleChar {
@@ -59,21 +59,24 @@
 }
 
 .blogContent a {
-  color: #ff00ff;
+  color: var(--tron-orange-primary, #FF6600);
   text-decoration: none;
 }
 
 .blogContent h1 {
-  color: #ff00ff;
+  color: var(--tron-red-primary, #F80206);
   text-align: center;
+  text-shadow: 0 0 10px var(--glow-red-primary, #F80206);
 }
 
 .blogContent h2 {
-  color: #ff00ff;
+  color: var(--tron-red-primary, #F80206);
+  text-shadow: 0 0 8px var(--glow-red-primary, #F80206);
 }
 
 .blogContent h3 {
-  color: #ff00ff;
+  color: var(--tron-red-primary, #F80206);
+  text-shadow: 0 0 6px var(--glow-red-primary, #F80206);
 }
 
 .blogContent a:hover {
