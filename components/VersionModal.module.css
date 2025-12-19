@@ -20,24 +20,25 @@
 
 .modal {
   background-color: #0a0a14;
-  border: 2px solid #00ffff;
+  border: 2px solid var(--tron-red-primary, #F80206);
   border-radius: 12px;
   padding: 24px;
   max-height: 90vh;
   width: 90%;
   max-width: 600px;
   overflow-y: auto;
-  box-shadow: 0 0 20px #00ffff88;
+  box-shadow: 0 0 20px rgba(248, 2, 6, 0.53);
 }
 
 .modalTitle {
-  color: #00ffff;
+  color: var(--tron-red-primary, #F80206);
   text-align: center;
   /* keep modal title centered */
   font-size: 1.8rem;
   margin-bottom: 1rem;
-  border-bottom: 1px solid #00ffff55;
+  border-bottom: 1px solid rgba(248, 2, 6, 0.33);
   padding-bottom: 8px;
+  text-shadow: 0 0 15px var(--glow-red-primary, #F80206);
 }
 
 .modalContent {
@@ -47,23 +48,35 @@
 }
 
 .versionSection {
-  border: 1px solid #00ffff55;
+  border: 1px solid rgba(248, 2, 6, 0.5);
   padding: 16px;
   border-radius: 8px;
-  background-color: #111122;
+  background: linear-gradient(135deg, rgba(17, 17, 34, 0.8), rgba(0, 0, 0, 0.9));
+  box-shadow: 
+    inset 0 0 10px rgba(248, 2, 6, 0.1),
+    0 0 5px rgba(248, 2, 6, 0.2);
+  transition: box-shadow 0.3s ease;
+}
+
+.versionSection:hover {
+  box-shadow: 
+    inset 0 0 15px rgba(248, 2, 6, 0.15),
+    0 0 10px rgba(248, 2, 6, 0.3);
 }
 
 .versionTitle {
   font-size: 1.2rem;
-  color: #00e0ff;
+  color: var(--tron-orange-primary, #FF6600);
   margin-bottom: 8px;
   text-align: left;
   /* force left align */
+  text-shadow: 0 0 8px rgba(255, 102, 0, 0.4);
 }
 
 .releaseDate {
   font-size: 0.9rem;
-  color: #888;
+  color: var(--tron-red-medium, #FF0D0D);
+  text-shadow: 0 0 5px var(--glow-red-primary, #F80206);
 }
 
 .noteList {
@@ -76,8 +89,9 @@
 }
 
 .noteItem {
-  color: #eeeeee;
+  color: var(--tron-orange-primary, #FF6600);
   margin-bottom: 4px;
+  text-shadow: 0 0 3px rgba(255, 102, 0, 0.3);
 }
 
 .buttonRow {
@@ -89,13 +103,13 @@
 .closeButton {
   font-family: "TechMono";
   background: black;
-  border: 2px solid #00ffff;
-  color: #00ffff;
+  border: 2px solid var(--tron-red-primary, #F80206);
+  color: var(--tron-red-light, #FF1A1A);
   padding: 10px 20px;
   cursor: pointer;
   font-size: 1rem;
   text-transform: uppercase;
-  box-shadow: 0 0 10px #00ffff;
+  box-shadow: 0 0 10px var(--glow-red-primary, #F80206);
   transition:
     background 0.3s,
     color 0.3s,
@@ -103,7 +117,7 @@
 }
 
 .closeButton:hover {
-  background: #00ffff;
+  background: var(--tron-red-primary, #F80206);
   color: black;
-  box-shadow: 0 0 20px #00ffff;
+  box-shadow: 0 0 20px var(--glow-red-intense, #FF0000);
 }

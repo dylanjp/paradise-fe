@@ -69,22 +69,22 @@
 .retroName {
   font-family: "Orbitron";
   font-size: 48px;
-  color: #00f8f8; /* Neon cyan */
+  color: var(--tron-red-light, #FF1A1A); /* TRON Ares red */
   text-shadow:
-    0 0 2px #00f8f8,
-    0 0 4px #00f8f8,
-    0 0 8px #ff00ff; /* Synthwave glow */
+    0 0 1px var(--glow-red-primary, #F80206),
+    0 0 2px var(--glow-red-primary, #F80206),
+    0 0 4px var(--tron-orange-primary, #FF6600); /* Complementary orange glow */
   text-align: center;
 }
 
 .retroSubTitle {
   font-family: "TechMono";
   font-size: 24px;
-  color: #00f8f8; /* Neon cyan */
+  color: var(--tron-red-light, #FF1A1A); /* TRON Ares red */
   text-shadow:
-    0 0 2px #00f8f8,
-    0 0 2px #00f8f8,
-    0 0 2px #00f8f8; /* Synthwave glow */
+    0 0 2px var(--glow-red-primary, #F80206),
+    0 0 2px var(--glow-red-primary, #F80206),
+    0 0 2px var(--glow-red-primary, #F80206); /* TRON Ares red glow */
   text-align: center;
   margin-top: -25px; /* Adjust this value to bring it closer */
   font-weight: lighter;
@@ -125,7 +125,7 @@
   align-items: center;
   padding: 10px 15px;
   font-size: 18px;
-  color: #ff00ff;
+  color: var(--tron-orange-primary, #FF6600);
   text-decoration: none;
   transition: color 0.3s ease;
 }
@@ -143,8 +143,8 @@
   right: 0;
   width: 10px;
   height: 10px;
-  border-right: 2px solid #ff00ff;
-  border-bottom: 2px solid #ff00ff;
+  border-right: 2px solid var(--tron-orange-primary, #FF6600);
+  border-bottom: 2px solid var(--tron-orange-primary, #FF6600);
   transition:
     width 0.3s ease,
     height 0.3s ease;

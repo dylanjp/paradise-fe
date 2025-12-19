@@ -21,7 +21,7 @@ const Background = () => {
         }}
       >
         {/* Puffs Animation */}
-        <Puffs color="hsla(180, 100%, 50%, 0.2)" quantity={30} />
+        <Puffs color="hsla(0, 97%, 49%, 0.2)" quantity={30} />
 
         {/* Glowing Grid */}
         <div
@@ -32,7 +32,7 @@ const Background = () => {
             width: "100%",
             height: "100%",
             backgroundImage:
-              "linear-gradient(to top, rgba(255, 0, 255, 0.1), transparent), repeating-linear-gradient(0deg, rgba(0, 255, 255, 0.5) 0px, rgba(0, 255, 255, 0.5) 2px, transparent 2px, transparent 50px), repeating-linear-gradient(90deg, rgba(0, 255, 255, 0.5) 0px, rgba(0, 255, 255, 0.5) 2px, transparent 2px, transparent 50px)",
+              "linear-gradient(to top, rgba(255, 102, 0, 0.1), transparent), repeating-linear-gradient(0deg, rgba(248, 2, 6, 0.5) 0px, rgba(248, 2, 6, 0.5) 2px, transparent 2px, transparent 50px), repeating-linear-gradient(90deg, rgba(248, 2, 6, 0.5) 0px, rgba(248, 2, 6, 0.5) 2px, transparent 2px, transparent 50px)",
             backgroundSize: "100% 100%, 100% 100%, 100% 100%",
             opacity: 0.2,
           }}

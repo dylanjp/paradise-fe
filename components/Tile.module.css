@@ -1,11 +1,11 @@
 .tile {
   background-color: black;
-  border: 2px solid #00ffff;
+  border: 2px solid var(--tron-red-primary, #F80206);
   border-radius: 8px;
   padding: 16px;
-  box-shadow: 0 0 10px #00ffff;
+  box-shadow: 0 0 10px var(--glow-red-primary, #F80206);
   font-family: "Orbitron", sans-serif;
-  color: #00ffff;
+  color: var(--tron-red-light, #FF1A1A);
   text-align: center;
   transition: transform 0.3s ease;
 }
@@ -17,14 +17,14 @@
 .tileTitle {
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
-  text-shadow: 0 0 5px #00ffff;
+  text-shadow: 0 0 5px var(--glow-red-primary, #F80206);
 }
 
 .tileImage {
   max-width: 100%;
   height: auto;
-  border: 2px solid #00ffff;
-  box-shadow: 0 0 5px #00ffff;
+  border: 2px solid var(--tron-red-primary, #F80206);
+  box-shadow: 0 0 5px var(--glow-red-primary, #F80206);
   margin-top: 8px;
 }
 
