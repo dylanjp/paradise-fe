@@ -49,8 +49,11 @@ export default function Home() {
               <Link href="./projects/" className={styles.navLink}>
                 Notification Manager
               </Link>
+              <Link href="./projects/" className={styles.navLink}>
+                Pratt Drive
+              </Link>
               <Link href="./home/" className={styles.navLink}>
-                House Management
+                Documentation
               </Link>
               <Link href="./projects/" className={styles.navLink}>
                 Print Center

@@ -7,7 +7,8 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { SiImmich } from "react-icons/si";
 import { SiPlex } from "react-icons/si";
 import { SiHomeassistant } from "react-icons/si";
-import { SiLetsencrypt, SiMailboxdotorg } from "react-icons/si";
+import { SiLetsencrypt} from "react-icons/si";
+import { FaExclamation } from "react-icons/fa";
 import VersionModal from "@/components/VersionModal";
 import versionData from "@/data/versionData";
 import styles from "./Navbar.module.css";
@@ -69,7 +70,7 @@ export default function Navbar() {
             onClick={() => setShowVersionModal(true)}
             style={{ cursor: "pointer" }}
           >
-            <SiMailboxdotorg />
+            <FaExclamation />
           </span>
           <span
             className={styles.version}

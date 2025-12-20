@@ -35,7 +35,7 @@ export default function DocumentationPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
       >
-        <h1 className={styles.title}>HOME DOCUMENTATION</h1>
+        <h1 className={styles.title}>DOCUMENTATION</h1>
         <div className={styles.ctas}>
           {categories.map((c) => (
             <div
