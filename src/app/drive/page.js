@@ -7,9 +7,9 @@ import Background from "@/components/Background";
 import ProjectCard from "@/components/ProjectCard";
 import ProjectModal from "@/components/ProjectModal";
 import projectsData from "@/data/projectsData"; // Adjust path as needed
-import styles from "./projects.module.css";
+import styles from "./drive.module.css";
 
-export default function ProjectsPage() {
+export default function DrivePage() {
   const [selectedProject, setSelectedProject] = useState(null);
 
   return (
@@ -23,7 +23,7 @@ export default function ProjectsPage() {
       <Navbar />
 
       <div className={styles.pageContent}>
-        <h1 className={styles.title}>Projects</h1>
+        <h1 className={styles.title}>My Drive</h1>
 
         {projectsData.length > 0 ? (
           <div className={styles.grid}>

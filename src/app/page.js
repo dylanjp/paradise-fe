@@ -43,19 +43,19 @@ export default function Home() {
             // Desktop navigation - show all CTA links
             <>
               {/* <Link href="./projects/" className={styles.navLink}>My Drive</Link> Access to Shared Folder*/}
-              <Link href="./projects/" className={styles.navLink}>
+              <Link href="./tasks/" className={styles.navLink}>
                 Task Management
               </Link>
-              <Link href="./projects/" className={styles.navLink}>
+              <Link href="./comingsoon/" className={styles.navLink}>
                 Notification Manager
               </Link>
-              <Link href="./projects/" className={styles.navLink}>
+              <Link href="./drive/" className={styles.navLink}>
                 Pratt Drive
               </Link>
               <Link href="./home/" className={styles.navLink}>
                 Documentation
               </Link>
-              <Link href="./projects/" className={styles.navLink}>
+              <Link href="./comingsoon/" className={styles.navLink}>
                 Print Center
               </Link>
             </>
