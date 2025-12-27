@@ -24,11 +24,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: 
+    background 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
   position: relative;
 }
 
-/* Remove border radius to maintain squared design */
+/* Maintain squared design */
 .toggleButton:first-child {
   border-right: 1px solid var(--tron-red-primary, #F80206);
 }
@@ -37,45 +41,58 @@
   border-left: 1px solid var(--tron-red-primary, #F80206);
 }
 
-/* Active state styling with enhanced glow */
+/* =========================
+   ACTIVE (ARES RED ONLY)
+   ========================= */
 .active {
-  background: var(--tron-orange-primary, #FF6600);
+  background: var(--tron-red-primary, #F80206);
   color: black;
-  box-shadow: 
-    0 0 10px var(--glow-orange, #FF6600),
-    0 0 20px var(--glow-orange, #FF6600);
-  border-color: var(--tron-orange-primary, #FF6600);
+  border-color: var(--tron-red-primary, #F80206);
+  box-shadow: none; /* no glow unless hover */
 }
 
-/* Inactive state with reduced opacity */
+/* =========================
+   INACTIVE
+   ========================= */
 .inactive {
   opacity: 0.7;
-  box-shadow: 0 0 5px var(--glow-red-primary, #F80206);
+  box-shadow: none; /* no glow unless hover */
 }
 
-/* Hover effects */
-.toggleButton:hover {
-  background: var(--tron-orange-primary, #FF6600);
+/* =========================
+   HOVER STATES
+   ========================= */
+
+/* Inactive hover = ORANGE */
+.toggleButton.inactive:hover {
+  background: var(--tron-orange-primary, #ff7a00);
   color: black;
-  box-shadow: 
-    0 0 15px var(--glow-orange, #FF6600),
-    0 0 25px var(--glow-orange, #FF6600);
-  border-color: var(--tron-orange-primary, #FF6600);
+  border-color: var(--tron-orange-primary, #ff7a00);
+  box-shadow:
+    0 0 12px var(--tron-orange-primary, #ff7a00),
+    0 0 24px var(--tron-orange-primary, #ff7a00);
 }
 
-/* Focus state for accessibility */
+/* Active hover = RED glow only */
+.toggleButton.active:hover {
+  background: var(--tron-red-primary, #F80206);
+  color: black;
+  box-shadow:
+    0 0 12px var(--tron-red-primary, #F80206),
+    0 0 24px var(--tron-red-primary, #F80206);
+}
+
+/* =========================
+   FOCUS (ACCESSIBILITY)
+   ========================= */
 .toggleButton:focus {
-  outline: 2px solid var(--tron-orange-primary, #FF6600);
+  outline: 2px solid var(--tron-red-primary, #F80206);
   outline-offset: 4px;
 }
 
-/* Ensure active state overrides hover */
-.active:hover {
-  background: var(--tron-orange-primary, #FF6600);
-  color: black;
-}
-
-/* Responsive design for mobile */
+/* =========================
+   RESPONSIVE
+   ========================= */
 @media (max-width: 768px) {
   .toggleButton {
     min-width: 100px;
@@ -84,7 +101,9 @@
   }
 }
 
-/* Error state styling */
+/* =========================
+   ERROR STATE (UNCHANGED)
+   ========================= */
 .errorContainer {
   background: rgba(255, 26, 26, 0.1);
   border: 2px solid var(--tron-red-light, #FF1A1A);
@@ -101,5 +120,5 @@
   color: var(--tron-red-light, #FF1A1A);
   font-size: 0.9rem;
   text-transform: uppercase;
-  text-shadow: 0 0 5px var(--glow-red-primary, #F80206);
+  text-shadow: 0 0 5px var(--tron-red-primary, #F80206);
 }

@@ -26,7 +26,7 @@
 .progressText {
   font-family: 'Share Tech Mono', monospace;
   font-size: 0.9rem;
-  color: var(--foreground);
+  color: var(--tron-amber-primary, #ffb000);
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -34,12 +34,18 @@
 
 .neonGlow {
   border-color: #00ff00;
-  box-shadow: 0 0 10px #00ff00, inset 0 0 10px rgba(0, 255, 0, 0.1);
+  box-shadow: 
+    0 0 10px #00ff00,
+    inset 0 0 10px rgba(0, 255, 0, 0.1);
 }
 
 .neonGlow .progressFill {
   background: #00ff00;
   box-shadow: 0 0 10px #00ff00;
+}
+
+.neonGlow .progressText {
+  color: #00ff00;
 }
 
 /* Error state styling */

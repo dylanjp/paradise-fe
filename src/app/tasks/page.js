@@ -38,7 +38,7 @@ export default function TasksPage() {
     renameTask 
   } = useTaskManager(INITIAL_TASKS);
 
-  const dailyProgress = clampProgress(77); 
+  const dailyProgress = clampProgress(79); 
   const pageTitle = `${activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)} TODO`;
 
   return (
