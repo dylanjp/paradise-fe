@@ -1,47 +1,28 @@
 import React from 'react';
-import { validateProgressPercentage, validateComponentProps } from '../src/lib/taskStateValidation';
 import styles from './DailyProgressBar.module.css';
 
 const DailyProgressBar = ({ percentage = 0, className = '' }) => {
-  // Validate props
-  const propsValidation = validateComponentProps(
-    { percentage, className },
-    ['percentage']
-  );
-
-  if (!propsValidation.isValid) {
-    console.error('DailyProgressBar props validation failed:', propsValidation.errors);
-    return (
-      <div className={`${styles.progressContainer} ${styles.errorContainer} ${className}`}>
-        <div className={styles.errorText}>Progress bar configuration error</div>
-      </div>
-    );
-  }
-
-  // Validate and clamp percentage
-  const progressValidation = validateProgressPercentage(percentage);
-  if (!progressValidation.isValid) {
-    console.warn('DailyProgressBar percentage validation issues:', progressValidation.errors);
-  }
-
-  const clampedPercentage = progressValidation.value;
-  const isComplete = clampedPercentage === 100;
+  // Robustly convert input to a number between 0 and 100
+  // Number() handles strings, || 0 handles NaN/null/undefined
+  const safePercentage = Math.max(0, Math.min(100, Number(percentage) || 0));
+  
+  const isComplete = safePercentage === 100;
 
   return (
     <div className={`${styles.progressContainer} ${className} ${isComplete ? styles.neonGlow : ''}`}>
       <div className={styles.progressBar}>
         <div 
           className={styles.progressFill}
-          style={{ width: `${clampedPercentage}%` }}
+          style={{ width: `${safePercentage}%` }}
           role="progressbar"
-          aria-valuenow={clampedPercentage}
+          aria-valuenow={safePercentage}
           aria-valuemin={0}
           aria-valuemax={100}
-          aria-label={`Daily progress: ${clampedPercentage}%`}
+          aria-label={`Daily progress: ${safePercentage}%`}
         />
       </div>
       <div className={styles.progressText}>
-        Daily Progress: {clampedPercentage}%
+        Daily Progress: {safePercentage}%
       </div>
     </div>
   );
