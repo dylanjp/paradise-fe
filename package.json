@@ -8,10 +8,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@arwes/react": "^1.0.0-alpha.23",
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
     "framer-motion": "^12.6.3",
     "marked": "^16.4.1",
     "next": "^15.2.4",
@@ -21,9 +25,14 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@fast-check/jest": "^2.1.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.1",
     "eslint": "^9",
     "eslint-config-next": "15.2.0",
     "gh-pages": "^6.3.0",
+    "jest": "^30.2.0",
+    "jest-environment-jsdom": "^30.2.0",
     "prettier": "^3.7.4"
   }
 }

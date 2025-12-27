@@ -1,0 +1,256 @@
+.taskRow {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  touch-action: manipulation; /* Prevent default touch behaviors */
+}
+
+.taskRow:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.taskRow:last-child {
+  border-bottom: none;
+}
+
+.dragHandle {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.2rem;
+  color: var(--tron-red-primary);
+  margin-right: 0.75rem;
+  cursor: grab;
+  user-select: none;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+  padding: 0.25rem;
+  border-radius: 2px;
+  touch-action: none; /* Allow drag-and-drop on touch devices */
+  -webkit-touch-callout: none; /* Disable iOS callout */
+  -webkit-user-select: none; /* Disable text selection on iOS */
+}
+
+.dragHandle:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  margin-right: 0.75rem;
+  accent-color: var(--tron-red-primary);
+  cursor: pointer;
+}
+
+.taskText {
+  flex: 1;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.9rem;
+  color: var(--foreground);
+  line-height: 1.4;
+}
+
+/* Clickable text styling */
+.clickableText {
+  cursor: text;
+  padding: 2px 4px;
+  border-radius: 2px;
+  transition: background-color 0.2s ease;
+}
+
+.clickableText:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Input field for editing */
+.taskInput {
+  flex: 1;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.9rem;
+  color: var(--foreground);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--tron-red-primary, #FF1A1A);
+  border-radius: 2px;
+  padding: 4px 8px;
+  outline: none;
+  line-height: 1.4;
+}
+
+.taskInput:focus {
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 5px rgba(255, 26, 26, 0.3);
+}
+
+.sectionInput {
+  color: var(--tron-amber, #FFA500);
+  border-color: var(--tron-amber, #FFA500);
+  text-transform: uppercase;
+}
+
+.sectionInput:focus {
+  box-shadow: 0 0 5px rgba(255, 165, 0, 0.3);
+}
+
+/* Editing state */
+.editing {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.editing .dragHandle {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* New task state */
+.newTask {
+  background: rgba(255, 26, 26, 0.05);
+  border-left: 2px solid var(--tron-red-primary, #FF1A1A);
+  animation: newTaskGlow 2s ease-in-out;
+}
+
+@keyframes newTaskGlow {
+  0%, 100% {
+    box-shadow: none;
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(255, 26, 26, 0.3);
+  }
+}
+
+/* Section styling */
+.sectionRow {
+  background: rgba(255, 165, 0, 0.05);
+  border-left: 2px solid var(--tron-amber, #FFA500);
+}
+
+.sectionText {
+  color: var(--tron-amber, #FFA500);
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+/* Child task indentation */
+.childRow {
+  padding-left: 2rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  margin-left: 1rem;
+}
+
+.childRow .dragHandle {
+  opacity: 0.5;
+}
+
+.childRow .taskText {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.dragging {
+  opacity: 0.6;
+  transform: rotate(1deg) scale(1.02);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+/* Smooth removal animation */
+.removing {
+  animation: slideOutAndFade 0.3s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes slideOutAndFade {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    max-height: 60px;
+    padding: 0.75rem;
+    margin-bottom: 0;
+  }
+  50% {
+    opacity: 0.3;
+    transform: translateX(20px) scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(30px) scale(0.9);
+    max-height: 0;
+    padding: 0;
+    margin-bottom: 0;
+    border-bottom-width: 0;
+  }
+}
+
+/* Error state styling */
+.errorRow {
+  background: rgba(255, 26, 26, 0.1);
+  border-left: 3px solid var(--tron-red-light, #FF1A1A);
+  opacity: 0.8;
+}
+
+.errorRow:hover {
+  background: rgba(255, 26, 26, 0.15);
+}
+
+.errorText {
+  flex: 1;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.9rem;
+  color: var(--tron-red-light, #FF1A1A);
+  line-height: 1.4;
+  font-style: italic;
+}
+
+.errorIndicator {
+  color: var(--tron-red-light, #FF1A1A);
+  font-size: 1rem;
+  margin-left: 0.5rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+  .taskRow {
+    padding: 1rem 0.75rem; /* Increase padding for easier touch targets */
+  }
+  
+  .dragHandle {
+    font-size: 1.4rem; /* Larger drag handle for mobile */
+    padding: 0.5rem; /* Larger touch target */
+    margin-right: 0.5rem;
+    opacity: 0.8; /* More visible on mobile */
+  }
+  
+  .dragHandle:hover {
+    opacity: 1;
+  }
+  
+  .checkbox {
+    width: 20px; /* Larger checkbox for mobile */
+    height: 20px;
+    margin-right: 0.5rem;
+  }
+  
+  .taskText {
+    font-size: 1rem; /* Slightly larger text on mobile */
+  }
+  
+  .childRow .taskText {
+    font-size: 0.9rem;
+  }
+  
+  .childRow {
+    padding-left: 1.5rem; /* Reduce indentation on mobile */
+    margin-left: 0.5rem;
+  }
+}

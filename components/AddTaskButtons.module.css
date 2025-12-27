@@ -1,0 +1,67 @@
+@font-face {
+  font-family: "TechMono";
+  src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
+}
+
+/* Container for both add buttons */
+.addButtonsContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  margin-top: 16px;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+/* Base styling for add buttons */
+.addButton {
+  font-family: "TechMono", monospace;
+  background: transparent;
+  border: none;
+  color: var(--tron-red-light, #FF1A1A);
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+  
+  /* Ensure buttons don't have primary button styling */
+  box-shadow: none;
+  text-shadow: none;
+}
+
+/* Hover effect for add buttons */
+.addButton:hover {
+  color: var(--tron-red-bright, #FF4444);
+  text-shadow: 0 0 5px var(--glow-red-primary, #F80206);
+  background: rgba(255, 26, 26, 0.05);
+}
+
+/* Focus state for accessibility */
+.addButton:focus {
+  outline: 1px solid var(--tron-red-light, #FF1A1A);
+  outline-offset: 2px;
+}
+
+/* Active state */
+.addButton:active {
+  color: var(--tron-red-bright, #FF4444);
+  transform: translateY(1px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .addButtonsContainer {
+    gap: 6px;
+    margin-top: 12px;
+  }
+  
+  .addButton {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+  }
+}

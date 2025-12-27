@@ -1,0 +1,192 @@
+@font-face {
+  font-family: "TechMono";
+  src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
+}
+
+.container {
+  border: 2px solid var(--tron-red-primary, #F80206);
+  border-radius: 4px;
+  background: var(--background, #000);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 5px rgba(248, 2, 6, 0.3);
+}
+
+.container:hover {
+  box-shadow: 
+    0 0 10px rgba(248, 2, 6, 0.4),
+    0 0 20px rgba(248, 2, 6, 0.2);
+}
+
+.title {
+  font-family: "TechMono", monospace;
+  font-size: 1.2rem;
+  color: var(--tron-red-primary, #F80206);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0 0 1rem 0;
+  text-align: center;
+  text-shadow: 0 0 5px var(--glow-red-primary, #F80206);
+}
+
+.taskList {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.02);
+  overflow: hidden;
+  touch-action: pan-y; /* Allow vertical scrolling but prevent horizontal pan */
+}
+
+.taskWrapper {
+  position: relative;
+}
+
+.dropZone {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 40px;
+  background: rgba(248, 2, 6, 0.1);
+  border: 2px dashed var(--tron-red-primary, #F80206);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  animation: dropZonePulse 1.5s ease-in-out infinite;
+  backdrop-filter: blur(2px);
+}
+
+.dropZoneActive {
+  background: rgba(248, 2, 6, 0.3);
+  border-color: var(--tron-red-light, #FF1A1A);
+  animation: dropZoneActivePulse 0.8s ease-in-out infinite;
+}
+
+@keyframes dropZoneActivePulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(248, 2, 6, 0.5);
+    background: rgba(248, 2, 6, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(248, 2, 6, 0.8);
+    background: rgba(248, 2, 6, 0.4);
+  }
+}
+
+.dropZoneContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.dropZoneText {
+  font-family: "TechMono", monospace;
+  font-size: 0.75rem;
+  color: var(--tron-red-primary, #F80206);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 0 3px var(--glow-red-primary, #F80206);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@keyframes dropZonePulse {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(248, 2, 6, 0.3);
+    background: rgba(248, 2, 6, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(248, 2, 6, 0.6);
+    background: rgba(248, 2, 6, 0.2);
+  }
+}
+
+.dragOverlay {
+  opacity: 0.8;
+  transform: rotate(5deg);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.emptyState {
+  text-align: center;
+  padding: 2rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.emptyText {
+  font-family: "TechMono", monospace;
+  font-size: 1rem;
+  color: var(--foreground, #fff);
+  margin: 0 0 0.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.emptySubtext {
+  font-family: "TechMono", monospace;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  font-style: italic;
+}
+
+.errorState {
+  text-align: center;
+  padding: 2rem 1rem;
+  border: 1px solid var(--tron-red-light, #FF1A1A);
+  border-radius: 2px;
+  background: rgba(255, 26, 26, 0.1);
+}
+
+.errorText {
+  font-family: "TechMono", monospace;
+  font-size: 1rem;
+  color: var(--tron-red-light, #FF1A1A);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 0 5px var(--glow-red-primary, #F80206);
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .title {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .dropZone {
+    width: 90%;
+    height: 35px;
+  }
+  
+  .dropZoneText {
+    font-size: 0.7rem;
+  }
+  
+  .emptyState {
+    padding: 1.5rem 0.75rem;
+  }
+  
+  .emptyText {
+    font-size: 0.9rem;
+  }
+  
+  .emptySubtext {
+    font-size: 0.75rem;
+  }
+}
