@@ -3,9 +3,9 @@
   align-items: center;
   padding: 0.75rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease;
   cursor: pointer;
-  touch-action: manipulation; /* Prevent default touch behaviors */
+  touch-action: manipulation;
 }
 
 .taskRow:hover {
@@ -16,6 +16,9 @@
   border-bottom: none;
 }
 
+/* =========================
+   DRAG HANDLE
+   ========================= */
 .dragHandle {
   font-family: 'Share Tech Mono', monospace;
   font-size: 1.2rem;
@@ -25,12 +28,11 @@
   user-select: none;
   line-height: 1;
   opacity: 0.7;
-  transition: opacity 0.3s ease;
   padding: 0.25rem;
   border-radius: 2px;
-  touch-action: none; /* Allow drag-and-drop on touch devices */
-  -webkit-touch-callout: none; /* Disable iOS callout */
-  -webkit-user-select: none; /* Disable text selection on iOS */
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
 }
 
 .dragHandle:hover {
@@ -42,6 +44,9 @@
   cursor: grabbing;
 }
 
+/* =========================
+   CHECKBOX
+   ========================= */
 .checkbox {
   width: 18px;
   height: 18px;
@@ -50,34 +55,38 @@
   cursor: pointer;
 }
 
+/* =========================
+   TASK TEXT (DEFAULT = RED)
+   ========================= */
 .taskText {
   flex: 1;
   font-family: 'Share Tech Mono', monospace;
   font-size: 0.9rem;
-  color: var(--foreground);
+  color: var(--tron-red-primary);
   line-height: 1.4;
 }
 
-/* Clickable text styling */
+/* Clickable text */
 .clickableText {
   cursor: text;
   padding: 2px 4px;
   border-radius: 2px;
-  transition: background-color 0.2s ease;
 }
 
 .clickableText:hover {
   background: rgba(255, 255, 255, 0.05);
 }
 
-/* Input field for editing */
+/* =========================
+   INPUT FIELDS
+   ========================= */
 .taskInput {
   flex: 1;
   font-family: 'Share Tech Mono', monospace;
   font-size: 0.9rem;
-  color: var(--foreground);
+  color: var(--tron-red-primary);
   background: rgba(255, 255, 255, 0.1);
-  border: 1px solid var(--tron-red-primary, #FF1A1A);
+  border: 1px solid var(--tron-red-primary);
   border-radius: 2px;
   padding: 4px 8px;
   outline: none;
@@ -86,20 +95,18 @@
 
 .taskInput:focus {
   background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 5px rgba(255, 26, 26, 0.3);
 }
 
+/* Section / parent input */
 .sectionInput {
   color: var(--tron-amber, #FFA500);
   border-color: var(--tron-amber, #FFA500);
   text-transform: uppercase;
 }
 
-.sectionInput:focus {
-  box-shadow: 0 0 5px rgba(255, 165, 0, 0.3);
-}
-
-/* Editing state */
+/* =========================
+   EDITING STATE
+   ========================= */
 .editing {
   background: rgba(255, 255, 255, 0.08);
 }
@@ -109,23 +116,17 @@
   cursor: not-allowed;
 }
 
-/* New task state */
+/* =========================
+   NEW TASK (NO GLOW)
+   ========================= */
 .newTask {
   background: rgba(255, 26, 26, 0.05);
-  border-left: 2px solid var(--tron-red-primary, #FF1A1A);
-  animation: newTaskGlow 2s ease-in-out;
+  border-left: 2px solid var(--tron-red-primary);
 }
 
-@keyframes newTaskGlow {
-  0%, 100% {
-    box-shadow: none;
-  }
-  50% {
-    box-shadow: 0 0 10px rgba(255, 26, 26, 0.3);
-  }
-}
-
-/* Section styling */
+/* =========================
+   SECTION / PARENT ROW
+   ========================= */
 .sectionRow {
   background: rgba(255, 165, 0, 0.05);
   border-left: 2px solid var(--tron-amber, #FFA500);
@@ -137,7 +138,14 @@
   letter-spacing: 0.5px;
 }
 
-/* Child task indentation */
+/* Ensure section rows override default text color */
+.sectionRow .taskText {
+  color: var(--tron-amber, #FFA500);
+}
+
+/* =========================
+   CHILD TASKS
+   ========================= */
 .childRow {
   padding-left: 2rem;
   background: rgba(255, 255, 255, 0.02);
@@ -151,19 +159,24 @@
 
 .childRow .taskText {
   font-size: 0.85rem;
+  color: var(--tron-red-primary);
   opacity: 0.9;
 }
 
+/* =========================
+   DRAGGING STATE
+   ========================= */
 .dragging {
   opacity: 0.6;
   transform: rotate(1deg) scale(1.02);
   background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   z-index: 1000;
 }
 
-/* Smooth removal animation */
+/* =========================
+   REMOVAL ANIMATION (NO GLOW)
+   ========================= */
 .removing {
   animation: slideOutAndFade 0.3s ease-out forwards;
   pointer-events: none;
@@ -175,7 +188,6 @@
     transform: translateX(0) scale(1);
     max-height: 60px;
     padding: 0.75rem;
-    margin-bottom: 0;
   }
   50% {
     opacity: 0.3;
@@ -186,16 +198,17 @@
     transform: translateX(30px) scale(0.9);
     max-height: 0;
     padding: 0;
-    margin-bottom: 0;
     border-bottom-width: 0;
   }
 }
 
-/* Error state styling */
+/* =========================
+   ERROR STATE (NO GLOW)
+   ========================= */
 .errorRow {
   background: rgba(255, 26, 26, 0.1);
   border-left: 3px solid var(--tron-red-light, #FF1A1A);
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 .errorRow:hover {
@@ -215,42 +228,39 @@
   color: var(--tron-red-light, #FF1A1A);
   font-size: 1rem;
   margin-left: 0.5rem;
-  animation: pulse 2s ease-in-out infinite;
 }
 
-/* Responsive design for mobile */
+/* =========================
+   MOBILE
+   ========================= */
 @media (max-width: 768px) {
   .taskRow {
-    padding: 1rem 0.75rem; /* Increase padding for easier touch targets */
+    padding: 1rem 0.75rem;
   }
-  
+
   .dragHandle {
-    font-size: 1.4rem; /* Larger drag handle for mobile */
-    padding: 0.5rem; /* Larger touch target */
+    font-size: 1.4rem;
+    padding: 0.5rem;
     margin-right: 0.5rem;
-    opacity: 0.8; /* More visible on mobile */
+    opacity: 0.8;
   }
-  
-  .dragHandle:hover {
-    opacity: 1;
-  }
-  
+
   .checkbox {
-    width: 20px; /* Larger checkbox for mobile */
+    width: 20px;
     height: 20px;
     margin-right: 0.5rem;
   }
-  
+
   .taskText {
-    font-size: 1rem; /* Slightly larger text on mobile */
+    font-size: 1rem;
   }
-  
+
   .childRow .taskText {
     font-size: 0.9rem;
   }
-  
+
   .childRow {
-    padding-left: 1.5rem; /* Reduce indentation on mobile */
+    padding-left: 1.5rem;
     margin-left: 0.5rem;
   }
 }
