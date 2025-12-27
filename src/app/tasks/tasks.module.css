@@ -18,6 +18,12 @@
   gap: 32px;
   position: relative; /* Ensure content stays in place */
   z-index: 2; /* Ensure it's above the background */
+  
+  /* Component spacing variables - easily adjustable */
+  /* Change these values to adjust spacing between all components */
+  --component-spacing: 24px;        /* Main spacing between components */
+  --component-spacing-small: 16px;  /* Smaller spacing for tight areas */
+  --component-spacing-large: 32px;  /* Larger spacing for emphasis */
 }
 
 /* Background section, remains static and unaffected by animation */
@@ -37,6 +43,11 @@
   animation: pageLoad 0.8s ease-out;
   z-index: 1; /* Ensure content stays above background */
   margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--component-spacing);
+  width: 100%;
+  max-width: 800px;
 }
 
 /* Title styling */
@@ -112,6 +123,10 @@
   .page {
     padding: 20px;
     gap: 16px;
+    /* Adjust component spacing for mobile */
+    --component-spacing: 16px;
+    --component-spacing-small: 12px;
+    --component-spacing-large: 24px;
   }
 
   /* Scale down the title and text sizes */
@@ -128,4 +143,132 @@
     gap: 16px;
     padding: 10px;
   }
+}
+
+/* Error display styling */
+.errorContainer {
+  background: rgba(255, 26, 26, 0.1);
+  border: 1px solid var(--tron-red-light, #FF1A1A);
+  border-radius: 4px;
+  padding: 16px;
+  margin: 0; /* Remove margin, let flexbox gap handle spacing */
+  max-width: 800px;
+  text-align: left;
+  width: 100%;
+}
+
+.errorTitle {
+  font-family: "TechMono";
+  color: var(--tron-red-light, #FF1A1A);
+  font-size: 1.2rem;
+  margin: 0 0 12px 0;
+  text-shadow: 0 0 5px var(--glow-red-primary, #F80206);
+}
+
+.errorMessage {
+  background: rgba(0, 0, 0, 0.3);
+  border-left: 3px solid var(--tron-red-light, #FF1A1A);
+  padding: 8px 12px;
+  margin: 8px 0;
+  font-family: "TechMono";
+  font-size: 0.9rem;
+}
+
+.errorDetails {
+  font-size: 0.8rem;
+  color: var(--tron-orange, #FF6B35);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+.errorCount {
+  font-family: "TechMono";
+  color: var(--tron-orange, #FF6B35);
+  font-size: 0.8rem;
+  margin: 8px 0 0 0;
+  text-align: center;
+}
+
+.clearErrorsButton {
+  font-family: "TechMono";
+  background: transparent;
+  border: 1px solid var(--tron-orange, #FF6B35);
+  color: var(--tron-orange, #FF6B35);
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  margin-top: 8px;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.clearErrorsButton:hover {
+  background: var(--tron-orange, #FF6B35);
+  color: var(--tron-black, #000000);
+  box-shadow: 0 0 10px var(--tron-orange, #FF6B35);
+}
+
+/* Loading indicator styling */
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  margin: 0; /* Remove margin, let flexbox gap handle spacing */
+  width: 100%;
+}
+
+.loadingText {
+  font-family: "TechMono";
+  color: var(--tron-orange, #FF6B35);
+  font-size: 1rem;
+  text-shadow: 0 0 5px var(--tron-orange, #FF6B35);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Component spacing utility classes */
+/* Apply these classes to .page to change overall spacing */
+.componentSpacingTight {
+  --component-spacing: 12px;        /* Tight spacing */
+  --component-spacing-small: 8px;
+  --component-spacing-large: 16px;
+}
+
+.componentSpacingNormal {
+  --component-spacing: 24px;        /* Normal spacing (default) */
+  --component-spacing-small: 16px;
+  --component-spacing-large: 32px;
+}
+
+.componentSpacingLoose {
+  --component-spacing: 36px;        /* Loose spacing */
+  --component-spacing-small: 24px;
+  --component-spacing-large: 48px;
+}
+
+/* Individual component spacing overrides */
+/* Use these classes on individual components if needed */
+.titleSpacing {
+  margin-bottom: var(--component-spacing-small);
+}
+
+.toggleSpacing {
+  margin: var(--component-spacing-small) 0;
+}
+
+.progressSpacing {
+  margin: var(--component-spacing-small) 0;
+}
+
+.containerSpacing {
+  margin-top: var(--component-spacing-small);
 }
