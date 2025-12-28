@@ -1,11 +1,14 @@
 "use client";
+import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Background from "@/components/Background";
 import DailyProgressBar from "@/components/DailyProgressBar";
+import DailyTasksModal from "@/components/DailyTasksModal";
 import TaskToggle from "@/components/TaskToggle";
 import TaskContainer from "@/components/TaskContainer";
 import ErrorBoundary from "@/components/ErrorBoundary";
-import { useTaskManager } from "@/hooks/useTaskManager"; 
+import { useTaskManager } from "@/hooks/useTaskManager";
+import { useDailyTaskManager } from "@/hooks/useDailyTaskManager";
 import styles from "./tasks.module.css";
 
 // Initial Data passed in at top level
@@ -23,9 +26,6 @@ const INITIAL_TASKS = {
   ]
 };
 
-// Simple clamp function replacing the complex validator
-const clampProgress = (val) => Math.max(0, Math.min(100, Number(val) || 0));
-
 export default function TasksPage() {
   const { 
     currentTasks, 
@@ -38,7 +38,20 @@ export default function TasksPage() {
     renameTask 
   } = useTaskManager(INITIAL_TASKS);
 
-  const dailyProgress = clampProgress(79); 
+  // Daily task management
+  const {
+    dailyTasks,
+    progressPercentage,
+    toggleTask,
+    addTask: addDailyTask,
+  } = useDailyTaskManager();
+
+  // Modal open/close state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
+
   const pageTitle = `${activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)} TODO`;
 
   return (
@@ -60,7 +73,21 @@ export default function TasksPage() {
         </ErrorBoundary>
 
         <ErrorBoundary title="Progress Error">
-          <DailyProgressBar percentage={dailyProgress} />
+          <DailyProgressBar 
+            percentage={progressPercentage} 
+            onClick={handleOpenModal}
+            isClickable={true}
+          />
+        </ErrorBoundary>
+
+        <ErrorBoundary title="Daily Tasks Modal Error">
+          <DailyTasksModal
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            tasks={dailyTasks}
+            onToggleTask={toggleTask}
+            onAddTask={addDailyTask}
+          />
         </ErrorBoundary>
 
         <ErrorBoundary title="Task List Error">

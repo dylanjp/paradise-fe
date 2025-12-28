@@ -11,7 +11,9 @@ const TaskRow = ({
   indentLevel = 0, 
   isNewTask = false,
   className = '',
-  isOverlay = false // Added to handle the DragOverlay look
+  isOverlay = false, // Added to handle the DragOverlay look
+  isDailyTask = false, // Enables daily task styling mode
+  isCompleted = false // For daily tasks: shows green completed state
 }) => {
   const [isRemoving, setIsRemoving] = useState(false);
   const [isEditing, setIsEditing] = useState(isNewTask);
@@ -27,7 +29,7 @@ const TaskRow = ({
     isDragging,
   } = useSortable({ 
     id: task?.id ?? 'temp-id',
-    disabled: isRemoving || isEditing || isOverlay
+    disabled: isRemoving || isEditing || isOverlay || isDailyTask
   });
 
   // Focus management for editing
@@ -46,6 +48,14 @@ const TaskRow = ({
 
   const handleComplete = () => {
     if (!task?.id || isRemoving) return;
+    
+    // For daily tasks, toggle completion without removal animation
+    if (isDailyTask) {
+      onComplete(task.id);
+      return;
+    }
+    
+    // For regular tasks, animate removal
     setIsRemoving(true);
     // Smooth exit: wait for CSS animation (300ms) before removing from state
     setTimeout(() => onComplete(task.id), 300);
@@ -75,6 +85,9 @@ const TaskRow = ({
 
   const displayDescription = isSection ? editValue.toUpperCase() : editValue;
 
+  // Determine the effective completed state for daily tasks
+  const effectiveCompleted = isDailyTask ? isCompleted : (task?.completed ?? false);
+
   return (
     <div 
       ref={setNodeRef}
@@ -85,22 +98,27 @@ const TaskRow = ({
         ${indentLevel > 0 ? styles.childRow : ''} 
         ${isRemoving ? styles.removing : ''} 
         ${isEditing ? styles.editing : ''} 
+        ${isDailyTask ? styles.dailyTaskRow : ''}
+        ${isDailyTask && isCompleted ? styles.dailyTaskCompleted : ''}
         ${className}
       `.trim()}
     >
-      <div 
-        className={styles.dragHandle} 
-        {...attributes} 
-        {...listeners}
-        style={{ cursor: isEditing ? 'default' : 'grab' }}
-      >
-        ⋮⋮
-      </div>
+      {/* Hide drag handle for daily tasks */}
+      {!isDailyTask && (
+        <div 
+          className={styles.dragHandle} 
+          {...attributes} 
+          {...listeners}
+          style={{ cursor: isEditing ? 'default' : 'grab' }}
+        >
+          ⋮⋮
+        </div>
+      )}
 
       <input
         type="checkbox"
-        className={styles.checkbox}
-        checked={task?.completed ?? false}
+        className={`${styles.checkbox} ${isDailyTask && isCompleted ? styles.dailyCheckboxCompleted : ''}`}
+        checked={effectiveCompleted}
         onChange={handleComplete}
         disabled={isNewTask || isRemoving}
       />
@@ -117,7 +135,7 @@ const TaskRow = ({
         />
       ) : (
         <span 
-          className={`${styles.taskText} ${styles.clickableText}`}
+          className={`${styles.taskText} ${styles.clickableText} ${isDailyTask && isCompleted ? styles.dailyTextCompleted : ''}`}
           onClick={() => !isRemoving && setIsEditing(true)}
         >
           {displayDescription || "Untitled Task"}
