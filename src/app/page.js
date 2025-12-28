@@ -5,10 +5,11 @@ import Link from "next/link";
 import Background from "@/components/Background";
 import Navbar from "@/components/Navbar";
 import PrimaryButton from "@/components/PrimaryButton";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
+  const navbarRef = useRef(null);
 
   useEffect(() => {
     // Function to detect viewport width changes
@@ -31,7 +32,7 @@ export default function Home() {
 
   return (
     <div className={styles.page}>
-      <Navbar />
+      <Navbar ref={navbarRef} />
       <Background />
       <main className={styles.main}>
         <h1 className={styles.retroName}>P.A.R.A.D.I.S.E</h1>
@@ -64,8 +65,7 @@ export default function Home() {
             <PrimaryButton
               className={styles.mobileNavButton}
               onClick={() => {
-                // Placeholder for future functionality
-                console.log("Mobile navigation button clicked");
+                navbarRef.current?.openMenu();
               }}
             >
               Tap Here

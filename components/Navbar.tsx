@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, forwardRef, useImperativeHandle } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaBars, FaTimes } from "react-icons/fa";
@@ -13,17 +13,26 @@ import VersionModal from "@/components/VersionModal";
 import versionData from "@/data/versionData";
 import styles from "./Navbar.module.css";
 
-export default function Navbar() {
+export interface NavbarHandle {
+  openMenu: () => void;
+}
+
+const Navbar = forwardRef<NavbarHandle>(function Navbar(_props, ref) {
   const pathname = usePathname();
   const pages = [
-    { name: "Task Management", href: "/projects/" },
-    { name: "Notification Manager", href: "/blog/" },
-    { name: "House Management", href: "/resume/" },
-    { name: "Print Center", href: "/about/" },
+    { name: "Task Management", href: "/tasks/" },
+    { name: "Notification Manager", href: "/comingsoon/" },
+    { name: "Pratt Drive", href: "/drive/" },
+    { name: "Documentation", href: "/home/" },
+    { name: "Print Center", href: "/comingsoon/" },
   ];
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [showVersionModal, setShowVersionModal] = useState(false);
+
+  useImperativeHandle(ref, () => ({
+    openMenu: () => setMenuOpen(true),
+  }));
 
   useEffect(() => {}, []);
 
@@ -158,4 +167,6 @@ export default function Navbar() {
       )}
     </>
   );
-}
+});
+
+export default Navbar;
