@@ -7,6 +7,26 @@
   transition: all 0.3s ease;
 }
 
+/* Clickable state styling */
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  border-color: var(--tron-amber-primary, #ffb000);
+  box-shadow: 0 0 8px rgba(255, 176, 0, 0.4);
+  background: rgba(255, 176, 0, 0.05);
+}
+
+.clickable:focus {
+  outline: 2px solid var(--tron-amber-primary, #ffb000);
+  outline-offset: 2px;
+}
+
+.clickable:active {
+  transform: scale(0.99);
+}
+
 .progressBar {
   width: 100%;
   height: 20px;

@@ -264,3 +264,31 @@
     margin-left: 0.5rem;
   }
 }
+
+
+/* =========================
+   DAILY TASK STYLES
+   ========================= */
+.dailyTaskRow {
+  /* Daily tasks don't need drag handle space */
+  padding-left: 0.75rem;
+}
+
+.dailyTaskCompleted {
+  /* Subtle background for completed daily tasks */
+  background: rgba(0, 255, 0, 0.05);
+}
+
+.dailyTaskCompleted:hover {
+  background: rgba(0, 255, 0, 0.08);
+}
+
+/* Green checkbox for completed daily tasks */
+.dailyCheckboxCompleted {
+  accent-color: #00ff00;
+}
+
+/* Green text for completed daily tasks */
+.dailyTextCompleted {
+  color: #00ff00;
+}
