@@ -18,7 +18,7 @@
   font-family: "TechMono", monospace;
   background: transparent;
   border: none;
-  color: var(--tron-red-light, #FF1A1A);
+  color: var(--tron-red-light, #ff1a1a);
   font-size: 0.9rem;
   font-weight: bold;
   text-transform: uppercase;
@@ -28,7 +28,7 @@
   text-align: left;
   transition: all 0.3s ease;
   border-radius: 2px;
-  
+
   /* Ensure buttons don't have primary button styling */
   box-shadow: none;
   text-shadow: none;
@@ -36,20 +36,20 @@
 
 /* Hover effect for add buttons */
 .addButton:hover {
-  color: var(--tron-red-bright, #FF4444);
-  text-shadow: 0 0 5px var(--glow-red-primary, #F80206);
+  color: var(--tron-red-bright, #ff4444);
+  text-shadow: 0 0 5px var(--glow-red-primary, #f80206);
   background: rgba(255, 26, 26, 0.05);
 }
 
 /* Focus state for accessibility */
 .addButton:focus {
-  outline: 1px solid var(--tron-red-light, #FF1A1A);
+  outline: 1px solid var(--tron-red-light, #ff1a1a);
   outline-offset: 2px;
 }
 
 /* Active state */
 .addButton:active {
-  color: var(--tron-red-bright, #FF4444);
+  color: var(--tron-red-bright, #ff4444);
   transform: translateY(1px);
 }
 
@@ -59,7 +59,7 @@
     gap: 6px;
     margin-top: 12px;
   }
-  
+
   .addButton {
     font-size: 0.8rem;
     padding: 6px 10px;

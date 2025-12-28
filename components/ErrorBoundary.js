@@ -1,32 +1,32 @@
-import React from 'react';
-import styles from './ErrorBoundary.module.css';
+import React from "react";
+import styles from "./ErrorBoundary.module.css";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      hasError: false, 
-      error: null, 
+    this.state = {
+      hasError: false,
+      error: null,
       errorInfo: null,
-      errorId: null
+      errorId: null,
     };
   }
 
   static getDerivedStateFromError(error) {
     // Update state so the next render will show the fallback UI
-    return { 
+    return {
       hasError: true,
-      errorId: Date.now().toString()
+      errorId: Date.now().toString(),
     };
   }
 
   componentDidCatch(error, errorInfo) {
     // Log error details for debugging
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
-    
+    console.error("ErrorBoundary caught an error:", error, errorInfo);
+
     this.setState({
       error: error,
-      errorInfo: errorInfo
+      errorInfo: errorInfo,
     });
 
     // Call optional error callback if provided
@@ -36,11 +36,11 @@ class ErrorBoundary extends React.Component {
   }
 
   handleRetry = () => {
-    this.setState({ 
-      hasError: false, 
-      error: null, 
+    this.setState({
+      hasError: false,
+      error: null,
       errorInfo: null,
-      errorId: null
+      errorId: null,
     });
   };
 
@@ -56,14 +56,15 @@ class ErrorBoundary extends React.Component {
         <div className={styles.errorBoundary}>
           <div className={styles.errorContainer}>
             <h2 className={styles.errorTitle}>
-              {this.props.title || 'Component Error'}
+              {this.props.title || "Component Error"}
             </h2>
             <p className={styles.errorMessage}>
-              {this.props.message || 'Something went wrong with this component.'}
+              {this.props.message ||
+                "Something went wrong with this component."}
             </p>
-            
+
             {/* Show error details in development */}
-            {process.env.NODE_ENV === 'development' && this.state.error && (
+            {process.env.NODE_ENV === "development" && this.state.error && (
               <details className={styles.errorDetails}>
                 <summary className={styles.errorSummary}>Error Details</summary>
                 <div className={styles.errorStack}>
@@ -79,7 +80,7 @@ class ErrorBoundary extends React.Component {
             )}
 
             <div className={styles.errorActions}>
-              <button 
+              <button
                 className={styles.retryButton}
                 onClick={this.handleRetry}
                 type="button"
@@ -87,7 +88,7 @@ class ErrorBoundary extends React.Component {
                 Try Again
               </button>
               {this.props.onReset && (
-                <button 
+                <button
                   className={styles.resetButton}
                   onClick={this.props.onReset}
                   type="button"

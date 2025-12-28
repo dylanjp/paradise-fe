@@ -22,11 +22,11 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  border: 2px solid #F80206;
+  border: 2px solid #f80206;
   box-shadow:
-    0 0 5px #F80206,
-    0 0 10px #F80206,
-    0 0 20px #F80206;
+    0 0 5px #f80206,
+    0 0 10px #f80206,
+    0 0 20px #f80206;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -42,11 +42,11 @@
 }
 
 .retroIcon:hover {
-  border-color: #FF6600;
+  border-color: #ff6600;
   box-shadow:
-    0 0 10px #FF6600,
-    0 0 20px #FF6600,
-    0 0 30px #FF6600;
+    0 0 10px #ff6600,
+    0 0 20px #ff6600,
+    0 0 30px #ff6600;
 }
 
 .innerText {
@@ -55,12 +55,12 @@
   text-align: center;
   overflow: hidden;
   display: block;
-  color: #F80206;
+  color: #f80206;
   transition: color 0.3s ease-in-out;
 }
 
 .retroIcon:hover .innerText {
-  color: #FF6600;
+  color: #ff6600;
 }
 
 .retroIcon::before {
@@ -80,7 +80,7 @@
 }
 
 .navLink {
-  color: #F80206;
+  color: #f80206;
   text-decoration: none;
   font-size: 18px;
   position: relative;
@@ -105,15 +105,15 @@
 
 .navLink:hover,
 .navLink:focus {
-  color: #FF6600;
+  color: #ff6600;
   transform: scale(1.1);
   text-shadow:
-    0 0 10px #FF6600,
-    0 0 20px #F80206;
+    0 0 10px #ff6600,
+    0 0 20px #f80206;
 }
 
 .navLink:focus {
-  outline: 2px solid #FF6600;
+  outline: 2px solid #ff6600;
   outline-offset: 4px;
 }
 
@@ -126,20 +126,20 @@
 
 .icon {
   font-size: 32px;
-  color: #F80206;
+  color: #f80206;
   transition:
     color 0.3s,
     transform 0.2s;
 }
 
 .icon:hover {
-  color: #FFFF00;
+  color: #ffff00;
   transform: scale(1.1);
 }
 
 .version {
   font-size: 14px;
-  color: #F80206;
+  color: #f80206;
   padding-left: 10px;
 }
 
@@ -153,7 +153,7 @@
 /* Hamburger Icon */
 .hamburger {
   font-size: 24px;
-  color: #F80206;
+  color: #f80206;
   cursor: pointer;
   transition:
     color 0.3s,
@@ -161,7 +161,7 @@
 }
 
 .hamburger:hover {
-  color: #FF6600;
+  color: #ff6600;
   transform: scale(1.1);
 }
 
@@ -178,12 +178,12 @@
   padding: 10px 0;
   gap: 10px;
   z-index: 200;
-  border-top: 1px solid #F80206;
+  border-top: 1px solid #f80206;
   animation: slideDown 0.3s ease-in-out;
 }
 
 .mobileNavLink {
-  color: #F80206;
+  color: #f80206;
   text-decoration: none;
   font-size: 18px;
   transition:
@@ -198,12 +198,12 @@
 
 .mobileNavLink:hover,
 .mobileNavLink:focus {
-  color: #FF6600;
+  color: #ff6600;
   transform: scale(1.1);
 }
 
 .mobileNavLink:focus {
-  outline: 2px solid #FF6600;
+  outline: 2px solid #ff6600;
   outline-offset: 2px;
 }
 
@@ -218,14 +218,14 @@
 @keyframes pulseGlow {
   0% {
     box-shadow:
-      0 0 5px #F80206,
-      0 0 10px #F80206;
+      0 0 5px #f80206,
+      0 0 10px #f80206;
   }
   100% {
     box-shadow:
-      0 0 10px #F80206,
-      0 0 20px #F80206,
-      0 0 30px #F80206;
+      0 0 10px #f80206,
+      0 0 20px #f80206,
+      0 0 30px #f80206;
   }
 }
 

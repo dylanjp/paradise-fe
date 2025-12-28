@@ -16,7 +16,7 @@
 /* Modal container */
 .modal {
   background: black;
-  border: 2px solid var(--tron-red-primary, #F80206);
+  border: 2px solid var(--tron-red-primary, #f80206);
   padding: 1.5rem;
   border-radius: 8px;
   max-width: 500px;
@@ -24,7 +24,7 @@
   max-height: 80vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 0 20px var(--tron-red-primary, #F80206);
+  box-shadow: 0 0 20px var(--tron-red-primary, #f80206);
   animation: modalPopIn 0.3s ease-out;
 }
 
@@ -39,7 +39,7 @@
 }
 
 .modalTitle {
-  font-family: 'Share Tech Mono', monospace;
+  font-family: "Share Tech Mono", monospace;
   font-size: 1.25rem;
   color: var(--tron-amber-primary, #ffb000);
   text-transform: uppercase;
@@ -49,9 +49,9 @@
 
 .closeButton {
   background: transparent;
-  border: 1px solid var(--tron-red-primary, #F80206);
-  color: var(--tron-red-primary, #F80206);
-  font-family: 'Share Tech Mono', monospace;
+  border: 1px solid var(--tron-red-primary, #f80206);
+  color: var(--tron-red-primary, #f80206);
+  font-family: "Share Tech Mono", monospace;
   font-size: 1rem;
   padding: 0.25rem 0.75rem;
   cursor: pointer;
@@ -60,9 +60,9 @@
 }
 
 .closeButton:hover {
-  background: var(--tron-red-primary, #F80206);
+  background: var(--tron-red-primary, #f80206);
   color: black;
-  box-shadow: 0 0 10px var(--tron-red-primary, #F80206);
+  box-shadow: 0 0 10px var(--tron-red-primary, #f80206);
 }
 
 /* Task list container */
@@ -75,13 +75,12 @@
 
 /* Empty state */
 .emptyState {
-  font-family: 'Share Tech Mono', monospace;
+  font-family: "Share Tech Mono", monospace;
   color: rgba(255, 255, 255, 0.5);
   text-align: center;
   padding: 2rem;
   font-size: 0.9rem;
 }
-
 
 /* Daily task row styling */
 .dailyTaskRow {
@@ -105,7 +104,7 @@
   width: 18px;
   height: 18px;
   margin-right: 0.75rem;
-  accent-color: var(--tron-red-primary, #F80206);
+  accent-color: var(--tron-red-primary, #f80206);
   cursor: pointer;
 }
 
@@ -117,9 +116,9 @@
 /* Task text */
 .taskText {
   flex: 1;
-  font-family: 'Share Tech Mono', monospace;
+  font-family: "Share Tech Mono", monospace;
   font-size: 0.9rem;
-  color: var(--tron-red-primary, #F80206);
+  color: var(--tron-red-primary, #f80206);
   line-height: 1.4;
 }
 
@@ -143,7 +142,7 @@
   background: transparent;
   border: 1px solid var(--tron-amber-primary, #ffb000);
   color: var(--tron-amber-primary, #ffb000);
-  font-family: 'Share Tech Mono', monospace;
+  font-family: "Share Tech Mono", monospace;
   font-size: 0.9rem;
   padding: 0.75rem 1rem;
   cursor: pointer;
@@ -165,7 +164,7 @@
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.3);
   color: rgba(255, 255, 255, 0.3);
-  font-family: 'Share Tech Mono', monospace;
+  font-family: "Share Tech Mono", monospace;
   font-size: 0.9rem;
   padding: 0.75rem 1rem;
   cursor: not-allowed;
@@ -182,7 +181,7 @@
 /* Add task input */
 .addTaskInput {
   width: 100%;
-  font-family: 'Share Tech Mono', monospace;
+  font-family: "Share Tech Mono", monospace;
   font-size: 0.9rem;
   color: var(--tron-amber-primary, #ffb000);
   background: rgba(255, 255, 255, 0.1);

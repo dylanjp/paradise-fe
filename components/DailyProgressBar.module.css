@@ -39,12 +39,14 @@
 .progressFill {
   height: 100%;
   background: var(--tron-red-primary);
-  transition: width 0.5s ease, background-color 0.3s ease;
+  transition:
+    width 0.5s ease,
+    background-color 0.3s ease;
   border-radius: 2px;
 }
 
 .progressText {
-  font-family: 'Share Tech Mono', monospace;
+  font-family: "Share Tech Mono", monospace;
   font-size: 0.9rem;
   color: var(--tron-amber-primary, #ffb000);
   text-align: center;
@@ -54,7 +56,7 @@
 
 .neonGlow {
   border-color: #00ff00;
-  box-shadow: 
+  box-shadow:
     0 0 10px #00ff00,
     inset 0 0 10px rgba(0, 255, 0, 0.1);
 }
@@ -71,16 +73,16 @@
 /* Error state styling */
 .errorContainer {
   background: rgba(255, 26, 26, 0.1);
-  border-color: var(--tron-red-light, #FF1A1A);
+  border-color: var(--tron-red-light, #ff1a1a);
   box-shadow: 0 0 10px rgba(255, 26, 26, 0.3);
 }
 
 .errorText {
-  font-family: 'Share Tech Mono', monospace;
+  font-family: "Share Tech Mono", monospace;
   font-size: 0.9rem;
-  color: var(--tron-red-light, #FF1A1A);
+  color: var(--tron-red-light, #ff1a1a);
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 1px;
-  text-shadow: 0 0 5px var(--glow-red-primary, #F80206);
+  text-shadow: 0 0 5px var(--glow-red-primary, #f80206);
 }

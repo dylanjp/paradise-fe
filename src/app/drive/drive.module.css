@@ -11,7 +11,7 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  color: var(--tron-red-light, #FF1A1A);
+  color: var(--tron-red-light, #ff1a1a);
   font-family: "Orbitron", sans-serif;
   text-align: center;
   padding: 40px;
@@ -43,7 +43,7 @@
 .title {
   font-family: "TechMono";
   font-size: 3rem;
-  text-shadow: 0 0 10px var(--glow-red-primary, #F80206);
+  text-shadow: 0 0 10px var(--glow-red-primary, #f80206);
 }
 
 /* Text styling */

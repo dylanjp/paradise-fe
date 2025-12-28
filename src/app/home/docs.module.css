@@ -12,14 +12,14 @@
   justify-content: flex-start; /* move content toward the top */
   padding-top: 8vh; /* healthy spacing from the top of the viewport */
   min-height: 100vh;
-  color: var(--tron-red-light, #FF1A1A);
+  color: var(--tron-red-light, #ff1a1a);
   font-family: "TechMono";
   text-align: center;
 }
 
 .title {
   font-size: 3rem;
-  text-shadow: 0 0 10px var(--glow-red-primary, #F80206);
+  text-shadow: 0 0 10px var(--glow-red-primary, #f80206);
   margin-bottom: 24px; /* space between h1 and the CTA links */
 }
 
@@ -58,7 +58,7 @@
   align-items: center;
   padding: 10px 15px;
   font-size: 18px;
-  color: var(--tron-orange-primary, #FF6600);
+  color: var(--tron-orange-primary, #ff6600);
   text-decoration: none;
   transition: color 0.3s ease;
 }
@@ -76,8 +76,8 @@
   right: 0;
   width: 10px;
   height: 10px;
-  border-right: 2px solid var(--tron-orange-primary, #FF6600);
-  border-bottom: 2px solid var(--tron-orange-primary, #FF6600);
+  border-right: 2px solid var(--tron-orange-primary, #ff6600);
+  border-bottom: 2px solid var(--tron-orange-primary, #ff6600);
   transition:
     width 0.3s ease,
     height 0.3s ease;
@@ -99,7 +99,7 @@
 /* visual active state when a category is selected */
 .navActive {
   background: rgba(248, 2, 6, 0.06);
-  color: var(--tron-yellow-active, #FFFF00);
+  color: var(--tron-yellow-active, #ffff00);
   border: 1px solid rgba(248, 2, 6, 0.18);
 }
 
@@ -140,7 +140,7 @@
 }
 
 .blog-content a {
-  color: var(--tron-orange-primary, #FF6600);
+  color: var(--tron-orange-primary, #ff6600);
   text-decoration: none;
 }
 

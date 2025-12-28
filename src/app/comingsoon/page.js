@@ -19,8 +19,8 @@ export default function ProjectsPage() {
       <Navbar />
 
       <div className={styles.pageContent}>
-        <h1 className={styles.title}>This feature is still being built</h1>     
-          <p className={styles.text}>More info is coming soon.</p>
+        <h1 className={styles.title}>This feature is still being built</h1>
+        <p className={styles.text}>More info is coming soon.</p>
       </div>
     </div>
   );

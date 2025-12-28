@@ -1,10 +1,7 @@
-import React from 'react';
-import styles from './AddTaskButtons.module.css';
+import React from "react";
+import styles from "./AddTaskButtons.module.css";
 
-const AddTaskButtons = ({ 
-  onAddTask, 
-  className = '' 
-}) => {
+const AddTaskButtons = ({ onAddTask, className = "" }) => {
   const handleAddTask = () => {
     if (onAddTask) {
       onAddTask();
@@ -13,7 +10,7 @@ const AddTaskButtons = ({
 
   return (
     <div className={`${styles.addButtonsContainer} ${className}`}>
-      <button 
+      <button
         className={styles.addButton}
         onClick={handleAddTask}
         type="button"

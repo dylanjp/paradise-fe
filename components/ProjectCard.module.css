@@ -18,7 +18,7 @@
 .card {
   font-family: "TechMono";
   background: rgba(0, 0, 0, 0.8);
-  border: 2px solid #F80206;
+  border: 2px solid #f80206;
   border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
@@ -48,11 +48,11 @@
 .card:focus {
   font-family: "TechMono";
   transform: scale(1.05);
-  box-shadow: 0 0 15px #F80206;
+  box-shadow: 0 0 15px #f80206;
 }
 
 .card:focus {
-  outline: 2px solid #F80206;
+  outline: 2px solid #f80206;
   outline-offset: 4px;
 }
 
@@ -68,7 +68,7 @@
 .cardTitle {
   font-family: "TechMono";
   font-size: 1.2rem;
-  color: #F80206;
+  color: #f80206;
   padding: 10px;
   text-align: center;
   margin: 0; /* Remove extra spacing below if needed */
