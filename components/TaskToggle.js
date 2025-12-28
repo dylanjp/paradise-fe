@@ -1,13 +1,13 @@
 "use client";
-import React from 'react';
+import React from "react";
 import styles from "./TaskToggle.module.css";
 
 export default function TaskToggle({
-  activeCategory = 'personal',
+  activeCategory = "personal",
   onCategoryChange,
-  className = ""
+  className = "",
 }) {
-  const categories = ['personal', 'work'];
+  const categories = ["personal", "work"];
 
   return (
     <div className={`${styles.toggleContainer} ${className}`.trim()}>

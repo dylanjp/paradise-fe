@@ -1,24 +1,24 @@
-import React, { useState, useRef, useEffect } from 'react';
-import styles from './DailyTasksModal.module.css';
+import React, { useState, useRef, useEffect } from "react";
+import styles from "./DailyTasksModal.module.css";
 
 /**
  * DailyTasksModal - Modal component for displaying and managing daily tasks
- * 
+ *
  * @param {boolean} isOpen - Controls modal visibility
  * @param {function} onClose - Handler to close modal
  * @param {Array} tasks - List of daily tasks
  * @param {function} onToggleTask - Handler to toggle task completion
  * @param {function} onAddTask - Handler to add new task
  */
-const DailyTasksModal = ({ 
-  isOpen, 
-  onClose, 
-  tasks = [], 
-  onToggleTask, 
-  onAddTask 
+const DailyTasksModal = ({
+  isOpen,
+  onClose,
+  tasks = [],
+  onToggleTask,
+  onAddTask,
 }) => {
   const [isAddingTask, setIsAddingTask] = useState(false);
-  const [newTaskDescription, setNewTaskDescription] = useState('');
+  const [newTaskDescription, setNewTaskDescription] = useState("");
   const inputRef = useRef(null);
   const modalRef = useRef(null);
 
@@ -32,18 +32,18 @@ const DailyTasksModal = ({
   // Handle escape key to close modal
   useEffect(() => {
     const handleEscape = (e) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === "Escape" && isOpen) {
         if (isAddingTask) {
           setIsAddingTask(false);
-          setNewTaskDescription('');
+          setNewTaskDescription("");
         } else {
           onClose();
         }
       }
     };
 
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
   }, [isOpen, isAddingTask, onClose]);
 
   // Don't render if not open
@@ -56,7 +56,6 @@ const DailyTasksModal = ({
     }
   };
 
-
   // Handle add task button click
   const handleAddTaskClick = () => {
     setIsAddingTask(true);
@@ -68,16 +67,16 @@ const DailyTasksModal = ({
     if (trimmed) {
       onAddTask(trimmed);
     }
-    setNewTaskDescription('');
+    setNewTaskDescription("");
     setIsAddingTask(false);
   };
 
   // Handle input key down
   const handleInputKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleSaveTask();
-    } else if (e.key === 'Escape') {
-      setNewTaskDescription('');
+    } else if (e.key === "Escape") {
+      setNewTaskDescription("");
       setIsAddingTask(false);
     }
   };
@@ -91,8 +90,8 @@ const DailyTasksModal = ({
   const sortedTasks = [...tasks].sort((a, b) => a.order - b.order);
 
   return (
-    <div 
-      className={styles.modalOverlay} 
+    <div
+      className={styles.modalOverlay}
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
@@ -104,7 +103,7 @@ const DailyTasksModal = ({
           <h2 id="daily-tasks-title" className={styles.modalTitle}>
             Daily Tasks
           </h2>
-          <button 
+          <button
             className={styles.closeButton}
             onClick={onClose}
             aria-label="Close modal"
@@ -124,12 +123,14 @@ const DailyTasksModal = ({
               <div key={task.id} className={styles.dailyTaskRow}>
                 <input
                   type="checkbox"
-                  className={`${styles.taskCheckbox} ${task.completed ? styles.completedCheckbox : ''}`}
+                  className={`${styles.taskCheckbox} ${task.completed ? styles.completedCheckbox : ""}`}
                   checked={task.completed}
                   onChange={() => handleToggle(task.id)}
-                  aria-label={`Mark "${task.description}" as ${task.completed ? 'incomplete' : 'complete'}`}
+                  aria-label={`Mark "${task.description}" as ${task.completed ? "incomplete" : "complete"}`}
                 />
-                <span className={`${styles.taskText} ${task.completed ? styles.completedText : ''}`}>
+                <span
+                  className={`${styles.taskText} ${task.completed ? styles.completedText : ""}`}
+                >
                   {task.description}
                 </span>
               </div>
@@ -154,14 +155,14 @@ const DailyTasksModal = ({
 
         {/* Button Container */}
         <div className={styles.buttonContainer}>
-          <button 
+          <button
             className={styles.addTaskButton}
             onClick={handleAddTaskClick}
             disabled={isAddingTask}
           >
             + Add Daily Task
           </button>
-          <button 
+          <button
             className={styles.dashboardButton}
             disabled
             title="Coming soon"

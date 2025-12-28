@@ -20,7 +20,7 @@
 
 .modal {
   background-color: #0a0a14;
-  border: 2px solid var(--tron-red-primary, #F80206);
+  border: 2px solid var(--tron-red-primary, #f80206);
   border-radius: 12px;
   padding: 24px;
   max-height: 90vh;
@@ -31,14 +31,14 @@
 }
 
 .modalTitle {
-  color: var(--tron-red-primary, #F80206);
+  color: var(--tron-red-primary, #f80206);
   text-align: center;
   /* keep modal title centered */
   font-size: 1.8rem;
   margin-bottom: 1rem;
   border-bottom: 1px solid rgba(248, 2, 6, 0.33);
   padding-bottom: 8px;
-  text-shadow: 0 0 15px var(--glow-red-primary, #F80206);
+  text-shadow: 0 0 15px var(--glow-red-primary, #f80206);
 }
 
 .modalContent {
@@ -51,22 +51,26 @@
   border: 1px solid rgba(248, 2, 6, 0.5);
   padding: 16px;
   border-radius: 8px;
-  background: linear-gradient(135deg, rgba(17, 17, 34, 0.8), rgba(0, 0, 0, 0.9));
-  box-shadow: 
+  background: linear-gradient(
+    135deg,
+    rgba(17, 17, 34, 0.8),
+    rgba(0, 0, 0, 0.9)
+  );
+  box-shadow:
     inset 0 0 10px rgba(248, 2, 6, 0.1),
     0 0 5px rgba(248, 2, 6, 0.2);
   transition: box-shadow 0.3s ease;
 }
 
 .versionSection:hover {
-  box-shadow: 
+  box-shadow:
     inset 0 0 15px rgba(248, 2, 6, 0.15),
     0 0 10px rgba(248, 2, 6, 0.3);
 }
 
 .versionTitle {
   font-size: 1.2rem;
-  color: var(--tron-orange-primary, #FF6600);
+  color: var(--tron-orange-primary, #ff6600);
   margin-bottom: 8px;
   text-align: left;
   /* force left align */
@@ -75,8 +79,8 @@
 
 .releaseDate {
   font-size: 0.9rem;
-  color: var(--tron-red-medium, #FF0D0D);
-  text-shadow: 0 0 5px var(--glow-red-primary, #F80206);
+  color: var(--tron-red-medium, #ff0d0d);
+  text-shadow: 0 0 5px var(--glow-red-primary, #f80206);
 }
 
 .noteList {
@@ -89,7 +93,7 @@
 }
 
 .noteItem {
-  color: var(--tron-orange-primary, #FF6600);
+  color: var(--tron-orange-primary, #ff6600);
   margin-bottom: 4px;
   text-shadow: 0 0 3px rgba(255, 102, 0, 0.3);
 }
@@ -103,13 +107,13 @@
 .closeButton {
   font-family: "TechMono";
   background: black;
-  border: 2px solid var(--tron-red-primary, #F80206);
-  color: var(--tron-red-light, #FF1A1A);
+  border: 2px solid var(--tron-red-primary, #f80206);
+  color: var(--tron-red-light, #ff1a1a);
   padding: 10px 20px;
   cursor: pointer;
   font-size: 1rem;
   text-transform: uppercase;
-  box-shadow: 0 0 10px var(--glow-red-primary, #F80206);
+  box-shadow: 0 0 10px var(--glow-red-primary, #f80206);
   transition:
     background 0.3s,
     color 0.3s,
@@ -117,7 +121,7 @@
 }
 
 .closeButton:hover {
-  background: var(--tron-red-primary, #F80206);
+  background: var(--tron-red-primary, #f80206);
   color: black;
-  box-shadow: 0 0 20px var(--glow-red-intense, #FF0000);
+  box-shadow: 0 0 20px var(--glow-red-intense, #ff0000);
 }

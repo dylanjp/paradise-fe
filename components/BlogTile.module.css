@@ -69,7 +69,7 @@
 }
 
 .imagePlaceholder {
-  color: #F80206;
+  color: #f80206;
   opacity: 0.6;
 }
 
@@ -83,7 +83,7 @@
 
 .title {
   margin: 0 0 8px 0;
-  color: #FF0D0D;
+  color: #ff0d0d;
   font-size: 1.4rem;
   line-height: 1.15;
   text-shadow: 0 0 10px rgba(255, 13, 13, 0.14);
@@ -91,7 +91,7 @@
 
 .desc {
   margin: 0;
-  color: #FF4400;
+  color: #ff4400;
   opacity: 0.95;
   font-size: 1.05rem;
   flex: 1 1 auto;
@@ -112,7 +112,7 @@
 }
 
 .date {
-  color: #FF0D0D;
+  color: #ff0d0d;
   font-size: 0.95rem;
 }
 
@@ -125,7 +125,7 @@
 
 .tag {
   border: 1px solid rgba(255, 102, 0, 0.12);
-  color: #FF6600;
+  color: #ff6600;
   padding: 4px 10px;
   border-radius: 999px;
   font-size: 0.85rem;

@@ -4,24 +4,24 @@
 
   /* TRON Ares Red Color Palette */
   /* Primary Red Colors */
-  --tron-red-primary: #F80206;      /* Main brand color */
-  --tron-red-light: #FF1A1A;        /* Lighter variant for text */
-  --tron-red-medium: #FF0D0D;       /* Medium variant for highlights */
-  --tron-red-dark: #FF0D0D;         /* Darker variant for metadata - updated for accessibility */
-  
+  --tron-red-primary: #f80206; /* Main brand color */
+  --tron-red-light: #ff1a1a; /* Lighter variant for text */
+  --tron-red-medium: #ff0d0d; /* Medium variant for highlights */
+  --tron-red-dark: #ff0d0d; /* Darker variant for metadata - updated for accessibility */
+
   /* Secondary Complementary Colors */
-  --tron-orange-primary: #FF6600;   /* Main accent color */
-  --tron-orange-light: #FF7733;     /* Light accent variant */
-  --tron-orange-medium: #FF4400;    /* Medium accent variant */
-  
+  --tron-orange-primary: #ff6600; /* Main accent color */
+  --tron-orange-light: #ff7733; /* Light accent variant */
+  --tron-orange-medium: #ff4400; /* Medium accent variant */
+
   /* Interactive State Colors */
-  --tron-yellow-active: #FFFF00;    /* Active/highlight states */
-  --tron-red-hover: #FF3333;        /* Hover state enhancement */
-  
+  --tron-yellow-active: #ffff00; /* Active/highlight states */
+  --tron-red-hover: #ff3333; /* Hover state enhancement */
+
   /* Glow Effect Colors */
-  --glow-red-primary: #F80206;      /* Primary glow color */
-  --glow-red-intense: #FF0000;      /* Intense glow for hover states */
-  --glow-orange: #FF6600;           /* Secondary glow color */
+  --glow-red-primary: #f80206; /* Primary glow color */
+  --glow-red-intense: #ff0000; /* Intense glow for hover states */
+  --glow-orange: #ff6600; /* Secondary glow color */
 
   /* Animation Infrastructure - CSS Custom Properties */
   --animation-stagger-delay: 150ms;
@@ -42,55 +42,55 @@
 /* Browser Compatibility Fallbacks */
 /* These classes provide fallback support for browsers that don't support CSS custom properties */
 .tron-text-primary {
-  color: #F80206; /* Fallback */
-  color: var(--tron-red-primary, #F80206);
+  color: #f80206; /* Fallback */
+  color: var(--tron-red-primary, #f80206);
 }
 
 .tron-text-light {
-  color: #FF1A1A; /* Fallback */
-  color: var(--tron-red-light, #FF1A1A);
+  color: #ff1a1a; /* Fallback */
+  color: var(--tron-red-light, #ff1a1a);
 }
 
 .tron-text-medium {
-  color: #FF0D0D; /* Fallback */
-  color: var(--tron-red-medium, #FF0D0D);
+  color: #ff0d0d; /* Fallback */
+  color: var(--tron-red-medium, #ff0d0d);
 }
 
 .tron-text-dark {
-  color: #FF0D0D; /* Fallback - updated for accessibility */
-  color: var(--tron-red-dark, #FF0D0D);
+  color: #ff0d0d; /* Fallback - updated for accessibility */
+  color: var(--tron-red-dark, #ff0d0d);
 }
 
 .tron-text-orange {
-  color: #FF6600; /* Fallback */
-  color: var(--tron-orange-primary, #FF6600);
+  color: #ff6600; /* Fallback */
+  color: var(--tron-orange-primary, #ff6600);
 }
 
 .tron-border-primary {
-  border-color: #F80206; /* Fallback */
-  border-color: var(--tron-red-primary, #F80206);
+  border-color: #f80206; /* Fallback */
+  border-color: var(--tron-red-primary, #f80206);
 }
 
 .tron-glow-primary {
-  text-shadow: 
-    0 0 5px #F80206,
-    0 0 10px #F80206,
-    0 0 20px #F80206; /* Fallback */
-  text-shadow: 
-    0 0 5px var(--glow-red-primary, #F80206),
-    0 0 10px var(--glow-red-primary, #F80206),
-    0 0 20px var(--glow-red-primary, #F80206);
+  text-shadow:
+    0 0 5px #f80206,
+    0 0 10px #f80206,
+    0 0 20px #f80206; /* Fallback */
+  text-shadow:
+    0 0 5px var(--glow-red-primary, #f80206),
+    0 0 10px var(--glow-red-primary, #f80206),
+    0 0 20px var(--glow-red-primary, #f80206);
 }
 
 .tron-glow-intense {
-  text-shadow: 
-    0 0 10px #FF0000,
-    0 0 20px #FF0000,
-    0 0 30px #FF0000; /* Fallback */
-  text-shadow: 
-    0 0 10px var(--glow-red-intense, #FF0000),
-    0 0 20px var(--glow-red-intense, #FF0000),
-    0 0 30px var(--glow-red-intense, #FF0000);
+  text-shadow:
+    0 0 10px #ff0000,
+    0 0 20px #ff0000,
+    0 0 30px #ff0000; /* Fallback */
+  text-shadow:
+    0 0 10px var(--glow-red-intense, #ff0000),
+    0 0 20px var(--glow-red-intense, #ff0000),
+    0 0 30px var(--glow-red-intense, #ff0000);
 }
 
 /* Prefers Reduced Motion Support for Animation Variables */

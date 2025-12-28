@@ -20,7 +20,7 @@
    DRAG HANDLE
    ========================= */
 .dragHandle {
-  font-family: 'Share Tech Mono', monospace;
+  font-family: "Share Tech Mono", monospace;
   font-size: 1.2rem;
   color: var(--tron-red-primary);
   margin-right: 0.75rem;
@@ -60,7 +60,7 @@
    ========================= */
 .taskText {
   flex: 1;
-  font-family: 'Share Tech Mono', monospace;
+  font-family: "Share Tech Mono", monospace;
   font-size: 0.9rem;
   color: var(--tron-red-primary);
   line-height: 1.4;
@@ -82,7 +82,7 @@
    ========================= */
 .taskInput {
   flex: 1;
-  font-family: 'Share Tech Mono', monospace;
+  font-family: "Share Tech Mono", monospace;
   font-size: 0.9rem;
   color: var(--tron-red-primary);
   background: rgba(255, 255, 255, 0.1);
@@ -99,8 +99,8 @@
 
 /* Section / parent input */
 .sectionInput {
-  color: var(--tron-amber, #FFA500);
-  border-color: var(--tron-amber, #FFA500);
+  color: var(--tron-amber, #ffa500);
+  border-color: var(--tron-amber, #ffa500);
   text-transform: uppercase;
 }
 
@@ -129,18 +129,18 @@
    ========================= */
 .sectionRow {
   background: rgba(255, 165, 0, 0.05);
-  border-left: 2px solid var(--tron-amber, #FFA500);
+  border-left: 2px solid var(--tron-amber, #ffa500);
 }
 
 .sectionText {
-  color: var(--tron-amber, #FFA500);
+  color: var(--tron-amber, #ffa500);
   font-weight: bold;
   letter-spacing: 0.5px;
 }
 
 /* Ensure section rows override default text color */
 .sectionRow .taskText {
-  color: var(--tron-amber, #FFA500);
+  color: var(--tron-amber, #ffa500);
 }
 
 /* =========================
@@ -207,7 +207,7 @@
    ========================= */
 .errorRow {
   background: rgba(255, 26, 26, 0.1);
-  border-left: 3px solid var(--tron-red-light, #FF1A1A);
+  border-left: 3px solid var(--tron-red-light, #ff1a1a);
   opacity: 0.85;
 }
 
@@ -217,15 +217,15 @@
 
 .errorText {
   flex: 1;
-  font-family: 'Share Tech Mono', monospace;
+  font-family: "Share Tech Mono", monospace;
   font-size: 0.9rem;
-  color: var(--tron-red-light, #FF1A1A);
+  color: var(--tron-red-light, #ff1a1a);
   line-height: 1.4;
   font-style: italic;
 }
 
 .errorIndicator {
-  color: var(--tron-red-light, #FF1A1A);
+  color: var(--tron-red-light, #ff1a1a);
   font-size: 1rem;
   margin-left: 0.5rem;
 }
@@ -264,7 +264,6 @@
     margin-left: 0.5rem;
   }
 }
-
 
 /* =========================
    DAILY TASK STYLES

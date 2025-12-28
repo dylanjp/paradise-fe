@@ -4,7 +4,7 @@
 }
 
 .container {
-  border: 2px solid var(--tron-red-primary, #F80206);
+  border: 2px solid var(--tron-red-primary, #f80206);
   border-radius: 4px;
   background: var(--background, #000);
   padding: 1.5rem;
@@ -14,7 +14,7 @@
 }
 
 .container:hover {
-  box-shadow: 
+  box-shadow:
     0 0 10px rgba(248, 2, 6, 0.4),
     0 0 20px rgba(248, 2, 6, 0.2);
 }
@@ -22,12 +22,12 @@
 .title {
   font-family: "TechMono", monospace;
   font-size: 1.2rem;
-  color: var(--tron-red-primary, #F80206);
+  color: var(--tron-red-primary, #f80206);
   text-transform: uppercase;
   letter-spacing: 1px;
   margin: 0 0 1rem 0;
   text-align: center;
-  text-shadow: 0 0 5px var(--glow-red-primary, #F80206);
+  text-shadow: 0 0 5px var(--glow-red-primary, #f80206);
 }
 
 .taskList {
@@ -50,7 +50,7 @@
   width: 80%;
   height: 40px;
   background: rgba(248, 2, 6, 0.1);
-  border: 2px dashed var(--tron-red-primary, #F80206);
+  border: 2px dashed var(--tron-red-primary, #f80206);
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -62,12 +62,13 @@
 
 .dropZoneActive {
   background: rgba(248, 2, 6, 0.3);
-  border-color: var(--tron-red-light, #FF1A1A);
+  border-color: var(--tron-red-light, #ff1a1a);
   animation: dropZoneActivePulse 0.8s ease-in-out infinite;
 }
 
 @keyframes dropZoneActivePulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 10px rgba(248, 2, 6, 0.5);
     background: rgba(248, 2, 6, 0.3);
   }
@@ -88,17 +89,18 @@
 .dropZoneText {
   font-family: "TechMono", monospace;
   font-size: 0.75rem;
-  color: var(--tron-red-primary, #F80206);
+  color: var(--tron-red-primary, #f80206);
   text-transform: uppercase;
   letter-spacing: 1px;
-  text-shadow: 0 0 3px var(--glow-red-primary, #F80206);
+  text-shadow: 0 0 3px var(--glow-red-primary, #f80206);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 @keyframes dropZonePulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 5px rgba(248, 2, 6, 0.3);
     background: rgba(248, 2, 6, 0.1);
   }
@@ -142,7 +144,7 @@
 .errorState {
   text-align: center;
   padding: 2rem 1rem;
-  border: 1px solid var(--tron-red-light, #FF1A1A);
+  border: 1px solid var(--tron-red-light, #ff1a1a);
   border-radius: 2px;
   background: rgba(255, 26, 26, 0.1);
 }
@@ -150,11 +152,11 @@
 .errorText {
   font-family: "TechMono", monospace;
   font-size: 1rem;
-  color: var(--tron-red-light, #FF1A1A);
+  color: var(--tron-red-light, #ff1a1a);
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 1px;
-  text-shadow: 0 0 5px var(--glow-red-primary, #F80206);
+  text-shadow: 0 0 5px var(--glow-red-primary, #f80206);
 }
 
 /* Responsive design for mobile */
@@ -163,29 +165,29 @@
     padding: 1rem;
     margin-bottom: 0.75rem;
   }
-  
+
   .title {
     font-size: 1rem;
     margin-bottom: 0.75rem;
   }
-  
+
   .dropZone {
     width: 90%;
     height: 35px;
   }
-  
+
   .dropZoneText {
     font-size: 0.7rem;
   }
-  
+
   .emptyState {
     padding: 1.5rem 0.75rem;
   }
-  
+
   .emptyText {
     font-size: 0.9rem;
   }
-  
+
   .emptySubtext {
     font-size: 0.75rem;
   }

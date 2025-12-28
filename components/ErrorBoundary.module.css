@@ -13,7 +13,7 @@
 
 .errorContainer {
   background: rgba(255, 26, 26, 0.1);
-  border: 2px solid var(--tron-red-light, #FF1A1A);
+  border: 2px solid var(--tron-red-light, #ff1a1a);
   border-radius: 8px;
   padding: 24px;
   max-width: 600px;
@@ -23,17 +23,17 @@
 
 .errorTitle {
   font-family: "TechMono", monospace;
-  color: var(--tron-red-light, #FF1A1A);
+  color: var(--tron-red-light, #ff1a1a);
   font-size: 1.5rem;
   margin: 0 0 16px 0;
-  text-shadow: 0 0 10px var(--glow-red-primary, #F80206);
+  text-shadow: 0 0 10px var(--glow-red-primary, #f80206);
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
 .errorMessage {
   font-family: "TechMono", monospace;
-  color: var(--tron-orange, #FF6B35);
+  color: var(--tron-orange, #ff6b35);
   font-size: 1rem;
   margin: 0 0 20px 0;
   line-height: 1.5;
@@ -43,28 +43,28 @@
   text-align: left;
   margin: 20px 0;
   background: rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--tron-orange, #FF6B35);
+  border: 1px solid var(--tron-orange, #ff6b35);
   border-radius: 4px;
   padding: 12px;
 }
 
 .errorSummary {
   font-family: "TechMono", monospace;
-  color: var(--tron-orange, #FF6B35);
+  color: var(--tron-orange, #ff6b35);
   cursor: pointer;
   font-weight: bold;
   margin-bottom: 8px;
 }
 
 .errorSummary:hover {
-  color: var(--tron-red-light, #FF1A1A);
-  text-shadow: 0 0 5px var(--glow-red-primary, #F80206);
+  color: var(--tron-red-light, #ff1a1a);
+  text-shadow: 0 0 5px var(--glow-red-primary, #f80206);
 }
 
 .errorStack {
   font-family: "TechMono", monospace;
   font-size: 0.8rem;
-  color: var(--tron-white, #FFFFFF);
+  color: var(--tron-white, #ffffff);
   margin: 8px 0;
   word-break: break-word;
 }
@@ -73,7 +73,7 @@
   white-space: pre-wrap;
   margin: 4px 0;
   font-size: 0.7rem;
-  color: var(--tron-gray, #CCCCCC);
+  color: var(--tron-gray, #cccccc);
 }
 
 .errorActions {
@@ -87,8 +87,8 @@
 .resetButton {
   font-family: "TechMono", monospace;
   background: transparent;
-  border: 2px solid var(--tron-orange, #FF6B35);
-  color: var(--tron-orange, #FF6B35);
+  border: 2px solid var(--tron-orange, #ff6b35);
+  color: var(--tron-orange, #ff6b35);
   padding: 10px 20px;
   cursor: pointer;
   text-transform: uppercase;
@@ -100,27 +100,27 @@
 
 .retryButton:hover,
 .resetButton:hover {
-  background: var(--tron-orange, #FF6B35);
+  background: var(--tron-orange, #ff6b35);
   color: var(--tron-black, #000000);
-  box-shadow: 0 0 15px var(--tron-orange, #FF6B35);
+  box-shadow: 0 0 15px var(--tron-orange, #ff6b35);
   text-shadow: none;
 }
 
 .retryButton:focus,
 .resetButton:focus {
-  outline: 2px solid var(--tron-red-light, #FF1A1A);
+  outline: 2px solid var(--tron-red-light, #ff1a1a);
   outline-offset: 2px;
 }
 
 .resetButton {
-  border-color: var(--tron-red-light, #FF1A1A);
-  color: var(--tron-red-light, #FF1A1A);
+  border-color: var(--tron-red-light, #ff1a1a);
+  color: var(--tron-red-light, #ff1a1a);
 }
 
 .resetButton:hover {
-  background: var(--tron-red-light, #FF1A1A);
+  background: var(--tron-red-light, #ff1a1a);
   color: var(--tron-black, #000000);
-  box-shadow: 0 0 15px var(--tron-red-light, #FF1A1A);
+  box-shadow: 0 0 15px var(--tron-red-light, #ff1a1a);
 }
 
 /* Responsive design */

@@ -8,7 +8,7 @@
   line-height: 1.7;
   white-space: pre-wrap; /* preserve all newlines */
   font-family: "TechMono";
-  color: #FF6600; /* Amber/orange for body text */
+  color: #ff6600; /* Amber/orange for body text */
   transition:
     filter 0.6s ease,
     opacity 0.6s ease;
@@ -57,24 +57,24 @@
 }
 
 .blogContent a {
-  color: #FF6600;
+  color: #ff6600;
   text-decoration: none;
 }
 
 .blogContent h1 {
-  color: #F80206; /* Red for titles */
+  color: #f80206; /* Red for titles */
   text-align: center;
-  text-shadow: 0 0 10px #F80206;
+  text-shadow: 0 0 10px #f80206;
 }
 
 .blogContent h2 {
-  color: #F80206; /* Red for titles */
-  text-shadow: 0 0 8px #F80206;
+  color: #f80206; /* Red for titles */
+  text-shadow: 0 0 8px #f80206;
 }
 
 .blogContent h3 {
-  color: #F80206; /* Red for titles */
-  text-shadow: 0 0 6px #F80206;
+  color: #f80206; /* Red for titles */
+  text-shadow: 0 0 6px #f80206;
 }
 
 .blogContent a:hover {
