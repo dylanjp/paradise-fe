@@ -11,85 +11,32 @@ import { useTaskManager } from "@/hooks/useTaskManager";
 import { useDailyTaskManager } from "@/hooks/useDailyTaskManager";
 import styles from "./tasks.module.css";
 
-// Initial Data passed in at top level
-const INITIAL_TASKS = {
-  personal: [
-    {
-      id: "1",
-      description: "Review morning routine",
-      category: "personal",
-      completed: false,
-      order: 1,
-    },
-    {
-      id: "2",
-      description: "HEALTH & FITNESS",
-      category: "personal",
-      completed: false,
-      order: 2,
-    },
-    {
-      id: "3",
-      description: "Go for morning walk",
-      category: "personal",
-      completed: false,
-      order: 1,
-      parentId: "2",
-    },
-    {
-      id: "4",
-      description: "Drink 8 glasses of water",
-      category: "personal",
-      completed: false,
-      order: 2,
-      parentId: "2",
-    },
-  ],
-  work: [
-    {
-      id: "9",
-      description: "Complete project documentation",
-      category: "work",
-      completed: false,
-      order: 1,
-    },
-    {
-      id: "10",
-      description: "CODE REVIEW TASKS",
-      category: "work",
-      completed: false,
-      order: 2,
-    },
-    {
-      id: "11",
-      description: "Review pull request #123",
-      category: "work",
-      completed: false,
-      order: 1,
-      parentId: "10",
-    },
-  ],
-};
+// User ID from environment variable - will be replaced with authentication later
+const USER_ID = process.env.NEXT_PUBLIC_PARADISE_USER_ID || "default-user";
 
 export default function TasksPage() {
   const {
     currentTasks,
     activeCategory,
     newTaskId,
+    isLoading: isTasksLoading,
+    error: tasksError,
     setCategory,
     addTask,
     completeTask,
     reorderTasks,
     renameTask,
-  } = useTaskManager(INITIAL_TASKS);
+  } = useTaskManager(USER_ID);
 
   // Daily task management
   const {
     dailyTasks,
     progressPercentage,
+    isLoading: isDailyLoading,
+    error: dailyError,
     toggleTask,
     addTask: addDailyTask,
-  } = useDailyTaskManager();
+  } = useDailyTaskManager(USER_ID);
 
   // Modal open/close state
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -98,6 +45,12 @@ export default function TasksPage() {
   const handleCloseModal = () => setIsModalOpen(false);
 
   const pageTitle = `${activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)} TODO`;
+
+  // Combined loading state
+  const isLoading = isTasksLoading || isDailyLoading;
+
+  // Combined error state - show the first error encountered
+  const error = tasksError || dailyError;
 
   return (
     <div className={styles.page}>
@@ -135,24 +88,42 @@ export default function TasksPage() {
           />
         </ErrorBoundary>
 
-        <ErrorBoundary title="Task List Error">
-          <TaskContainer
-            title={pageTitle}
-            tasks={currentTasks}
-            onTaskComplete={completeTask}
-            onTaskReorder={reorderTasks}
-            onTaskRename={renameTask}
-            onAddTask={() => addTask("")}
-            newTaskId={newTaskId}
-          />
+        {/* Error Display */}
+        {error && (
+          <div className={styles.errorContainer}>
+            <h3 className={styles.errorTitle}>Error</h3>
+            <p className={styles.errorMessage}>{error}</p>
+          </div>
+        )}
 
-          {/* Empty State Handling */}
-          {currentTasks.length === 0 && (
-            <div className={styles.emptyState}>
-              <p>No tasks yet. Add one to get started!</p>
-            </div>
-          )}
-        </ErrorBoundary>
+        {/* Loading State */}
+        {isLoading && (
+          <div className={styles.loadingContainer}>
+            <span className={styles.loadingText}>Loading tasks...</span>
+          </div>
+        )}
+
+        {/* Task List - only show when not loading */}
+        {!isLoading && (
+          <ErrorBoundary title="Task List Error">
+            <TaskContainer
+              title={pageTitle}
+              tasks={currentTasks}
+              onTaskComplete={completeTask}
+              onTaskReorder={reorderTasks}
+              onTaskRename={renameTask}
+              onAddTask={() => addTask("")}
+              newTaskId={newTaskId}
+            />
+
+            {/* Empty State Handling */}
+            {currentTasks.length === 0 && (
+              <div className={styles.emptyState}>
+                <p>No tasks yet. Add one to get started!</p>
+              </div>
+            )}
+          </ErrorBoundary>
+        )}
       </div>
     </div>
   );

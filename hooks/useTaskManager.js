@@ -1,4 +1,5 @@
-import { useReducer, useMemo, useCallback } from "react";
+import { useReducer, useMemo, useCallback, useEffect } from "react";
+import { TaskService } from "@/src/lib/taskService";
 
 /**
  * --- INTERNAL VALIDATION & REPAIR UTILITIES ---
@@ -64,6 +65,30 @@ const taskReducer = (state, action) => {
   const currentTasks = state.tasks[category];
 
   switch (action.type) {
+    case "SET_LOADING":
+      return { ...state, isLoading: action.payload };
+
+    case "SET_ERROR":
+      return { ...state, error: action.payload };
+
+    case "CLEAR_ERROR":
+      return { ...state, error: null };
+
+    case "SET_TASKS":
+      return {
+        ...state,
+        tasks: sanitizeInitialData(action.payload),
+        isLoading: false,
+        error: null,
+      };
+
+    case "ROLLBACK":
+      return {
+        ...state,
+        tasks: action.payload,
+        error: action.error || null,
+      };
+
     case "SET_CATEGORY":
       if (!["personal", "work"].includes(action.payload)) {
         console.warn(`Attempted to set invalid category: ${action.payload}`);
@@ -73,7 +98,7 @@ const taskReducer = (state, action) => {
 
     case "ADD_TASK": {
       // Logic: Calculate order based on siblings
-      const { description, parentId } = action.payload;
+      const { description, parentId, id } = action.payload;
       const tasksInLevel = parentId
         ? currentTasks.filter((t) => t.parentId === parentId)
         : currentTasks.filter((t) => !t.parentId);
@@ -85,7 +110,7 @@ const taskReducer = (state, action) => {
 
       // Logic: Create perfectly valid task object immediately
       const newTask = createSafeTask({
-        id: crypto.randomUUID(),
+        id: id || crypto.randomUUID(),
         description,
         category,
         completed: false,
@@ -172,19 +197,39 @@ const taskReducer = (state, action) => {
 
 /**
  * --- MAIN HOOK ---
+ * @param {string} userId - User identifier for API calls
  */
-export function useTaskManager(initialData) {
-  // 1. Sanitize Data ONCE on initialization
-  const sanitizedData = useMemo(
-    () => sanitizeInitialData(initialData),
-    [initialData],
-  );
-
+export function useTaskManager(userId) {
   const [state, dispatch] = useReducer(taskReducer, {
-    tasks: sanitizedData,
+    tasks: { personal: [], work: [] },
     category: "personal",
     newTaskId: null,
+    isLoading: true,
+    error: null,
   });
+
+  // Fetch tasks on mount when userId is provided
+  useEffect(() => {
+    if (!userId) {
+      dispatch({ type: "SET_LOADING", payload: false });
+      return;
+    }
+
+    const fetchTasks = async () => {
+      dispatch({ type: "SET_LOADING", payload: true });
+      dispatch({ type: "CLEAR_ERROR" });
+
+      try {
+        const response = await TaskService.getAllTasks(userId);
+        dispatch({ type: "SET_TASKS", payload: response.todoTasks });
+      } catch (error) {
+        dispatch({ type: "SET_ERROR", payload: error.message });
+        dispatch({ type: "SET_LOADING", payload: false });
+      }
+    };
+
+    fetchTasks();
+  }, [userId]);
 
   // 2. Memoized Hierarchy Calculation (Performance Optimization)
   const hierarchicalTasks = useMemo(() => {
@@ -203,39 +248,173 @@ export function useTaskManager(initialData) {
     });
   }, [state.tasks, state.category]);
 
-  // 3. Stable Action Dispatchers
-  const handlers = {
-    setCategory: useCallback(
-      (cat) => dispatch({ type: "SET_CATEGORY", payload: cat }),
-      [],
-    ),
-    addTask: useCallback(
-      (desc, parentId) =>
+  // 3. Stable Action Dispatchers with Optimistic Updates
+  const setCategory = useCallback(
+    (cat) => dispatch({ type: "SET_CATEGORY", payload: cat }),
+    [],
+  );
+
+  /**
+   * Add a new task with optimistic update
+   * @param {string} description - Task description
+   * @param {string} [parentId] - Optional parent task ID
+   */
+  const addTask = useCallback(
+    async (description, parentId) => {
+      // Save previous state for rollback
+      const previousTasks = { ...state.tasks };
+      const newTaskId = crypto.randomUUID();
+
+      // Optimistic update
+      dispatch({
+        type: "ADD_TASK",
+        payload: { description, parentId, id: newTaskId },
+      });
+
+      // If no userId, skip API call (local-only mode)
+      if (!userId) return;
+
+      try {
+        // Calculate order for the new task
+        const category = state.category;
+        const currentTasks = state.tasks[category];
+        const tasksInLevel = parentId
+          ? currentTasks.filter((t) => t.parentId === parentId)
+          : currentTasks.filter((t) => !t.parentId);
+        const maxOrder =
+          tasksInLevel.length > 0
+            ? Math.max(...tasksInLevel.map((t) => t.order))
+            : 0;
+
+        const taskData = {
+          id: newTaskId,
+          description: description || "Untitled Task",
+          category,
+          order: maxOrder + 1,
+          parentId,
+        };
+
+        await TaskService.createTodoTask(userId, taskData);
+      } catch (error) {
+        // Rollback on failure
         dispatch({
-          type: "ADD_TASK",
-          payload: { description: desc, parentId },
-        }),
-      [],
-    ),
-    completeTask: useCallback(
-      (id) => dispatch({ type: "COMPLETE_TASK", payload: id }),
-      [],
-    ),
-    reorderTasks: useCallback(
-      (tasks) => dispatch({ type: "REORDER_TASKS", payload: tasks }),
-      [],
-    ),
-    renameTask: useCallback(
-      (id, description) =>
-        dispatch({ type: "RENAME_TASK", payload: { id, description } }),
-      [],
-    ),
-  };
+          type: "ROLLBACK",
+          payload: previousTasks,
+          error: error.message,
+        });
+      }
+    },
+    [userId, state.tasks, state.category],
+  );
+
+  /**
+   * Complete (delete) a task with optimistic update
+   * @param {string} id - Task ID to complete/delete
+   */
+  const completeTask = useCallback(
+    async (id) => {
+      // Save previous state for rollback
+      const previousTasks = { ...state.tasks };
+
+      // Optimistic update
+      dispatch({ type: "COMPLETE_TASK", payload: id });
+
+      // If no userId, skip API call (local-only mode)
+      if (!userId) return;
+
+      try {
+        await TaskService.deleteTodoTask(userId, id);
+      } catch (error) {
+        // Rollback on failure
+        dispatch({
+          type: "ROLLBACK",
+          payload: previousTasks,
+          error: error.message,
+        });
+      }
+    },
+    [userId, state.tasks],
+  );
+
+  /**
+   * Reorder tasks with optimistic update
+   * @param {Array} tasks - Reordered tasks array
+   */
+  const reorderTasks = useCallback(
+    async (tasks) => {
+      // Save previous state for rollback
+      const previousTasks = { ...state.tasks };
+
+      // Optimistic update
+      dispatch({ type: "REORDER_TASKS", payload: tasks });
+
+      // If no userId, skip API call (local-only mode)
+      if (!userId) return;
+
+      try {
+        // Update order for each task that changed
+        const updatePromises = tasks.map((task, index) => {
+          if (task.order !== index + 1) {
+            return TaskService.updateTodoTask(userId, task.id, {
+              order: index + 1,
+            });
+          }
+          return Promise.resolve();
+        });
+
+        await Promise.all(updatePromises);
+      } catch (error) {
+        // Rollback on failure
+        dispatch({
+          type: "ROLLBACK",
+          payload: previousTasks,
+          error: error.message,
+        });
+      }
+    },
+    [userId, state.tasks],
+  );
+
+  /**
+   * Rename a task with optimistic update
+   * @param {string} id - Task ID
+   * @param {string} description - New description
+   */
+  const renameTask = useCallback(
+    async (id, description) => {
+      // Save previous state for rollback
+      const previousTasks = { ...state.tasks };
+
+      // Optimistic update
+      dispatch({ type: "RENAME_TASK", payload: { id, description } });
+
+      // If no userId, skip API call (local-only mode)
+      if (!userId) return;
+
+      try {
+        await TaskService.updateTodoTask(userId, id, { description });
+      } catch (error) {
+        // Rollback on failure
+        dispatch({
+          type: "ROLLBACK",
+          payload: previousTasks,
+          error: error.message,
+        });
+      }
+    },
+    [userId, state.tasks],
+  );
 
   return {
     currentTasks: hierarchicalTasks,
     activeCategory: state.category,
     newTaskId: state.newTaskId,
-    ...handlers,
+    isLoading: state.isLoading,
+    error: state.error,
+    setCategory,
+    addTask,
+    completeTask,
+    reorderTasks,
+    renameTask,
   };
 }

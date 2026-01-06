@@ -1,8 +1,9 @@
-import { useReducer, useMemo, useCallback } from "react";
+import { useReducer, useMemo, useCallback, useEffect } from "react";
+import { TaskService } from "@/src/lib/taskService";
 
 /**
  * Initial hardcoded daily tasks for demonstration purposes
- * These will be replaced with backend data in the future
+ * These will be replaced with backend data when userId is provided
  */
 const INITIAL_DAILY_TASKS = [
   {
@@ -46,9 +47,15 @@ const INITIAL_DAILY_TASKS = [
  * Reducer action types
  */
 const ActionTypes = {
+  SET_LOADING: "SET_LOADING",
+  SET_ERROR: "SET_ERROR",
+  CLEAR_ERROR: "CLEAR_ERROR",
+  SET_TASKS: "SET_TASKS",
   TOGGLE_TASK: "TOGGLE_TASK",
   ADD_TASK: "ADD_TASK",
+  DELETE_TASK: "DELETE_TASK",
   RESET_ALL: "RESET_ALL",
+  ROLLBACK: "ROLLBACK",
 };
 
 /**
@@ -56,6 +63,30 @@ const ActionTypes = {
  */
 const dailyTaskReducer = (state, action) => {
   switch (action.type) {
+    case ActionTypes.SET_LOADING:
+      return { ...state, isLoading: action.payload };
+
+    case ActionTypes.SET_ERROR:
+      return { ...state, error: action.payload };
+
+    case ActionTypes.CLEAR_ERROR:
+      return { ...state, error: null };
+
+    case ActionTypes.SET_TASKS:
+      return {
+        ...state,
+        tasks: action.payload,
+        isLoading: false,
+        error: null,
+      };
+
+    case ActionTypes.ROLLBACK:
+      return {
+        ...state,
+        tasks: action.payload,
+        error: action.error || null,
+      };
+
     case ActionTypes.TOGGLE_TASK: {
       const taskId = action.payload;
       return {
@@ -67,7 +98,7 @@ const dailyTaskReducer = (state, action) => {
     }
 
     case ActionTypes.ADD_TASK: {
-      const { description } = action.payload;
+      const { id, description } = action.payload;
 
       // Validation: reject empty or whitespace-only descriptions
       if (!description || !description.trim()) {
@@ -80,7 +111,7 @@ const dailyTaskReducer = (state, action) => {
           : 0;
 
       const newTask = {
-        id: crypto.randomUUID(),
+        id: id || crypto.randomUUID(),
         description: description.trim(),
         completed: false,
         order: maxOrder + 1,
@@ -90,6 +121,14 @@ const dailyTaskReducer = (state, action) => {
       return {
         ...state,
         tasks: [...state.tasks, newTask],
+      };
+    }
+
+    case ActionTypes.DELETE_TASK: {
+      const taskId = action.payload;
+      return {
+        ...state,
+        tasks: state.tasks.filter((task) => task.id !== taskId),
       };
     }
 
@@ -106,15 +145,41 @@ const dailyTaskReducer = (state, action) => {
 };
 
 /**
- * Custom hook for managing daily task state
+ * Custom hook for managing daily task state with backend integration
  *
+ * @param {string} userId - User identifier for API calls (optional, enables backend sync)
  * @param {Array} initialTasks - Optional initial tasks array (defaults to INITIAL_DAILY_TASKS)
  * @returns {Object} Daily task state and action handlers
  */
-export function useDailyTaskManager(initialTasks = INITIAL_DAILY_TASKS) {
+export function useDailyTaskManager(userId, initialTasks = INITIAL_DAILY_TASKS) {
   const [state, dispatch] = useReducer(dailyTaskReducer, {
-    tasks: initialTasks,
+    tasks: userId ? [] : initialTasks, // Start empty if userId provided (will fetch from backend)
+    isLoading: !!userId, // Start loading if userId provided
+    error: null,
   });
+
+  // Fetch daily tasks from backend on mount when userId is provided
+  useEffect(() => {
+    if (!userId) {
+      dispatch({ type: ActionTypes.SET_LOADING, payload: false });
+      return;
+    }
+
+    const fetchDailyTasks = async () => {
+      dispatch({ type: ActionTypes.SET_LOADING, payload: true });
+      dispatch({ type: ActionTypes.CLEAR_ERROR });
+
+      try {
+        const response = await TaskService.getAllTasks(userId);
+        dispatch({ type: ActionTypes.SET_TASKS, payload: response.dailyTasks });
+      } catch (error) {
+        dispatch({ type: ActionTypes.SET_ERROR, payload: error.message });
+        dispatch({ type: ActionTypes.SET_LOADING, payload: false });
+      }
+    };
+
+    fetchDailyTasks();
+  }, [userId]);
 
   // Calculate completed count
   const completedCount = useMemo(
@@ -131,15 +196,124 @@ export function useDailyTaskManager(initialTasks = INITIAL_DAILY_TASKS) {
     return Math.round((completedCount / totalCount) * 100);
   }, [completedCount, totalCount]);
 
-  // Action handlers
-  const toggleTask = useCallback((taskId) => {
-    dispatch({ type: ActionTypes.TOGGLE_TASK, payload: taskId });
-  }, []);
+  /**
+   * Toggle task completion status with optimistic update
+   * @param {string} taskId - Task ID to toggle
+   */
+  const toggleTask = useCallback(
+    async (taskId) => {
+      // Save previous state for rollback
+      const previousTasks = [...state.tasks];
 
-  const addTask = useCallback((description) => {
-    dispatch({ type: ActionTypes.ADD_TASK, payload: { description } });
-  }, []);
+      // Find the task to get its current completed status
+      const task = state.tasks.find((t) => t.id === taskId);
+      if (!task) return;
 
+      // Optimistic update
+      dispatch({ type: ActionTypes.TOGGLE_TASK, payload: taskId });
+
+      // If no userId, skip API call (local-only mode)
+      if (!userId) return;
+
+      try {
+        await TaskService.updateDailyTask(userId, taskId, {
+          completed: !task.completed,
+        });
+      } catch (error) {
+        // Rollback on failure
+        dispatch({
+          type: ActionTypes.ROLLBACK,
+          payload: previousTasks,
+          error: error.message,
+        });
+      }
+    },
+    [userId, state.tasks],
+  );
+
+  /**
+   * Add a new daily task with optimistic update
+   * @param {string} description - Task description
+   */
+  const addTask = useCallback(
+    async (description) => {
+      // Validation: reject empty or whitespace-only descriptions
+      if (!description || !description.trim()) {
+        return;
+      }
+
+      // Save previous state for rollback
+      const previousTasks = [...state.tasks];
+      const newTaskId = crypto.randomUUID();
+
+      // Calculate order for the new task
+      const maxOrder =
+        state.tasks.length > 0
+          ? Math.max(...state.tasks.map((t) => t.order))
+          : 0;
+
+      // Optimistic update
+      dispatch({
+        type: ActionTypes.ADD_TASK,
+        payload: { id: newTaskId, description },
+      });
+
+      // If no userId, skip API call (local-only mode)
+      if (!userId) return;
+
+      try {
+        const taskData = {
+          id: newTaskId,
+          description: description.trim(),
+          order: maxOrder + 1,
+        };
+
+        await TaskService.createDailyTask(userId, taskData);
+      } catch (error) {
+        // Rollback on failure
+        dispatch({
+          type: ActionTypes.ROLLBACK,
+          payload: previousTasks,
+          error: error.message,
+        });
+      }
+    },
+    [userId, state.tasks],
+  );
+
+  /**
+   * Delete a daily task with optimistic update
+   * @param {string} taskId - Task ID to delete
+   */
+  const deleteTask = useCallback(
+    async (taskId) => {
+      // Save previous state for rollback
+      const previousTasks = [...state.tasks];
+
+      // Optimistic update
+      dispatch({ type: ActionTypes.DELETE_TASK, payload: taskId });
+
+      // If no userId, skip API call (local-only mode)
+      if (!userId) return;
+
+      try {
+        await TaskService.deleteDailyTask(userId, taskId);
+      } catch (error) {
+        // Rollback on failure
+        dispatch({
+          type: ActionTypes.ROLLBACK,
+          payload: previousTasks,
+          error: error.message,
+        });
+      }
+    },
+    [userId, state.tasks],
+  );
+
+  /**
+   * Reset all tasks to incomplete status
+   * Note: This is a local-only operation for now
+   */
   const resetAllTasks = useCallback(() => {
     dispatch({ type: ActionTypes.RESET_ALL });
   }, []);
@@ -149,8 +323,11 @@ export function useDailyTaskManager(initialTasks = INITIAL_DAILY_TASKS) {
     completedCount,
     totalCount,
     progressPercentage,
+    isLoading: state.isLoading,
+    error: state.error,
     toggleTask,
     addTask,
+    deleteTask,
     resetAllTasks,
   };
 }
