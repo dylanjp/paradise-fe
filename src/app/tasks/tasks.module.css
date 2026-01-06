@@ -273,3 +273,13 @@
 .containerSpacing {
   margin-top: var(--component-spacing-small);
 }
+
+
+/* Empty state styling */
+.emptyState {
+  font-family: "TechMono";
+  text-align: center;
+  padding: 2rem 1rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1rem;
+}
