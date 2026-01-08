@@ -1,31 +1,22 @@
 /**
  * TaskService - Frontend service module for backend API communication
  * Handles all HTTP requests to the Java Spring Boot backend for task operations
+ *
+ * Updated to use apiClient with JWT authentication instead of Basic Auth
+ * Requirements: 5.1, 5.4
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_PARADISE_API_BASE_URL || 'http://localhost:8080';
-const API_USERNAME = process.env.NEXT_PUBLIC_PARADISE_API_USERNAME || 'user';
-const API_PASSWORD = process.env.NEXT_PUBLIC_PARADISE_API_PASSWORD || '';
+import apiClient from "./apiClient";
 
 /**
- * Creates the Authorization header for Basic Auth
- * @returns {string} Base64 encoded credentials for Basic Auth
- */
-function getAuthHeader() {
-  const credentials = btoa(`${API_USERNAME}:${API_PASSWORD}`);
-  return `Basic ${credentials}`;
-}
-
-/**
- * Constructs a full API URL for the given endpoint
+ * Constructs an API endpoint path for the given user and endpoint
  * @param {string} userId - User identifier
  * @param {string} endpoint - API endpoint path (e.g., 'tasks', 'tasks/todo', 'tasks/daily')
- * @returns {string} Full URL for the API endpoint
+ * @returns {string} Full endpoint path for the API
  */
-export function buildApiUrl(userId, endpoint) {
-  const baseUrl = API_BASE_URL.replace(/\/+$/, ''); // Remove trailing slashes
-  const cleanEndpoint = endpoint.replace(/^\/+/, ''); // Remove leading slashes
-  return `${baseUrl}/users/${userId}/${cleanEndpoint}`;
+export function buildApiEndpoint(userId, endpoint) {
+  const cleanEndpoint = endpoint.replace(/^\/+/, ""); // Remove leading slashes
+  return `/users/${userId}/${cleanEndpoint}`;
 }
 
 /**
@@ -62,20 +53,32 @@ export function buildApiUrl(userId, endpoint) {
  * @returns {Error} Transformed error with user-friendly message
  */
 function handleApiError(error, operation) {
-  if (error.name === 'TypeError' && error.message === 'Failed to fetch') {
-    return new Error('Unable to connect to server. Please check your connection.');
+  // Handle network errors
+  if (error.name === "TypeError" && error.message === "Failed to fetch") {
+    return new Error(
+      "Unable to connect to server. Please check your connection.",
+    );
   }
 
+  // Handle API client errors with status codes
   if (error.status === 404) {
-    return new Error('Task not found. It may have been deleted.');
+    return new Error("Task not found. It may have been deleted.");
   }
 
   if (error.status === 400) {
     return new Error(`Invalid request: ${error.message}`);
   }
 
+  if (error.status === 401) {
+    return new Error("Session expired. Please log in again.");
+  }
+
+  if (error.status === 403) {
+    return new Error("You do not have permission to perform this action.");
+  }
+
   if (error.status >= 500) {
-    return new Error('Server error. Please try again later.');
+    return new Error("Server error. Please try again later.");
   }
 
   return new Error(`Failed to ${operation}. Please try again.`);
@@ -89,7 +92,7 @@ function handleApiError(error, operation) {
 export function parseTasksResponse(response) {
   const todoTasks = {
     personal: [],
-    work: []
+    work: [],
   };
   const dailyTasks = [];
 
@@ -118,27 +121,13 @@ export const TaskService = {
    * @returns {Promise<UserTasksResponse>}
    */
   getAllTasks: async (userId) => {
-    const url = buildApiUrl(userId, 'tasks');
-    
+    const endpoint = buildApiEndpoint(userId, "tasks");
+
     try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': getAuthHeader(),
-        },
-      });
-
-      if (!response.ok) {
-        const error = new Error(`HTTP error! status: ${response.status}`);
-        error.status = response.status;
-        throw error;
-      }
-
-      const data = await response.json();
+      const data = await apiClient.get(endpoint);
       return parseTasksResponse(data);
     } catch (error) {
-      throw handleApiError(error, 'fetch tasks');
+      throw handleApiError(error, "fetch tasks");
     }
   },
 
@@ -149,8 +138,8 @@ export const TaskService = {
    * @returns {Promise<TodoTask>}
    */
   createTodoTask: async (userId, task) => {
-    const url = buildApiUrl(userId, 'tasks/todo');
-    
+    const endpoint = buildApiEndpoint(userId, "tasks/todo");
+
     const requestBody = {
       id: task.id,
       description: task.description,
@@ -164,24 +153,9 @@ export const TaskService = {
     }
 
     try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': getAuthHeader(),
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      if (!response.ok) {
-        const error = new Error(`HTTP error! status: ${response.status}`);
-        error.status = response.status;
-        throw error;
-      }
-
-      return await response.json();
+      return await apiClient.post(endpoint, requestBody);
     } catch (error) {
-      throw handleApiError(error, 'create TODO task');
+      throw handleApiError(error, "create TODO task");
     }
   },
 
@@ -192,8 +166,8 @@ export const TaskService = {
    * @returns {Promise<DailyTask>}
    */
   createDailyTask: async (userId, task) => {
-    const url = buildApiUrl(userId, 'tasks/daily');
-    
+    const endpoint = buildApiEndpoint(userId, "tasks/daily");
+
     const requestBody = {
       id: task.id,
       description: task.description,
@@ -201,24 +175,9 @@ export const TaskService = {
     };
 
     try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': getAuthHeader(),
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      if (!response.ok) {
-        const error = new Error(`HTTP error! status: ${response.status}`);
-        error.status = response.status;
-        throw error;
-      }
-
-      return await response.json();
+      return await apiClient.post(endpoint, requestBody);
     } catch (error) {
-      throw handleApiError(error, 'create daily task');
+      throw handleApiError(error, "create daily task");
     }
   },
 
@@ -230,27 +189,12 @@ export const TaskService = {
    * @returns {Promise<TodoTask>}
    */
   updateTodoTask: async (userId, taskId, updates) => {
-    const url = buildApiUrl(userId, `tasks/todo/${taskId}`);
+    const endpoint = buildApiEndpoint(userId, `tasks/todo/${taskId}`);
 
     try {
-      const response = await fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': getAuthHeader(),
-        },
-        body: JSON.stringify(updates),
-      });
-
-      if (!response.ok) {
-        const error = new Error(`HTTP error! status: ${response.status}`);
-        error.status = response.status;
-        throw error;
-      }
-
-      return await response.json();
+      return await apiClient.put(endpoint, updates);
     } catch (error) {
-      throw handleApiError(error, 'update TODO task');
+      throw handleApiError(error, "update TODO task");
     }
   },
 
@@ -262,27 +206,12 @@ export const TaskService = {
    * @returns {Promise<DailyTask>}
    */
   updateDailyTask: async (userId, taskId, updates) => {
-    const url = buildApiUrl(userId, `tasks/daily/${taskId}`);
+    const endpoint = buildApiEndpoint(userId, `tasks/daily/${taskId}`);
 
     try {
-      const response = await fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': getAuthHeader(),
-        },
-        body: JSON.stringify(updates),
-      });
-
-      if (!response.ok) {
-        const error = new Error(`HTTP error! status: ${response.status}`);
-        error.status = response.status;
-        throw error;
-      }
-
-      return await response.json();
+      return await apiClient.put(endpoint, updates);
     } catch (error) {
-      throw handleApiError(error, 'update daily task');
+      throw handleApiError(error, "update daily task");
     }
   },
 
@@ -293,24 +222,12 @@ export const TaskService = {
    * @returns {Promise<void>}
    */
   deleteTodoTask: async (userId, taskId) => {
-    const url = buildApiUrl(userId, `tasks/todo/${taskId}`);
+    const endpoint = buildApiEndpoint(userId, `tasks/todo/${taskId}`);
 
     try {
-      const response = await fetch(url, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': getAuthHeader(),
-        },
-      });
-
-      if (!response.ok) {
-        const error = new Error(`HTTP error! status: ${response.status}`);
-        error.status = response.status;
-        throw error;
-      }
+      await apiClient.delete(endpoint);
     } catch (error) {
-      throw handleApiError(error, 'delete TODO task');
+      throw handleApiError(error, "delete TODO task");
     }
   },
 
@@ -321,27 +238,12 @@ export const TaskService = {
    * @returns {Promise<void>}
    */
   deleteDailyTask: async (userId, taskId) => {
-    const url = buildApiUrl(userId, `tasks/daily/${taskId}`);
+    const endpoint = buildApiEndpoint(userId, `tasks/daily/${taskId}`);
 
     try {
-      const response = await fetch(url, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': getAuthHeader(),
-        },
-      });
-
-      if (!response.ok) {
-        const error = new Error(`HTTP error! status: ${response.status}`);
-        error.status = response.status;
-        throw error;
-      }
+      await apiClient.delete(endpoint);
     } catch (error) {
-      throw handleApiError(error, 'delete daily task');
+      throw handleApiError(error, "delete daily task");
     }
   },
 };
-
-// Export the base URL for testing purposes
-export { API_BASE_URL };

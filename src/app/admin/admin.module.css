@@ -1,0 +1,659 @@
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/Orbitron-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "TechMono";
+  src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
+}
+
+/* =========================
+   PAGE CONTAINER
+   ========================= */
+.adminPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 40px 20px;
+  padding-top: 80px; /* Account for navbar */
+  font-family: "TechMono", monospace;
+  position: relative;
+}
+
+.pageBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.adminContainer {
+  width: 100%;
+  max-width: 1000px;
+  animation: containerFadeIn 0.5s ease-out;
+}
+
+@keyframes containerFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   TITLE
+   ========================= */
+.title {
+  font-family: "Orbitron", sans-serif;
+  font-size: 2.5rem;
+  color: var(--tron-red-light, #ff1a1a);
+  text-align: center;
+  margin-bottom: 30px;
+  text-shadow:
+    0 0 5px var(--glow-red-primary, #f80206),
+    0 0 10px var(--glow-red-primary, #f80206),
+    0 0 20px var(--tron-orange-primary, #ff6600);
+}
+
+/* =========================
+   ACTION BAR
+   ========================= */
+.actionBar {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+/* =========================
+   SUCCESS MESSAGE
+   ========================= */
+.successMessage {
+  background: rgba(0, 255, 100, 0.1);
+  border: 1px solid #00ff64;
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  color: #00ff64;
+  font-family: "TechMono", monospace;
+  text-align: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* =========================
+   ERROR CONTAINER
+   ========================= */
+.errorContainer {
+  background: rgba(255, 26, 26, 0.1);
+  border: 1px solid var(--tron-red-light, #ff1a1a);
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.errorMessage {
+  font-family: "TechMono", monospace;
+  font-size: 0.9rem;
+  color: var(--tron-red-light, #ff1a1a);
+  margin: 0;
+}
+
+.dismissButton {
+  font-family: "TechMono", monospace;
+  background: transparent;
+  border: 1px solid var(--tron-red-light, #ff1a1a);
+  color: var(--tron-red-light, #ff1a1a);
+  padding: 4px 12px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.dismissButton:hover {
+  background: var(--tron-red-light, #ff1a1a);
+  color: black;
+}
+
+/* =========================
+   LOADING STATE
+   ========================= */
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.loadingText {
+  font-family: "TechMono", monospace;
+  color: var(--tron-orange-primary, #ff6600);
+  font-size: 1rem;
+  text-shadow: 0 0 5px var(--tron-orange-primary, #ff6600);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* =========================
+   EMPTY STATE
+   ========================= */
+.emptyState {
+  font-family: "TechMono", monospace;
+  text-align: center;
+  padding: 40px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1rem;
+}
+
+/* =========================
+   USER LIST
+   ========================= */
+.userList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* =========================
+   USER CARD
+   ========================= */
+.userCard {
+  background: black;
+  border: 2px solid var(--tron-red-primary, #f80206);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 0 10px rgba(248, 2, 6, 0.3);
+  transition: all 0.3s ease;
+}
+
+.userCard:hover {
+  box-shadow: 0 0 20px var(--glow-red-primary, #f80206);
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.username {
+  font-family: "TechMono", monospace;
+  font-size: 1.1rem;
+  color: var(--tron-red-light, #ff1a1a);
+  font-weight: bold;
+  min-width: 120px;
+}
+
+/* =========================
+   ROLE TAGS
+   ========================= */
+.roleTags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.roleTag {
+  font-family: "TechMono", monospace;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: rgba(255, 102, 0, 0.2);
+  border: 1px solid var(--tron-orange-primary, #ff6600);
+  color: var(--tron-orange-primary, #ff6600);
+  text-transform: uppercase;
+}
+
+.roleTag.adminRole {
+  background: rgba(248, 2, 6, 0.2);
+  border-color: var(--tron-red-primary, #f80206);
+  color: var(--tron-red-light, #ff1a1a);
+  box-shadow: 0 0 5px rgba(248, 2, 6, 0.5);
+}
+
+/* =========================
+   STATUS BADGE
+   ========================= */
+.statusBadge {
+  font-family: "TechMono", monospace;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.statusBadge.enabled {
+  background: rgba(0, 255, 100, 0.2);
+  border: 1px solid #00ff64;
+  color: #00ff64;
+}
+
+.statusBadge.disabled {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* =========================
+   USER ACTIONS
+   ========================= */
+.userActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.actionButton {
+  font-family: "TechMono", monospace;
+  background: transparent;
+  border: 1px solid var(--tron-orange-primary, #ff6600);
+  color: var(--tron-orange-primary, #ff6600);
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.actionButton:hover {
+  background: var(--tron-orange-primary, #ff6600);
+  color: black;
+  box-shadow: 0 0 10px var(--tron-orange-primary, #ff6600);
+}
+
+.actionButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.actionButton.disableButton {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.actionButton.disableButton:hover {
+  background: rgba(255, 255, 255, 0.5);
+  color: black;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.actionButton.enableButton {
+  border-color: #00ff64;
+  color: #00ff64;
+}
+
+.actionButton.enableButton:hover {
+  background: #00ff64;
+  color: black;
+  box-shadow: 0 0 10px #00ff64;
+}
+
+.actionButton.deleteButton {
+  border-color: var(--tron-red-light, #ff1a1a);
+  color: var(--tron-red-light, #ff1a1a);
+}
+
+.actionButton.deleteButton:hover {
+  background: var(--tron-red-light, #ff1a1a);
+  color: black;
+  box-shadow: 0 0 10px var(--tron-red-light, #ff1a1a);
+}
+
+/* =========================
+   MODAL OVERLAY
+   ========================= */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* =========================
+   MODAL
+   ========================= */
+.modal {
+  background: black;
+  border: 2px solid var(--tron-red-primary, #f80206);
+  border-radius: 10px;
+  padding: 30px;
+  max-width: 450px;
+  width: 90%;
+  box-shadow: 0 0 30px var(--glow-red-primary, #f80206);
+  animation: modalPopIn 0.3s ease-out;
+}
+
+@keyframes modalPopIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modalTitle {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.5rem;
+  color: var(--tron-red-light, #ff1a1a);
+  text-align: center;
+  margin: 0 0 10px 0;
+  text-shadow: 0 0 5px var(--glow-red-primary, #f80206);
+}
+
+.modalSubtitle {
+  font-family: "TechMono", monospace;
+  font-size: 0.9rem;
+  color: var(--tron-orange-primary, #ff6600);
+  text-align: center;
+  margin: 0 0 20px 0;
+}
+
+.modalSubtitle strong {
+  color: var(--tron-red-light, #ff1a1a);
+}
+
+.modalError {
+  background: rgba(255, 26, 26, 0.1);
+  border: 1px solid var(--tron-red-light, #ff1a1a);
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 16px;
+  font-family: "TechMono", monospace;
+  font-size: 0.85rem;
+  color: var(--tron-red-light, #ff1a1a);
+  text-align: center;
+}
+
+.warningText {
+  font-family: "TechMono", monospace;
+  font-size: 0.85rem;
+  color: var(--tron-red-light, #ff1a1a);
+  text-align: center;
+  margin: 0 0 20px 0;
+}
+
+/* =========================
+   FORM ELEMENTS
+   ========================= */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-family: "TechMono", monospace;
+  font-size: 0.85rem;
+  color: var(--tron-orange-primary, #ff6600);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.input {
+  font-family: "TechMono", monospace;
+  font-size: 1rem;
+  color: var(--tron-red-light, #ff1a1a);
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid var(--tron-red-primary, #f80206);
+  border-radius: 4px;
+  padding: 10px 14px;
+  outline: none;
+  transition: all 0.3s ease;
+  caret-color: var(--tron-red-primary, #f80206);
+}
+
+.input::placeholder {
+  color: rgba(255, 26, 26, 0.5);
+}
+
+.input:focus {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 10px var(--glow-red-primary, #f80206);
+  border-color: var(--tron-orange-primary, #ff6600);
+}
+
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =========================
+   CHECKBOX GROUP
+   ========================= */
+.checkboxGroup {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.checkboxLabel {
+  font-family: "TechMono", monospace;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--tron-orange-primary, #ff6600);
+  font-size: 0.9rem;
+}
+
+.checkboxLabel input[type="checkbox"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--tron-red-primary, #f80206);
+  border-radius: 3px;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.checkboxLabel input[type="checkbox"]:checked {
+  background: var(--tron-red-primary, #f80206);
+  box-shadow: 0 0 8px var(--glow-red-primary, #f80206);
+}
+
+.checkboxLabel input[type="checkbox"]:checked::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.checkboxLabel input[type="checkbox"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =========================
+   MODAL ACTIONS
+   ========================= */
+.modalActions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.cancelButton {
+  font-family: "TechMono", monospace;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.cancelButton:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  color: white;
+}
+
+.cancelButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+   ========================= */
+@media (max-width: 768px) {
+  .adminPage {
+    padding: 20px 10px;
+  }
+
+  .title {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+
+  .userCard {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .userInfo {
+    width: 100%;
+  }
+
+  .userActions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .actionButton {
+    flex: 1;
+    min-width: 80px;
+    text-align: center;
+  }
+
+  .modal {
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .modalTitle {
+    font-size: 1.3rem;
+  }
+
+  .modalActions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .username {
+    font-size: 1rem;
+    min-width: auto;
+    width: 100%;
+  }
+
+  .userInfo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .actionBar {
+    flex-direction: column;
+  }
+
+  .actionBar > * {
+    width: 100%;
+  }
+}
+
+/* =========================
+   ACCESSIBILITY
+   ========================= */
+@media (prefers-reduced-motion: reduce) {
+  .adminContainer,
+  .modalOverlay,
+  .modal,
+  .userCard {
+    animation: none;
+  }
+
+  .loadingText {
+    animation: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .input,
+  .userCard,
+  .modal {
+    border-width: 3px;
+  }
+
+  .actionButton {
+    border-width: 2px;
+  }
+}
