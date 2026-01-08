@@ -1,0 +1,281 @@
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/Orbitron-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "TechMono";
+  src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
+}
+
+/* =========================
+   PAGE CONTAINER
+   ========================= */
+.loginPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  font-family: "TechMono", monospace;
+}
+
+/* =========================
+   LOGIN CONTAINER
+   ========================= */
+.loginContainer {
+  background: black;
+  border: 2px solid var(--tron-red-primary, #f80206);
+  border-radius: 10px;
+  padding: 40px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 0 20px var(--glow-red-primary, #f80206);
+  animation: containerFadeIn 0.5s ease-out;
+}
+
+@keyframes containerFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   TITLE
+   ========================= */
+.title {
+  font-family: "Orbitron", sans-serif;
+  font-size: 2rem;
+  color: var(--tron-red-light, #ff1a1a);
+  text-align: center;
+  margin-bottom: 30px;
+  text-shadow:
+    0 0 5px var(--glow-red-primary, #f80206),
+    0 0 10px var(--glow-red-primary, #f80206),
+    0 0 20px var(--tron-orange-primary, #ff6600);
+}
+
+/* =========================
+   FORM
+   ========================= */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* =========================
+   INPUT GROUP
+   ========================= */
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-family: "TechMono", monospace;
+  font-size: 0.9rem;
+  color: var(--tron-orange-primary, #ff6600);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.input {
+  font-family: "TechMono", monospace;
+  font-size: 1rem;
+  color: var(--tron-red-light, #ff1a1a);
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid var(--tron-red-primary, #f80206);
+  border-radius: 4px;
+  padding: 12px 16px;
+  outline: none;
+  transition: all 0.3s ease;
+  caret-color: var(--tron-red-primary, #f80206);
+}
+
+.input::placeholder {
+  color: rgba(255, 26, 26, 0.5);
+}
+
+.input:focus {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 10px var(--glow-red-primary, #f80206);
+  border-color: var(--tron-orange-primary, #ff6600);
+}
+
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =========================
+   SUBMIT BUTTON
+   ========================= */
+.submitButton {
+  font-family: "TechMono", monospace;
+  background: black;
+  border: 2px solid var(--tron-red-primary, #f80206);
+  color: var(--tron-red-primary, #f80206);
+  padding: 14px 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  text-transform: uppercase;
+  box-shadow: 0 0 10px var(--glow-red-primary, #f80206);
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: var(--tron-orange-primary, #ff6600);
+  color: black;
+  box-shadow: 0 0 20px var(--tron-orange-primary, #ff6600);
+}
+
+.submitButton:focus {
+  outline: 2px solid var(--tron-orange-primary, #ff6600);
+  outline-offset: 4px;
+}
+
+.submitButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* =========================
+   ERROR MESSAGE
+   ========================= */
+.errorContainer {
+  background: rgba(255, 26, 26, 0.1);
+  border: 1px solid var(--tron-red-light, #ff1a1a);
+  border-radius: 4px;
+  padding: 12px 16px;
+  animation: errorShake 0.5s ease-out;
+}
+
+@keyframes errorShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-5px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(5px);
+  }
+}
+
+.errorMessage {
+  font-family: "TechMono", monospace;
+  font-size: 0.9rem;
+  color: var(--tron-red-light, #ff1a1a);
+  text-align: center;
+  margin: 0;
+}
+
+/* =========================
+   LOADING STATE
+   ========================= */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+   ========================= */
+@media (max-width: 480px) {
+  .loginContainer {
+    padding: 30px 20px;
+    margin: 10px;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .input {
+    padding: 10px 14px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  .submitButton {
+    padding: 12px 16px;
+  }
+}
+
+/* =========================
+   ACCESSIBILITY
+   ========================= */
+@media (prefers-reduced-motion: reduce) {
+  .loginContainer {
+    animation: none;
+  }
+
+  .errorContainer {
+    animation: none;
+  }
+
+  .spinner {
+    animation: none;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .input {
+    border-width: 3px;
+  }
+
+  .submitButton {
+    border-width: 3px;
+  }
+
+  .errorContainer {
+    border-width: 2px;
+  }
+}

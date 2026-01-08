@@ -270,3 +270,76 @@
     display: flex;
   }
 }
+
+/* Admin Link Styles */
+.adminLink {
+  font-size: 28px;
+  color: #f80206;
+  transition:
+    color 0.3s,
+    transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.adminLink:hover {
+  color: #ffff00;
+  transform: scale(1.1);
+}
+
+/* Logout Button Styles */
+.logoutButton {
+  font-size: 28px;
+  color: #f80206;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    color 0.3s,
+    transform 0.2s;
+}
+
+.logoutButton:hover {
+  color: #ffff00;
+  transform: scale(1.1);
+}
+
+.logoutButton:focus {
+  outline: 2px solid #ff6600;
+  outline-offset: 2px;
+}
+
+/* Mobile Logout Button Styles */
+.mobileLogoutButton {
+  color: #f80206;
+  background: none;
+  border: 1px solid #f80206;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-family: "TechMono";
+  cursor: pointer;
+  margin-top: 10px;
+  transition:
+    color 0.3s,
+    border-color 0.3s,
+    box-shadow 0.3s;
+}
+
+.mobileLogoutButton:hover {
+  color: #ff6600;
+  border-color: #ff6600;
+  box-shadow:
+    0 0 5px #ff6600,
+    0 0 10px #ff6600;
+}
+
+.mobileLogoutButton:focus {
+  outline: 2px solid #ff6600;
+  outline-offset: 2px;
+}

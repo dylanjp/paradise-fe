@@ -151,7 +151,10 @@ const dailyTaskReducer = (state, action) => {
  * @param {Array} initialTasks - Optional initial tasks array (defaults to INITIAL_DAILY_TASKS)
  * @returns {Object} Daily task state and action handlers
  */
-export function useDailyTaskManager(userId, initialTasks = INITIAL_DAILY_TASKS) {
+export function useDailyTaskManager(
+  userId,
+  initialTasks = INITIAL_DAILY_TASKS,
+) {
   const [state, dispatch] = useReducer(dailyTaskReducer, {
     tasks: userId ? [] : initialTasks, // Start empty if userId provided (will fetch from backend)
     isLoading: !!userId, // Start loading if userId provided

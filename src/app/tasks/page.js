@@ -7,14 +7,19 @@ import DailyTasksModal from "@/components/DailyTasksModal";
 import TaskToggle from "@/components/TaskToggle";
 import TaskContainer from "@/components/TaskContainer";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import RouteGuard from "@/components/RouteGuard";
 import { useTaskManager } from "@/hooks/useTaskManager";
 import { useDailyTaskManager } from "@/hooks/useDailyTaskManager";
+import { useAuth } from "../../context/AuthContext";
 import styles from "./tasks.module.css";
 
-// User ID from environment variable - will be replaced with authentication later
-const USER_ID = process.env.NEXT_PUBLIC_PARADISE_USER_ID || "default-user";
-
 export default function TasksPage() {
+  // Get username from auth context for user-specific tasks
+  const { username } = useAuth();
+
+  // Use authenticated username, fallback to environment variable for backwards compatibility
+  const USER_ID =
+    username || process.env.NEXT_PUBLIC_PARADISE_USER_ID || "default-user";
   const {
     currentTasks,
     activeCategory,
@@ -53,78 +58,80 @@ export default function TasksPage() {
   const error = tasksError || dailyError;
 
   return (
-    <div className={styles.page}>
-      <div className={styles.pageBackground}>
-        <Background />
-      </div>
+    <RouteGuard>
+      <div className={styles.page}>
+        <div className={styles.pageBackground}>
+          <Background />
+        </div>
 
-      <Navbar />
+        <Navbar />
 
-      <div className={styles.pageContent}>
-        <h1 className={styles.title}>Tasks</h1>
+        <div className={styles.pageContent}>
+          <h1 className={styles.title}>Tasks</h1>
 
-        <ErrorBoundary title="Menu Error">
-          <TaskToggle
-            activeCategory={activeCategory}
-            onCategoryChange={setCategory}
-          />
-        </ErrorBoundary>
-
-        <ErrorBoundary title="Progress Error">
-          <DailyProgressBar
-            percentage={progressPercentage}
-            onClick={handleOpenModal}
-            isClickable={true}
-          />
-        </ErrorBoundary>
-
-        <ErrorBoundary title="Daily Tasks Modal Error">
-          <DailyTasksModal
-            isOpen={isModalOpen}
-            onClose={handleCloseModal}
-            tasks={dailyTasks}
-            onToggleTask={toggleTask}
-            onAddTask={addDailyTask}
-          />
-        </ErrorBoundary>
-
-        {/* Error Display */}
-        {error && (
-          <div className={styles.errorContainer}>
-            <h3 className={styles.errorTitle}>Error</h3>
-            <p className={styles.errorMessage}>{error}</p>
-          </div>
-        )}
-
-        {/* Loading State */}
-        {isLoading && (
-          <div className={styles.loadingContainer}>
-            <span className={styles.loadingText}>Loading tasks...</span>
-          </div>
-        )}
-
-        {/* Task List - only show when not loading */}
-        {!isLoading && (
-          <ErrorBoundary title="Task List Error">
-            <TaskContainer
-              title={pageTitle}
-              tasks={currentTasks}
-              onTaskComplete={completeTask}
-              onTaskReorder={reorderTasks}
-              onTaskRename={renameTask}
-              onAddTask={() => addTask("")}
-              newTaskId={newTaskId}
+          <ErrorBoundary title="Menu Error">
+            <TaskToggle
+              activeCategory={activeCategory}
+              onCategoryChange={setCategory}
             />
-
-            {/* Empty State Handling */}
-            {currentTasks.length === 0 && (
-              <div className={styles.emptyState}>
-                <p>No tasks yet. Add one to get started!</p>
-              </div>
-            )}
           </ErrorBoundary>
-        )}
+
+          <ErrorBoundary title="Progress Error">
+            <DailyProgressBar
+              percentage={progressPercentage}
+              onClick={handleOpenModal}
+              isClickable={true}
+            />
+          </ErrorBoundary>
+
+          <ErrorBoundary title="Daily Tasks Modal Error">
+            <DailyTasksModal
+              isOpen={isModalOpen}
+              onClose={handleCloseModal}
+              tasks={dailyTasks}
+              onToggleTask={toggleTask}
+              onAddTask={addDailyTask}
+            />
+          </ErrorBoundary>
+
+          {/* Error Display */}
+          {error && (
+            <div className={styles.errorContainer}>
+              <h3 className={styles.errorTitle}>Error</h3>
+              <p className={styles.errorMessage}>{error}</p>
+            </div>
+          )}
+
+          {/* Loading State */}
+          {isLoading && (
+            <div className={styles.loadingContainer}>
+              <span className={styles.loadingText}>Loading tasks...</span>
+            </div>
+          )}
+
+          {/* Task List - only show when not loading */}
+          {!isLoading && (
+            <ErrorBoundary title="Task List Error">
+              <TaskContainer
+                title={pageTitle}
+                tasks={currentTasks}
+                onTaskComplete={completeTask}
+                onTaskReorder={reorderTasks}
+                onTaskRename={renameTask}
+                onAddTask={() => addTask("")}
+                newTaskId={newTaskId}
+              />
+
+              {/* Empty State Handling */}
+              {currentTasks.length === 0 && (
+                <div className={styles.emptyState}>
+                  <p>No tasks yet. Add one to get started!</p>
+                </div>
+              )}
+            </ErrorBoundary>
+          )}
+        </div>
       </div>
-    </div>
+    </RouteGuard>
   );
 }
