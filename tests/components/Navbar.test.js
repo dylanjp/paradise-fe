@@ -110,7 +110,7 @@ describe("Navbar Admin UI Visibility", () => {
     ],
     { numRuns: 100 },
   )(
-    "Feature: user-authentication, Property 8: Admin UI Hidden From Non-Admins - admin users should see admin link",
+    "Feature: move-auth-icons, Property: Admin icons removed from Navbar - admin users should NOT see admin link in Navbar",
     (additionalRoles) => {
       // Clean up any previous renders
       cleanup();
@@ -126,9 +126,10 @@ describe("Navbar Admin UI Visibility", () => {
       // Render the Navbar
       render(<Navbar />);
 
-      // Assert: Admin link SHOULD be visible for admin users (at least one - desktop version)
-      const adminLinks = screen.getAllByTitle("Admin Panel");
-      expect(adminLinks.length).toBeGreaterThan(0);
+      // Assert: Admin link should NOT be visible in Navbar (moved to VersionModal)
+      // Requirements 1.1, 1.3: Auth icons removed from Navbar
+      const adminLinks = screen.queryAllByTitle("Admin Panel");
+      expect(adminLinks).toHaveLength(0);
     },
   );
 
@@ -141,7 +142,7 @@ describe("Navbar Admin UI Visibility", () => {
     ],
     { numRuns: 100 },
   )(
-    "Feature: user-authentication, Property 8: Logout button visibility matches authentication state",
+    "Feature: move-auth-icons, Property: Logout button removed from Navbar - logout should NOT be visible in Navbar",
     (isAuthenticated, roles) => {
       // Clean up any previous renders
       cleanup();
@@ -157,14 +158,10 @@ describe("Navbar Admin UI Visibility", () => {
       // Render the Navbar
       render(<Navbar />);
 
-      // Assert: Logout button should only be visible when authenticated
+      // Assert: Logout button should NOT be visible in Navbar (moved to VersionModal)
+      // Requirements 1.2, 1.4: Auth icons removed from Navbar
       const logoutButtons = screen.queryAllByTitle("Logout");
-
-      if (isAuthenticated) {
-        expect(logoutButtons.length).toBeGreaterThan(0);
-      } else {
-        expect(logoutButtons).toHaveLength(0);
-      }
+      expect(logoutButtons).toHaveLength(0);
     },
   );
 });

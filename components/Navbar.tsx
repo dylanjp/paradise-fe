@@ -3,7 +3,7 @@
 import { useState, useEffect, forwardRef, useImperativeHandle } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FaBars, FaTimes, FaSignOutAlt, FaUserShield } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 import { SiImmich } from "react-icons/si";
 import { SiPlex } from "react-icons/si";
 import { SiHomeassistant } from "react-icons/si";
@@ -11,7 +11,6 @@ import { SiLetsencrypt } from "react-icons/si";
 import { FaExclamation } from "react-icons/fa";
 import VersionModal from "@/components/VersionModal";
 import versionData from "@/data/versionData";
-import { useAuth } from "../src/context/AuthContext";
 import styles from "./Navbar.module.css";
 
 export interface NavbarHandle {
@@ -20,7 +19,6 @@ export interface NavbarHandle {
 
 const Navbar = forwardRef<NavbarHandle>(function Navbar(_props, ref) {
   const pathname = usePathname();
-  const { isAuthenticated, isAdmin, logout } = useAuth();
 
   const pages = [
     { name: "Task Management", href: "/tasks/" },
@@ -39,11 +37,6 @@ const Navbar = forwardRef<NavbarHandle>(function Navbar(_props, ref) {
 
   useEffect(() => {}, []);
 
-  const handleLogout = () => {
-    logout();
-    setMenuOpen(false);
-  };
-
   return (
     <>
       <nav className={styles.navbar}>
@@ -54,27 +47,6 @@ const Navbar = forwardRef<NavbarHandle>(function Navbar(_props, ref) {
 
         {/* Right Side for Desktop: Social Icons & Version */}
         <div className={styles.socialsDesktop}>
-          {/* Admin link - only visible to admins (Requirement 3.3) */}
-          {isAuthenticated && isAdmin() && (
-            <Link
-              href="/admin"
-              className={styles.adminLink}
-              title="Admin Panel"
-            >
-              <FaUserShield />
-            </Link>
-          )}
-          {/* Logout button - only visible to authenticated users */}
-          {isAuthenticated && (
-            <button
-              onClick={handleLogout}
-              className={styles.logoutButton}
-              title="Logout"
-              aria-label="Logout"
-            >
-              <FaSignOutAlt />
-            </button>
-          )}
           <a
             href={process.env.NEXT_PUBLIC_IMMICH_URL}
             target="_blank"
@@ -121,14 +93,6 @@ const Navbar = forwardRef<NavbarHandle>(function Navbar(_props, ref) {
 
         {/* Mobile Controls: Version & Hamburger Icon */}
         <div className={styles.mobileControls}>
-          {/* The message center icon should only appear if you have an unread notification */}
-          {/* <span
-            className={styles.icon}
-            onClick={() => setShowVersionModal(true)}
-            style={{ cursor: "pointer" }}
-          >
-            <SiMailboxdotorg />
-          </span> */}
           <span
             className={styles.version}
             onClick={() => setShowVersionModal(true)}
@@ -157,25 +121,6 @@ const Navbar = forwardRef<NavbarHandle>(function Navbar(_props, ref) {
                 {page.name}
               </Link>
             ))}
-            {/* Admin link in mobile menu - only visible to admins (Requirement 3.3) */}
-            {isAuthenticated && isAdmin() && (
-              <Link
-                href="/admin"
-                className={`${styles.mobileNavLink} ${pathname === "/admin" ? styles.activeMobileNavLink : ""}`}
-                onClick={() => setMenuOpen(false)}
-              >
-                Admin Panel
-              </Link>
-            )}
-            {/* Logout link in mobile menu - only visible to authenticated users */}
-            {isAuthenticated && (
-              <button
-                onClick={handleLogout}
-                className={styles.mobileLogoutButton}
-              >
-                Logout
-              </button>
-            )}
             {/* Social Icons at the bottom of the mobile menu */}
             <div className={styles.mobileSocials}>
               <a
