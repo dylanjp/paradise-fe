@@ -56,6 +56,7 @@ const ActionTypes = {
   DELETE_TASK: "DELETE_TASK",
   RESET_ALL: "RESET_ALL",
   ROLLBACK: "ROLLBACK",
+  REORDER_TASKS: "REORDER_TASKS",
 };
 
 /**
@@ -136,6 +137,13 @@ const dailyTaskReducer = (state, action) => {
       return {
         ...state,
         tasks: state.tasks.map((task) => ({ ...task, completed: false })),
+      };
+    }
+
+    case ActionTypes.REORDER_TASKS: {
+      return {
+        ...state,
+        tasks: action.payload,
       };
     }
 
@@ -321,6 +329,46 @@ export function useDailyTaskManager(
     dispatch({ type: ActionTypes.RESET_ALL });
   }, []);
 
+  /**
+   * Reorder daily tasks with optimistic update
+   * @param {Array} reorderedTasks - Array of tasks with updated order values
+   */
+  const reorderTasks = useCallback(
+    async (reorderedTasks) => {
+      // Save previous state for rollback
+      const previousTasks = [...state.tasks];
+
+      // Identify tasks with changed order values
+      const changedTasks = reorderedTasks.filter((newTask) => {
+        const oldTask = previousTasks.find((t) => t.id === newTask.id);
+        return oldTask && oldTask.order !== newTask.order;
+      });
+
+      // Optimistic update
+      dispatch({ type: ActionTypes.REORDER_TASKS, payload: reorderedTasks });
+
+      // If no userId, skip API call (local-only mode)
+      if (!userId) return;
+
+      try {
+        // Update each task with changed order on the backend
+        await Promise.all(
+          changedTasks.map((task) =>
+            TaskService.updateDailyTask(userId, task.id, { order: task.order })
+          )
+        );
+      } catch (error) {
+        // Rollback on failure
+        dispatch({
+          type: ActionTypes.ROLLBACK,
+          payload: previousTasks,
+          error: error.message,
+        });
+      }
+    },
+    [userId, state.tasks]
+  );
+
   return {
     dailyTasks: state.tasks,
     completedCount,
@@ -332,6 +380,7 @@ export function useDailyTaskManager(
     addTask,
     deleteTask,
     resetAllTasks,
+    reorderTasks,
   };
 }
 

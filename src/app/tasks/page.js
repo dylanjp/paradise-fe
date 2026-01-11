@@ -42,6 +42,7 @@ export default function TasksPage() {
     toggleTask,
     addTask: addDailyTask,
     deleteTask: deleteDailyTask,
+    reorderTasks: reorderDailyTasks,
   } = useDailyTaskManager(USER_ID);
 
   // Modal open/close state
@@ -93,6 +94,7 @@ export default function TasksPage() {
               onToggleTask={toggleTask}
               onAddTask={addDailyTask}
               onDeleteTask={deleteDailyTask}
+              onReorderTasks={reorderDailyTasks}
             />
           </ErrorBoundary>
 
