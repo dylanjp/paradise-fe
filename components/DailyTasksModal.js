@@ -9,6 +9,7 @@ import styles from "./DailyTasksModal.module.css";
  * @param {Array} tasks - List of daily tasks
  * @param {function} onToggleTask - Handler to toggle task completion
  * @param {function} onAddTask - Handler to add new task
+ * @param {function} onDeleteTask - Handler to delete a task
  */
 const DailyTasksModal = ({
   isOpen,
@@ -16,6 +17,7 @@ const DailyTasksModal = ({
   tasks = [],
   onToggleTask,
   onAddTask,
+  onDeleteTask,
 }) => {
   const [isAddingTask, setIsAddingTask] = useState(false);
   const [newTaskDescription, setNewTaskDescription] = useState("");
@@ -133,6 +135,14 @@ const DailyTasksModal = ({
                 >
                   {task.description}
                 </span>
+                <button
+                  className={styles.deleteButton}
+                  onClick={() => onDeleteTask(task.id)}
+                  aria-label={`Delete task: ${task.description}`}
+                  type="button"
+                >
+                  ✕
+                </button>
               </div>
             ))
           )}

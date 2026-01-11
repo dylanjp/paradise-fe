@@ -41,6 +41,7 @@ export default function TasksPage() {
     error: dailyError,
     toggleTask,
     addTask: addDailyTask,
+    deleteTask: deleteDailyTask,
   } = useDailyTaskManager(USER_ID);
 
   // Modal open/close state
@@ -91,6 +92,7 @@ export default function TasksPage() {
               tasks={dailyTasks}
               onToggleTask={toggleTask}
               onAddTask={addDailyTask}
+              onDeleteTask={deleteDailyTask}
             />
           </ErrorBoundary>
 

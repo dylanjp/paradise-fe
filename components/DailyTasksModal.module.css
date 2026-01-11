@@ -127,6 +127,44 @@
   color: #00ff00;
 }
 
+/* Delete button for task rows */
+.deleteButton {
+  background: transparent;
+  border: 1px solid var(--tron-red-primary, #f80206);
+  color: var(--tron-red-primary, #f80206);
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.deleteButton:hover {
+  background: var(--tron-red-primary, #f80206);
+  color: black;
+  box-shadow: 0 0 8px var(--tron-red-primary, #f80206);
+}
+
+.deleteButton:focus {
+  outline: 2px solid var(--tron-red-primary, #f80206);
+  outline-offset: 2px;
+  box-shadow: 0 0 8px var(--tron-red-primary, #f80206);
+}
+
+.deleteButton:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+.deleteButton:focus-visible {
+  outline: 2px solid var(--tron-red-primary, #f80206);
+  outline-offset: 2px;
+  box-shadow: 0 0 8px var(--tron-red-primary, #f80206);
+}
+
 /* Button container */
 .buttonContainer {
   display: flex;
