@@ -67,9 +67,9 @@ const TaskContainer = ({
   // Dnd-kit requires a flat list of IDs for the SortableContext
   const sortableIds = useMemo(() => {
     const ids = tasks.map((t) => t.id);
-    // Add virtual IDs for drop zones to allow nesting
+    // Add virtual IDs for drop zones to allow nesting on all root tasks
     tasks.forEach((t) => {
-      if (!t.parentId && !isSection(t, tasks)) ids.push(`dropzone-${t.id}`);
+      if (!t.parentId) ids.push(`dropzone-${t.id}`);
     });
     return ids;
   }, [tasks]);
@@ -142,9 +142,8 @@ const TaskContainer = ({
                       indentLevel={task.parentId ? 1 : 0}
                       isNewTask={newTaskId === task.id}
                     />
-                    {/* Nesting Helper: Only show for root tasks that aren't already sections */}
+                    {/* Nesting Helper: Show for all root tasks to allow nesting */}
                     {!task.parentId &&
-                      !taskIsSection &&
                       activeId &&
                       activeId !== task.id && (
                         <DropZone taskId={task.id} isVisible={true} />
