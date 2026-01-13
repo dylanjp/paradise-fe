@@ -88,22 +88,35 @@ const TaskContainer = ({
     const oldIndex = tasks.findIndex((t) => t.id === draggedId);
     const newIndex = tasks.findIndex((t) => t.id === targetId);
 
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    const draggedTask = tasks[oldIndex];
+
     // 1. Calculate new task order
     let updatedTasks = arrayMove(tasks, oldIndex, newIndex);
 
-    // 2. Update parent/child relationships
-    updatedTasks = updatedTasks.map((task) => {
+    // 2. Update parent/child relationships and order values
+    updatedTasks = updatedTasks.map((task, index) => {
       if (task.id === draggedId) {
-        const targetTask = tasks.find((t) => t.id === targetId);
+        // Determine the new parentId for the dragged task
+        let newParentId = draggedTask.parentId; // Default: keep existing parentId
+        
+        if (isNestingAction) {
+          // Dropped on a dropzone - nest under that task
+          newParentId = targetId;
+        }
+        // If not a nesting action, preserve the original parentId (just reordering)
+        
         return {
           ...task,
-          // If dropped on a dropzone, nest it. If dropped on a root, make it root.
-          parentId: isNestingAction
-            ? targetId
-            : targetTask?.parentId || undefined,
+          order: index + 1,
+          parentId: newParentId,
         };
       }
-      return task;
+      return {
+        ...task,
+        order: index + 1,
+      };
     });
 
     onTaskReorder(updatedTasks);

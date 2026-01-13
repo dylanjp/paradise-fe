@@ -14,12 +14,14 @@ import { useAuth } from "../../context/AuthContext";
 import styles from "./tasks.module.css";
 
 export default function TasksPage() {
-  // Get username from auth context for user-specific tasks
-  const { username } = useAuth();
+  // Get username and loading state from auth context for user-specific tasks
+  const { username, isLoading: isAuthLoading } = useAuth();
 
-  // Use authenticated username, fallback to environment variable for backwards compatibility
-  const USER_ID =
-    username || process.env.NEXT_PUBLIC_PARADISE_USER_ID || "default-user";
+  // Only use the userId once auth has finished loading to prevent race conditions on refresh
+  // This ensures we don't fetch tasks with a fallback userId before the real one is available
+  const USER_ID = isAuthLoading
+    ? null
+    : username || process.env.NEXT_PUBLIC_PARADISE_USER_ID || "default-user";
   const {
     currentTasks,
     activeCategory,
@@ -53,8 +55,8 @@ export default function TasksPage() {
 
   const pageTitle = `${activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)} TODO`;
 
-  // Combined loading state
-  const isLoading = isTasksLoading || isDailyLoading;
+  // Combined loading state - include auth loading to prevent flash of empty content
+  const isLoading = isAuthLoading || isTasksLoading || isDailyLoading;
 
   // Combined error state - show the first error encountered
   const error = tasksError || dailyError;

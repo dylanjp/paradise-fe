@@ -344,6 +344,8 @@ export function useTaskManager(userId) {
     async (tasks) => {
       // Save previous state for rollback
       const previousTasks = { ...state.tasks };
+      const currentCategory = state.category;
+      const oldTasks = state.tasks[currentCategory];
 
       // Optimistic update
       dispatch({ type: "REORDER_TASKS", payload: tasks });
@@ -352,12 +354,24 @@ export function useTaskManager(userId) {
       if (!userId) return;
 
       try {
-        // Update order for each task that changed
-        const updatePromises = tasks.map((task, index) => {
-          if (task.order !== index + 1) {
-            return TaskService.updateTodoTask(userId, task.id, {
-              order: index + 1,
-            });
+        // Update order and parentId for each task that changed
+        const updatePromises = tasks.map((task) => {
+          const oldTask = oldTasks.find((t) => t.id === task.id);
+          if (!oldTask) return Promise.resolve();
+
+          const orderChanged = oldTask.order !== task.order;
+          // Handle undefined vs null vs string comparison for parentId
+          const oldParentId = oldTask.parentId || null;
+          const newParentId = task.parentId || null;
+          const parentIdChanged = oldParentId !== newParentId;
+
+          if (orderChanged || parentIdChanged) {
+            // Always include both order and parentId to ensure backend updates correctly
+            const updates = {
+              order: task.order,
+              parentId: task.parentId || null,
+            };
+            return TaskService.updateTodoTask(userId, task.id, updates);
           }
           return Promise.resolve();
         });
@@ -372,7 +386,7 @@ export function useTaskManager(userId) {
         });
       }
     },
-    [userId, state.tasks],
+    [userId, state.tasks, state.category],
   );
 
   /**
