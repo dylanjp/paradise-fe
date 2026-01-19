@@ -1,0 +1,286 @@
+/* ContributionChart - GitHub-style contribution grid with Tron aesthetic */
+
+.chartContainer {
+  padding: 1rem;
+  border: 2px solid var(--tron-red-primary, #f80206);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 15px rgba(248, 2, 6, 0.3);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Month labels row */
+.monthLabelsRow {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.dayLabelsPlaceholder {
+  width: 32px;
+  flex-shrink: 0;
+}
+
+.monthLabels {
+  position: relative;
+  height: 16px;
+  flex: 1;
+}
+
+.monthLabel {
+  position: absolute;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.7rem;
+  color: var(--tron-red-primary, #f80206);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* Chart grid layout */
+.chartGrid {
+  display: flex;
+  gap: 0.25rem;
+}
+
+/* Day of week labels */
+.dayLabels {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 28px;
+  flex-shrink: 0;
+  padding-right: 4px;
+}
+
+.dayLabel {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.65rem;
+  color: var(--tron-red-primary, #f80206);
+  height: 12px;
+  line-height: 12px;
+  text-align: right;
+}
+
+/* Weeks container - horizontal scroll on mobile */
+.weeksContainer {
+  display: flex;
+  gap: 3px;
+  min-width: max-content;
+}
+
+/* Individual week column */
+.week {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+/* Day square base styles */
+.daySquare {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* Empty/incomplete day */
+.empty {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.empty:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Completed day - green with glow */
+.completed {
+  background: #00ff00;
+  border: 1px solid #00ff00;
+  box-shadow: 0 0 4px #00ff00;
+}
+
+.completed:hover {
+  box-shadow: 
+    0 0 8px #00ff00,
+    0 0 12px rgba(0, 255, 0, 0.5);
+  transform: scale(1.1);
+}
+
+/* Empty placeholder square (for padding first week) */
+.emptySquare {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background: transparent;
+}
+
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.95);
+  border: 1px solid var(--tron-red-primary, #f80206);
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  z-index: 100;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  box-shadow: 0 0 10px rgba(248, 2, 6, 0.4);
+  pointer-events: none;
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--tron-red-primary, #f80206);
+}
+
+.tooltipDate {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.75rem;
+  color: var(--tron-red-primary, #f80206);
+}
+
+.tooltipCompleted {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.7rem;
+  color: #00ff00;
+  text-shadow: 0 0 5px #00ff00;
+}
+
+.tooltipIncomplete {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+
+/* Legend */
+.legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.legendLabel {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.legendSquare {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+/* Responsive styles for mobile */
+@media (max-width: 768px) {
+  .chartContainer {
+    padding: 0.75rem;
+    border-radius: 6px;
+  }
+
+  /* Ensure horizontal scroll works smoothly */
+  .weeksContainer {
+    padding-bottom: 0.5rem;
+  }
+
+  /* Slightly larger touch targets on mobile */
+  .daySquare {
+    width: 10px;
+    height: 10px;
+  }
+
+  .emptySquare {
+    width: 10px;
+    height: 10px;
+  }
+
+  .dayLabel {
+    font-size: 0.6rem;
+    height: 10px;
+    line-height: 10px;
+  }
+
+  .dayLabels {
+    width: 24px;
+    gap: 3px;
+  }
+
+  .week {
+    gap: 3px;
+  }
+
+  .monthLabel {
+    font-size: 0.6rem;
+  }
+
+  .legend {
+    justify-content: center;
+  }
+
+  .legendLabel {
+    font-size: 0.65rem;
+  }
+
+  .legendSquare {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  .chartContainer {
+    padding: 0.5rem;
+  }
+
+  .dayLabelsPlaceholder {
+    width: 24px;
+  }
+
+  .dayLabels {
+    width: 20px;
+  }
+
+  .dayLabel {
+    font-size: 0.55rem;
+  }
+
+  /* Hide some day labels on very small screens */
+  .dayLabel:nth-child(2),
+  .dayLabel:nth-child(6) {
+    visibility: hidden;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .daySquare {
+    transition: none;
+  }
+
+  .completed:hover {
+    transform: none;
+  }
+}

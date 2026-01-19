@@ -246,4 +246,21 @@ export const TaskService = {
       throw handleApiError(error, "delete daily task");
     }
   },
+
+  /**
+   * Fetches completion history for a daily task
+   * @param {string} userId - User identifier
+   * @param {string} taskId - Daily task identifier
+   * @returns {Promise<string[]>} Array of ISO date strings (YYYY-MM-DD)
+   */
+  getDailyTaskCompletions: async (userId, taskId) => {
+    const endpoint = buildApiEndpoint(userId, `tasks/daily/${taskId}/completions`);
+
+    try {
+      const data = await apiClient.get(endpoint);
+      return data;
+    } catch (error) {
+      throw handleApiError(error, "fetch completion history");
+    }
+  },
 };
