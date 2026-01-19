@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   DndContext,
   closestCenter,
@@ -121,6 +122,7 @@ const DailyTasksModal = ({
   onDeleteTask,
   onReorderTasks,
 }) => {
+  const router = useRouter();
   const [isAddingTask, setIsAddingTask] = useState(false);
   const [newTaskDescription, setNewTaskDescription] = useState("");
   const [activeId, setActiveId] = useState(null);
@@ -232,6 +234,12 @@ const DailyTasksModal = ({
     }
   };
 
+  // Handle dashboard navigation
+  const handleDashboardClick = () => {
+    onClose();
+    router.push("/tasks/dashboard");
+  };
+
   // Sort tasks by order
   const sortedTasks = [...tasks].sort((a, b) => a.order - b.order);
 
@@ -321,9 +329,8 @@ const DailyTasksModal = ({
           </button>
           <button
             className={styles.dashboardButton}
-            disabled
-            title="Coming soon"
-            aria-label="Dashboard (coming soon)"
+            onClick={handleDashboardClick}
+            aria-label="View Dashboard"
           >
             Dashboard
           </button>
