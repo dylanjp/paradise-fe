@@ -6,8 +6,7 @@
   border-radius: 8px;
   background: rgba(0, 0, 0, 0.8);
   box-shadow: 0 0 15px rgba(248, 2, 6, 0.3);
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
 }
 
 /* Month labels row */
@@ -62,24 +61,29 @@
   text-align: right;
 }
 
-/* Weeks container - horizontal scroll on mobile */
+/* Weeks container - responsive grid */
 .weeksContainer {
   display: flex;
-  gap: 3px;
-  min-width: max-content;
+  gap: 2px;
+  flex: 1;
+  justify-content: flex-start;
 }
 
 /* Individual week column */
 .week {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
+  flex: 1;
+  max-width: 14px;
 }
 
 /* Day square base styles */
 .daySquare {
-  width: 12px;
-  height: 12px;
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 12px;
+  max-height: 12px;
   border-radius: 2px;
   cursor: pointer;
   position: relative;
@@ -113,8 +117,10 @@
 
 /* Empty placeholder square (for padding first week) */
 .emptySquare {
-  width: 12px;
-  height: 12px;
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 12px;
+  max-height: 12px;
   border-radius: 2px;
   background: transparent;
 }
@@ -200,39 +206,40 @@
     border-radius: 6px;
   }
 
-  /* Ensure horizontal scroll works smoothly */
   .weeksContainer {
-    padding-bottom: 0.5rem;
-  }
-
-  /* Slightly larger touch targets on mobile */
-  .daySquare {
-    width: 10px;
-    height: 10px;
-  }
-
-  .emptySquare {
-    width: 10px;
-    height: 10px;
-  }
-
-  .dayLabel {
-    font-size: 0.6rem;
-    height: 10px;
-    line-height: 10px;
-  }
-
-  .dayLabels {
-    width: 24px;
-    gap: 3px;
+    gap: 1px;
   }
 
   .week {
-    gap: 3px;
+    gap: 1px;
+    max-width: 10px;
+  }
+
+  .daySquare {
+    max-width: 8px;
+    max-height: 8px;
+    border-radius: 1px;
+  }
+
+  .emptySquare {
+    max-width: 8px;
+    max-height: 8px;
+    border-radius: 1px;
+  }
+
+  .dayLabel {
+    font-size: 0.5rem;
+    height: 8px;
+    line-height: 8px;
+  }
+
+  .dayLabels {
+    width: 20px;
+    gap: 1px;
   }
 
   .monthLabel {
-    font-size: 0.6rem;
+    font-size: 0.5rem;
   }
 
   .legend {
@@ -244,8 +251,8 @@
   }
 
   .legendSquare {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
   }
 }
 
@@ -256,21 +263,54 @@
   }
 
   .dayLabelsPlaceholder {
-    width: 24px;
+    width: 18px;
   }
 
   .dayLabels {
-    width: 20px;
+    width: 16px;
   }
 
   .dayLabel {
-    font-size: 0.55rem;
+    font-size: 0.45rem;
   }
 
   /* Hide some day labels on very small screens */
   .dayLabel:nth-child(2),
   .dayLabel:nth-child(6) {
     visibility: hidden;
+  }
+
+  .weeksContainer {
+    gap: 1px;
+  }
+
+  .week {
+    gap: 1px;
+    max-width: 6px;
+  }
+
+  .daySquare {
+    max-width: 5px;
+    max-height: 5px;
+    border-radius: 1px;
+  }
+
+  .emptySquare {
+    max-width: 5px;
+    max-height: 5px;
+  }
+
+  .monthLabel {
+    font-size: 0.4rem;
+  }
+
+  .legendSquare {
+    width: 6px;
+    height: 6px;
+  }
+
+  .legendLabel {
+    font-size: 0.55rem;
   }
 }
 
