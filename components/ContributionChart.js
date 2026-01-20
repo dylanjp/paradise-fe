@@ -62,9 +62,8 @@ const ContributionChart = ({ year, completionDates = [] }) => {
   // Generate month labels with positions
   const monthLabels = useMemo(() => generateMonthLabels(year), [year]);
 
-  // Calculate square size based on number of weeks
-  const squareSize = 12;
-  const squareGap = 3;
+  // Total weeks for percentage-based positioning
+  const totalWeeks = weeks.length;
 
   return (
     <div className={styles.chartContainer}>
@@ -76,7 +75,7 @@ const ContributionChart = ({ year, completionDates = [] }) => {
             <span
               key={month}
               className={styles.monthLabel}
-              style={{ left: `${weekIndex * (squareSize + squareGap)}px` }}
+              style={{ left: `${(weekIndex / totalWeeks) * 100}%` }}
             >
               {month}
             </span>

@@ -263,4 +263,28 @@ export const TaskService = {
       throw handleApiError(error, "fetch completion history");
     }
   },
+
+  /**
+   * Fetches perfect days for a user in a given year
+   * A perfect day is a date where the user completed ALL daily tasks
+   * @param {string} userId - User identifier
+   * @param {number} [year] - Year to fetch (defaults to current year on backend)
+   * @returns {Promise<string[]>} Array of ISO date strings (YYYY-MM-DD)
+   * Requirements: 2.1, 2.2, 2.3, 2.4, 2.5
+   */
+  getPerfectDays: async (userId, year) => {
+    const endpoint = buildApiEndpoint(userId, "tasks/daily/perfect-days");
+    const params = year ? `?year=${year}` : "";
+
+    try {
+      const data = await apiClient.get(`${endpoint}${params}`);
+      return data || [];
+    } catch (error) {
+      // Handle 400 Bad Request specifically for perfect days - Requirements: 2.4
+      if (error.status === 400) {
+        throw new Error("Invalid year selected. Please choose a valid year.");
+      }
+      throw handleApiError(error, "fetch perfect days");
+    }
+  },
 };
