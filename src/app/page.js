@@ -5,11 +5,14 @@ import Link from "next/link";
 import Background from "@/components/Background";
 import Navbar from "@/components/Navbar";
 import PrimaryButton from "@/components/PrimaryButton";
+import BackendErrorOverlay from "@/components/BackendErrorOverlay";
+import useBackendHealth from "@/hooks/useBackendHealth";
 import { useEffect, useState, useRef } from "react";
 
 export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
   const navbarRef = useRef(null);
+  const { isHealthy, isLoading, isRetrying, retry } = useBackendHealth();
 
   useEffect(() => {
     // Function to detect viewport width changes
@@ -30,43 +33,62 @@ export default function Home() {
     };
   }, []);
 
+  // Show loading indicator during initial health check
+  if (isLoading) {
+    return (
+      <div className={styles.page}>
+        <Background />
+        <main className={styles.main}>
+          <div className={styles.loadingIndicator}>
+            <span className={styles.loadingText}>Checking backend status...</span>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.page}>
       <Navbar ref={navbarRef} />
       <Background />
+      {/* Show error overlay when backend is down */}
+      {isHealthy === false && (
+        <BackendErrorOverlay isRetrying={isRetrying} onRetry={retry} />
+      )}
       <main className={styles.main}>
         <h1 className={styles.retroName}>P.A.R.A.D.I.S.E</h1>
         <h3 className={styles.retroSubTitle}>
-          Pratt’s Automated Residential And Data Integration System Engine
+          Pratt's Automated Residential And Data Integration System Engine
         </h3>
         <div className={styles.ctas}>
           {!isMobile ? (
             // Desktop navigation - show all CTA links
             <>
               {/* <Link href="./projects/" className={styles.navLink}>My Drive</Link> Access to Shared Folder*/}
-              <Link href="./tasks/" className={styles.navLink}>
+              <Link href="./tasks/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
                 Task Management
               </Link>
-              <Link href="./comingsoon/" className={styles.navLink}>
+              <Link href="./comingsoon/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
                 Notification Manager
               </Link>
-              <Link href="./drive/" className={styles.navLink}>
+              <Link href="./drive/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
                 Pratt Drive
               </Link>
-              <Link href="./home/" className={styles.navLink}>
+              <Link href="./home/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
                 Documentation
               </Link>
-              <Link href="./comingsoon/" className={styles.navLink}>
+              <Link href="./comingsoon/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
                 Print Center
               </Link>
             </>
           ) : (
             // Mobile navigation - show PrimaryButton
             <PrimaryButton
-              className={styles.mobileNavButton}
+              className={`${styles.mobileNavButton} ${isHealthy === false ? styles.disabledLink : ''}`}
               onClick={() => {
                 navbarRef.current?.openMenu();
               }}
+              disabled={isHealthy === false}
             >
               Tap Here
             </PrimaryButton>
