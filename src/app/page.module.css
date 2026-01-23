@@ -402,3 +402,50 @@ a.secondary {
   padding: 8px 16px !important;
   font-size: 14px !important;
 }
+
+
+/* Loading indicator styles for initial health check */
+.loadingIndicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.loadingText {
+  font-family: "TechMono";
+  font-size: 18px;
+  color: var(--tron-orange-primary, #ff6600);
+  text-shadow: 0 0 2px var(--tron-orange-primary, #ff6600);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Disabled link styles for when backend is down */
+.disabledLink {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.disabledLink::after {
+  border-color: var(--tron-red-light, #ff1a1a) !important;
+}
+
+.disabledLink:hover {
+  color: inherit;
+}
+
+.disabledLink:hover::after {
+  width: 10px;
+  height: 10px;
+}
