@@ -56,7 +56,7 @@ function handleApiError(error, operation) {
   // Handle network errors
   if (error.name === "TypeError" && error.message === "Failed to fetch") {
     return new Error(
-      "Unable to connect to server. Please check your connection.",
+      "Unable to connect to server. Please check that the EPIC-SERVER is running",
     );
   }
 
