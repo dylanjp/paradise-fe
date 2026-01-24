@@ -154,6 +154,7 @@ const TaskContainer = ({
                       isSection={taskIsSection}
                       indentLevel={task.parentId ? 1 : 0}
                       isNewTask={newTaskId === task.id}
+                      isFromNotification={task.createdFromNotification === true}
                     />
                     {/* Nesting Helper: Show for all root tasks to allow nesting */}
                     {!task.parentId &&

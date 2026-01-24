@@ -7,12 +7,16 @@ import Navbar from "@/components/Navbar";
 import PrimaryButton from "@/components/PrimaryButton";
 import BackendErrorOverlay from "@/components/BackendErrorOverlay";
 import useBackendHealth from "@/hooks/useBackendHealth";
+import { useAuth } from "@/src/context/AuthContext";
+import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 
 export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
   const navbarRef = useRef(null);
+  const router = useRouter();
   const { isHealthy, isLoading, isRetrying, retry } = useBackendHealth();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
 
   useEffect(() => {
     // Function to detect viewport width changes
@@ -61,14 +65,22 @@ export default function Home() {
           Pratt's Automated Residential And Data Integration System Engine
         </h3>
         <div className={styles.ctas}>
-          {!isMobile ? (
+          {authLoading ? null : !isAuthenticated ? (
+            // Not logged in - show Login button
+            <PrimaryButton
+              onClick={() => router.push('/login')}
+              disabled={isHealthy === false}
+            >
+              Login
+            </PrimaryButton>
+          ) : !isMobile ? (
             // Desktop navigation - show all CTA links
             <>
               {/* <Link href="./projects/" className={styles.navLink}>My Drive</Link> Access to Shared Folder*/}
               <Link href="./tasks/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
                 Task Management
               </Link>
-              <Link href="./comingsoon/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
+              <Link href="./notifications/manage" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
                 Notification Manager
               </Link>
               <Link href="./drive/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>

@@ -6,7 +6,7 @@ import { Puffs } from "@arwes/react-bgs";
 
 const Background = () => {
   return (
-    <Animator active={true} duration={{ interval: 2 }}>
+    <Animator active duration={{ interval: 2 }}>
       <div
         style={{
           position: "fixed",
@@ -20,10 +20,17 @@ const Background = () => {
             "radial-gradient(circle, rgba(10,10,30,1) 20%, rgba(0,0,0,1) 80%)",
         }}
       >
-        {/* Puffs Animation */}
-        <Puffs color="hsla(0, 97%, 49%, 0.2)" quantity={30} />
-
-        {/* Glowing Grid */}
+        <Puffs
+          color="hsla(0, 97%, 49%, 0.2)"
+          quantity={30}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+          }}
+        />
         <div
           style={{
             position: "absolute",
@@ -37,7 +44,6 @@ const Background = () => {
             opacity: 0.2,
           }}
         />
-        {/* Keyframes for Animations */}
         <style>
           {`
             @keyframes moveLights {

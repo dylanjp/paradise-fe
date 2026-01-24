@@ -291,3 +291,11 @@
 .dailyTextCompleted {
   color: #00ff00;
 }
+
+/* =========================
+   NOTIFICATION TASK STYLES
+   ========================= */
+/* Blue text for tasks originating from notifications */
+.notificationTaskText {
+  color: #00bfff; /* TRON-style cyan/blue */
+}

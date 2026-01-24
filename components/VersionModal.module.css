@@ -72,6 +72,18 @@
   transform: scale(1.1);
 }
 
+.userStatus {
+  color: var(--tron-orange-primary, #ff6600);
+  font-size: 0.95rem;
+  text-align: center;
+  padding: 8px 12px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255, 102, 0, 0.3);
+  border-radius: 6px;
+  background: rgba(255, 102, 0, 0.05);
+  text-shadow: 0 0 5px rgba(255, 102, 0, 0.3);
+}
+
 .modalContent {
   display: flex;
   flex-direction: column;

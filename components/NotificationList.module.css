@@ -1,0 +1,92 @@
+/**
+ * NotificationList Component Styles
+ * TRON-inspired aesthetic for notification list container and empty state
+ *
+ * Requirements: 2.6, 9.1, 9.2, 9.3, 9.4, 9.5
+ */
+
+/* =========================
+   CONTAINER
+   ========================= */
+.container {
+  width: 100%;
+}
+
+/* =========================
+   LIST WRAPPER
+   ========================= */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* =========================
+   EMPTY STATE
+   ========================= */
+.emptyState {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  border: 2px solid var(--tron-red-primary, #f80206);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.9);
+  box-shadow: 0 0 10px rgba(248, 2, 6, 0.3);
+}
+
+.emptyIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.emptyText {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.25rem;
+  color: var(--tron-red-light, #ff1a1a);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0 0 0.75rem 0;
+  text-shadow: 0 0 5px rgba(248, 2, 6, 0.5);
+}
+
+.emptySubtext {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* =========================
+   MOBILE RESPONSIVE
+   ========================= */
+@media (max-width: 768px) {
+  .emptyState {
+    padding: 2rem 1rem;
+  }
+
+  .emptyIcon {
+    font-size: 2.5rem;
+  }
+
+  .emptyText {
+    font-size: 1rem;
+    letter-spacing: 1px;
+  }
+
+  .emptySubtext {
+    font-size: 0.85rem;
+  }
+}

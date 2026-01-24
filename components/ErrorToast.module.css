@@ -1,0 +1,225 @@
+/**
+ * ErrorToast Component Styles
+ * TRON-inspired toast notification styling with glow effects
+ *
+ * Requirements: 10.3, 9.1, 9.2, 9.3, 9.4, 9.5
+ */
+
+/* =========================
+   BASE TOAST STYLES
+   ========================= */
+.toast {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.95);
+  font-family: "Share Tech Mono", monospace;
+  animation: slideIn 0.3s ease-out, glow 2s ease-in-out infinite alternate;
+  max-width: 450px;
+  min-width: 300px;
+  box-sizing: border-box;
+}
+
+/* =========================
+   ERROR TYPE
+   ========================= */
+.error {
+  border: 2px solid var(--tron-red-primary, #f80206);
+  box-shadow: 
+    0 0 15px rgba(248, 2, 6, 0.4),
+    inset 0 0 10px rgba(248, 2, 6, 0.05);
+}
+
+.error .icon {
+  color: var(--tron-red-primary, #f80206);
+  text-shadow: 0 0 8px var(--tron-red-primary, #f80206);
+}
+
+.error .message {
+  color: var(--tron-red-light, #ff1a1a);
+}
+
+.error .dismissButton {
+  color: var(--tron-red-light, #ff1a1a);
+  border-color: var(--tron-red-primary, #f80206);
+}
+
+.error .dismissButton:hover {
+  background: rgba(248, 2, 6, 0.2);
+  box-shadow: 0 0 10px rgba(248, 2, 6, 0.4);
+}
+
+/* =========================
+   SUCCESS TYPE
+   ========================= */
+.success {
+  border: 2px solid #00ff00;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 0, 0.4),
+    inset 0 0 10px rgba(0, 255, 0, 0.05);
+}
+
+.success .icon {
+  color: #00ff00;
+  text-shadow: 0 0 8px #00ff00;
+}
+
+.success .message {
+  color: #00ff88;
+}
+
+.success .dismissButton {
+  color: #00ff88;
+  border-color: #00ff00;
+}
+
+.success .dismissButton:hover {
+  background: rgba(0, 255, 0, 0.2);
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
+}
+
+/* =========================
+   WARNING TYPE
+   ========================= */
+.warning {
+  border: 2px solid var(--tron-yellow-active, #ffff00);
+  box-shadow: 
+    0 0 15px rgba(255, 255, 0, 0.4),
+    inset 0 0 10px rgba(255, 255, 0, 0.05);
+}
+
+.warning .icon {
+  color: var(--tron-yellow-active, #ffff00);
+  text-shadow: 0 0 8px var(--tron-yellow-active, #ffff00);
+}
+
+.warning .message {
+  color: #ffff88;
+}
+
+.warning .dismissButton {
+  color: #ffff88;
+  border-color: var(--tron-yellow-active, #ffff00);
+}
+
+.warning .dismissButton:hover {
+  background: rgba(255, 255, 0, 0.2);
+  box-shadow: 0 0 10px rgba(255, 255, 0, 0.4);
+}
+
+/* =========================
+   CONTENT SECTION
+   ========================= */
+.content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.icon {
+  font-size: 1.25rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.message {
+  font-size: 0.9rem;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+/* =========================
+   DISMISS BUTTON
+   ========================= */
+.dismissButton {
+  background: transparent;
+  border: 1px solid;
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  line-height: 1;
+  padding: 0;
+}
+
+.dismissButton:focus {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.dismissButton:active {
+  transform: scale(0.95);
+}
+
+/* =========================
+   ANIMATIONS
+   ========================= */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes glow {
+  from {
+    filter: brightness(1);
+  }
+  to {
+    filter: brightness(1.1);
+  }
+}
+
+/* =========================
+   MOBILE RESPONSIVE
+   ========================= */
+@media (max-width: 768px) {
+  .toast {
+    min-width: 280px;
+    max-width: calc(100vw - 40px);
+    padding: 0.875rem 1rem;
+  }
+
+  .message {
+    font-size: 0.85rem;
+  }
+
+  .icon {
+    font-size: 1.1rem;
+  }
+
+  .dismissButton {
+    width: 26px;
+    height: 26px;
+    font-size: 1.1rem;
+  }
+}
+
+/* =========================
+   REDUCED MOTION
+   ========================= */
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    animation: none;
+  }
+}

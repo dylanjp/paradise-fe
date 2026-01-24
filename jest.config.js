@@ -11,12 +11,17 @@ const customJestConfig = {
   testEnvironment: "jsdom",
   moduleNameMapper: {
     "^@/components/(.*)$": "<rootDir>/components/$1",
-    "^@/(.*)$": "<rootDir>/src/$1",
+    "^@/services/(.*)$": "<rootDir>/services/$1",
+    "^@/hooks/(.*)$": "<rootDir>/hooks/$1",
+    "^@/(.*)$": "<rootDir>/$1",
   },
   testMatch: [
     "<rootDir>/tests/**/*.test.js",
     "<rootDir>/tests/**/*.test.jsx",
+    "<rootDir>/tests/**/*.test.ts",
+    "<rootDir>/tests/**/*.test.tsx",
     "<rootDir>/tests/**/*.property.js",
+    "<rootDir>/tests/**/*.property.ts",
   ],
 };
 
