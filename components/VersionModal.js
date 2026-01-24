@@ -9,7 +9,7 @@ import { FaSignOutAlt, FaUserShield } from "react-icons/fa";
 import Link from "next/link";
 
 export default function VersionModal({ onClose }) {
-  const { isAuthenticated, isAdmin, logout } = useAuth();
+  const { isAuthenticated, isAdmin, logout, username } = useAuth();
 
   useEffect(() => {
     // Optional: logging or animations
@@ -41,6 +41,9 @@ export default function VersionModal({ onClose }) {
               </button>
             </div>
           )}
+        </div>
+        <div className={styles.userStatus}>
+          {isAuthenticated ? `Signed in as: ${username}` : "NOT SIGNED IN"}
         </div>
         <div className={styles.modalContent}>
           {versionData.map(({ version, releaseDate, notes }) => (

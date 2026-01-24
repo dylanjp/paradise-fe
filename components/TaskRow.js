@@ -14,6 +14,7 @@ const TaskRow = ({
   isOverlay = false, // Added to handle the DragOverlay look
   isDailyTask = false, // Enables daily task styling mode
   isCompleted = false, // For daily tasks: shows green completed state
+  isFromNotification = false, // Enables blue text styling for notification-originated tasks
 }) => {
   const [isRemoving, setIsRemoving] = useState(false);
   const [isEditing, setIsEditing] = useState(isNewTask);
@@ -137,7 +138,7 @@ const TaskRow = ({
         />
       ) : (
         <span
-          className={`${styles.taskText} ${styles.clickableText} ${isDailyTask && isCompleted ? styles.dailyTextCompleted : ""}`}
+          className={`${styles.taskText} ${styles.clickableText} ${isDailyTask && isCompleted ? styles.dailyTextCompleted : ""} ${isFromNotification ? styles.notificationTaskText : ""}`}
           onClick={() => !isRemoving && setIsEditing(true)}
         >
           {displayDescription || "Untitled Task"}

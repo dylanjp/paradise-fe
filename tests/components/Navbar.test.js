@@ -19,6 +19,15 @@ jest.mock("next/navigation", () => ({
   }),
 }));
 
+// Mock useUnreadStatus hook
+jest.mock("../../hooks/useUnreadStatus", () => ({
+  useUnreadStatus: () => ({
+    hasUnread: false,
+    isLoading: false,
+    refetch: jest.fn(),
+  }),
+}));
+
 // Create a mutable mock state object
 let mockAuthState = {
   isAuthenticated: false,

@@ -35,6 +35,7 @@ const createSafeTask = (task, index = 0, defaultCategory = "personal") => {
         : index + 1,
     parentId: typeof task.parentId === "string" ? task.parentId : undefined,
     createdAt: task.createdAt instanceof Date ? task.createdAt : new Date(),
+    createdFromNotification: task.createdFromNotification === true,
   };
 };
 

@@ -1,0 +1,152 @@
+/**
+ * Notification Reader Page Styles
+ * TRON-inspired aesthetic for the notification reader page
+ *
+ * Requirements: 2.2, 9.1, 9.2, 9.3, 9.4, 9.5
+ */
+
+@font-face {
+  font-family: "TechMono";
+  src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
+}
+
+/* =========================
+   PAGE LAYOUT
+   ========================= */
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 8vh;
+  min-height: 100vh;
+  color: var(--tron-red-light, #ff1a1a);
+  font-family: "TechMono", "Share Tech Mono", monospace;
+  text-align: center;
+}
+
+/* =========================
+   HERO SECTION
+   ========================= */
+.hero {
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 20px;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-family: "Orbitron", sans-serif;
+  font-size: 3rem;
+  text-shadow: 0 0 10px var(--glow-red-primary, #f80206);
+  margin-bottom: 0.5rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+/* =========================
+   CONTENT SECTION
+   ========================= */
+.content {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 80px;
+  padding: 0 20px;
+}
+
+/* =========================
+   LOADING STATE
+   ========================= */
+.loadingState {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  border: 2px solid var(--tron-red-primary, #f80206);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.9);
+  box-shadow: 0 0 10px rgba(248, 2, 6, 0.3);
+}
+
+.loadingSpinner {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 1rem;
+  border: 3px solid rgba(248, 2, 6, 0.3);
+  border-top-color: var(--tron-red-primary, #f80206);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingText {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* =========================
+   ERROR STATE
+   ========================= */
+.errorState {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border: 2px solid var(--tron-red-primary, #f80206);
+  border-radius: 8px;
+  background: rgba(248, 2, 6, 0.1);
+  box-shadow: 0 0 15px rgba(248, 2, 6, 0.4);
+}
+
+.errorText {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 1rem;
+  color: var(--tron-red-light, #ff1a1a);
+  margin: 0;
+}
+
+/* =========================
+   MOBILE RESPONSIVE
+   ========================= */
+@media (max-width: 768px) {
+  .page {
+    padding-top: 6vh;
+  }
+
+  .title {
+    font-size: 2rem;
+    letter-spacing: 2px;
+  }
+
+  .content {
+    padding: 0 15px;
+    margin-bottom: 60px;
+  }
+
+  .loadingState,
+  .errorState {
+    padding: 2rem 1rem;
+  }
+
+  .loadingSpinner {
+    width: 32px;
+    height: 32px;
+  }
+
+  .loadingText,
+  .errorText {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+  }
+}

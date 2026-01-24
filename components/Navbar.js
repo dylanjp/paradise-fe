@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, forwardRef, useImperativeHandle } from "react";
+import { useState, forwardRef, useImperativeHandle } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaBars, FaTimes } from "react-icons/fa";
@@ -8,21 +8,19 @@ import { SiImmich } from "react-icons/si";
 import { SiPlex } from "react-icons/si";
 import { SiHomeassistant } from "react-icons/si";
 import { SiLetsencrypt } from "react-icons/si";
-import { FaExclamation } from "react-icons/fa";
 import VersionModal from "@/components/VersionModal";
+import NotificationIcon from "@/components/NotificationIcon";
+import { useUnreadStatus } from "@/hooks/useUnreadStatus";
 import versionData from "@/data/versionData";
 import styles from "./Navbar.module.css";
 
-export interface NavbarHandle {
-  openMenu: () => void;
-}
-
-const Navbar = forwardRef<NavbarHandle>(function Navbar(_props, ref) {
+const Navbar = forwardRef(function Navbar(_props, ref) {
   const pathname = usePathname();
+  const { hasUnread } = useUnreadStatus();
 
   const pages = [
     { name: "Task Management", href: "/tasks/" },
-    { name: "Notification Manager", href: "/comingsoon/" },
+    { name: "Notification Manager", href: "/notifications/manage" },
     { name: "Pratt Drive", href: "/drive/" },
     { name: "Documentation", href: "/home/" },
     { name: "Print Center", href: "/comingsoon/" },
@@ -34,8 +32,6 @@ const Navbar = forwardRef<NavbarHandle>(function Navbar(_props, ref) {
   useImperativeHandle(ref, () => ({
     openMenu: () => setMenuOpen(true),
   }));
-
-  useEffect(() => {}, []);
 
   return (
     <>
@@ -75,13 +71,7 @@ const Navbar = forwardRef<NavbarHandle>(function Navbar(_props, ref) {
           >
             <SiLetsencrypt />
           </a>
-          <span
-            className={styles.icon}
-            onClick={() => setShowVersionModal(true)}
-            style={{ cursor: "pointer" }}
-          >
-            <FaExclamation />
-          </span>
+          <NotificationIcon hasUnread={hasUnread} />
           <span
             className={styles.version}
             onClick={() => setShowVersionModal(true)}
@@ -151,6 +141,7 @@ const Navbar = forwardRef<NavbarHandle>(function Navbar(_props, ref) {
               >
                 <SiLetsencrypt />
               </a>
+              <NotificationIcon hasUnread={hasUnread} onClick={() => setMenuOpen(false)} />
             </div>
           </div>
         )}

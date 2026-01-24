@@ -3,23 +3,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import styles from "./BlogTile.module.css";
 
-type Blog = {
-  date?: string;
-  id?: string;
-  title: string;
-  image?: string;
-  description?: string;
-  blogLocation?: string;
-  tags?: string[];
-  slug?: string;
-};
-
-interface Props {
-  blog: Blog;
-  index?: number;
-}
-
-export default function BlogTile({ blog, index = 0 }: Props) {
+export default function BlogTile({ blog, index = 0 }) {
   const { title, image, description, date, tags, slug } = blog;
 
   return (
@@ -46,11 +30,7 @@ export default function BlogTile({ blog, index = 0 }: Props) {
           "0 18px 60px rgba(0,200,255,0.12), inset 0 0 60px rgba(0,200,255,0.06)",
         borderColor: "rgba(0,200,255,0.6)",
       }}
-      style={
-        {
-          ["--anim-delay" as any]: `${index * 80}ms`,
-        } as React.CSSProperties
-      }
+      style={{ ["--anim-delay"]: `${index * 80}ms` }}
     >
       <Link href={`/home/${slug || ""}`} className={styles.fullLink}>
         <div className={styles.imageWrap} aria-hidden>

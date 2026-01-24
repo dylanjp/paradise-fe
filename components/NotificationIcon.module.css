@@ -1,0 +1,55 @@
+/**
+ * NotificationIcon Styles
+ * TRON-inspired styling for the notification icon with unread state indication.
+ *
+ * Requirements: 1.4, 1.5, 9.1, 9.2, 9.3
+ */
+
+.icon {
+  font-size: 32px;
+  color: #f80206;
+  cursor: pointer;
+  transition:
+    color 0.3s,
+    transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon:hover {
+  color: #ff6600;
+  transform: scale(1.1);
+}
+
+.icon:focus {
+  outline: 2px solid #ff6600;
+  outline-offset: 2px;
+}
+
+/* Unread state - yellow color with pulse animation */
+.unread {
+  color: #ffff00;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.unread:hover {
+  color: #ffff00;
+  transform: scale(1.1);
+}
+
+/* Pulse animation for unread state */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 2px #ffff00);
+  }
+  50% {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 8px #ffff00) drop-shadow(0 0 12px #ffff00);
+  }
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 2px #ffff00);
+  }
+}
