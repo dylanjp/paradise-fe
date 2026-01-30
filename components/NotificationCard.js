@@ -35,6 +35,14 @@ function formatTimestamp(isoString) {
 }
 
 /**
+ * Month names for display
+ */
+const MONTH_NAMES = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
+];
+
+/**
  * Formats a recurrence rule to a human-readable summary
  */
 function formatRecurrence(rule) {
@@ -56,6 +64,17 @@ function formatRecurrence(rule) {
         return `Monthly on ${rule.dayOfMonth}${suffix}`;
       }
       return 'Monthly';
+    case 'YEARLY': {
+      const monthName = MONTH_NAMES[rule.month - 1];
+      const suffix = getOrdinalSuffix(rule.dayOfMonth);
+      return `Yearly on ${monthName} ${rule.dayOfMonth}${suffix}`;
+    }
+    case 'RANDOM_DATE_RANGE': {
+      const startMonth = MONTH_NAMES[rule.startMonth - 1].substring(0, 3);
+      const endMonth = MONTH_NAMES[rule.endMonth - 1].substring(0, 3);
+      let display = `Random: ${startMonth} ${rule.startDay} - ${endMonth} ${rule.endDay}`;
+      return display;
+    }
     default:
       return 'Recurring';
   }
@@ -68,6 +87,20 @@ function getOrdinalSuffix(n) {
   const s = ['th', 'st', 'nd', 'rd'];
   const v = n % 100;
   return s[(v - 20) % 10] || s[v] || s[0];
+}
+
+/**
+ * Formats the generated random date for RANDOM_DATE_RANGE notifications
+ * @param {object} rule - Recurrence rule with randomMonth and randomDay
+ * @returns {string|null} Formatted string or null if no random date
+ */
+function formatRandomDate(rule) {
+  if (!rule || rule.type !== 'RANDOM_DATE_RANGE') return null;
+  if (rule.randomMonth === undefined || rule.randomDay === undefined) return null;
+  
+  const monthName = MONTH_NAMES[rule.randomMonth - 1];
+  const suffix = getOrdinalSuffix(rule.randomDay);
+  return `This year's date: ${monthName} ${rule.randomDay}${suffix}`;
 }
 
 /**
@@ -146,6 +179,12 @@ const NotificationCard = ({
         {recurrenceRule && (
           <span className={styles.recurrenceIndicator}>
             {formatRecurrence(recurrenceRule)}
+          </span>
+        )}
+
+        {recurrenceRule && formatRandomDate(recurrenceRule) && (
+          <span className={styles.randomDateIndicator}>
+            {formatRandomDate(recurrenceRule)}
           </span>
         )}
       </div>

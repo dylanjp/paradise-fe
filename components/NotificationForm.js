@@ -7,6 +7,13 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import styles from './NotificationForm.module.css';
+import {
+  MONTH_NAMES,
+  getMaxDayForMonth,
+  validateYearlyRecurrence,
+  validateRandomDateRangeRecurrence,
+  formatRecurrencePreview
+} from '../utils/recurrenceValidation';
 
 const INITIAL_FORM_STATE = {
   subject: '',
@@ -19,9 +26,37 @@ const INITIAL_FORM_STATE = {
   frequency: 'DAILY',
   dayOfWeek: 'random',
   dayOfMonth: 'random',
+  // YEARLY fields
+  yearlyMonth: '',
+  yearlyDay: '',
+  // RANDOM_DATE_RANGE fields
+  rangeStartMonth: '',
+  rangeStartDay: '',
+  rangeEndMonth: '',
+  rangeEndDay: '',
   hasActionItem: false,
   actionDescription: '',
 };
+
+const RECURRENCE_TYPES = [
+  {
+    group: 'Simple patterns',
+    options: [
+      { value: 'DAILY', label: 'Daily' },
+      { value: 'WEEKLY', label: 'Weekly' },
+      { value: 'MONTHLY', label: 'Monthly' },
+      { value: 'YEARLY', label: 'Yearly (specific date)' },
+    ]
+  },
+  {
+    group: 'Randomized patterns',
+    options: [
+      { value: 'RANDOM_WEEKLY', label: 'Random weekly' },
+      { value: 'RANDOM_MONTHLY', label: 'Random monthly' },
+      { value: 'RANDOM_DATE_RANGE', label: 'Random date within range' },
+    ]
+  },
+];
 
 const DAYS_OF_WEEK = [
   { value: 0, label: 'Sunday' },
@@ -97,6 +132,46 @@ export default function NotificationForm({ onSubmit, isSubmitting, isAdmin = fal
       }
     }
 
+    // Validate YEARLY recurrence
+    if (formState.hasRecurrence && formState.frequency === 'YEARLY') {
+      const yearlyResult = validateYearlyRecurrence({
+        month: formState.yearlyMonth,
+        dayOfMonth: formState.yearlyDay
+      });
+      if (!yearlyResult.valid) {
+        if (yearlyResult.errors.month) {
+          newErrors.yearlyMonth = yearlyResult.errors.month;
+        }
+        if (yearlyResult.errors.dayOfMonth) {
+          newErrors.yearlyDay = yearlyResult.errors.dayOfMonth;
+        }
+      }
+    }
+
+    // Validate RANDOM_DATE_RANGE recurrence
+    if (formState.hasRecurrence && formState.frequency === 'RANDOM_DATE_RANGE') {
+      const rangeResult = validateRandomDateRangeRecurrence({
+        startMonth: formState.rangeStartMonth,
+        startDay: formState.rangeStartDay,
+        endMonth: formState.rangeEndMonth,
+        endDay: formState.rangeEndDay
+      });
+      if (!rangeResult.valid) {
+        if (rangeResult.errors.startMonth) {
+          newErrors.rangeStartMonth = rangeResult.errors.startMonth;
+        }
+        if (rangeResult.errors.startDay) {
+          newErrors.rangeStartDay = rangeResult.errors.startDay;
+        }
+        if (rangeResult.errors.endMonth) {
+          newErrors.rangeEndMonth = rangeResult.errors.endMonth;
+        }
+        if (rangeResult.errors.endDay) {
+          newErrors.rangeEndDay = rangeResult.errors.endDay;
+        }
+      }
+    }
+
     if (formState.hasActionItem && !formState.actionDescription.trim()) {
       newErrors.actionDescription = 'Action description is required when action item is enabled';
     } else if (formState.actionDescription.length > 500) {
@@ -121,6 +196,65 @@ export default function NotificationForm({ onSubmit, isSubmitting, isAdmin = fal
   const handleSelectChange = useCallback((name, value) => {
     setFormState(prev => ({ ...prev, [name]: value }));
   }, []);
+
+  // Blur handler for field-level validation
+  const handleFieldBlur = useCallback((fieldName) => {
+    // Validate YEARLY fields on blur
+    if (formState.frequency === 'YEARLY') {
+      if (fieldName === 'yearlyMonth' || fieldName === 'yearlyDay') {
+        const yearlyResult = validateYearlyRecurrence({
+          month: formState.yearlyMonth,
+          dayOfMonth: formState.yearlyDay
+        });
+        setErrors(prev => {
+          const newErrors = { ...prev };
+          if (fieldName === 'yearlyMonth') {
+            if (yearlyResult.errors.month) {
+              newErrors.yearlyMonth = yearlyResult.errors.month;
+            } else {
+              delete newErrors.yearlyMonth;
+            }
+          }
+          if (fieldName === 'yearlyDay') {
+            if (yearlyResult.errors.dayOfMonth) {
+              newErrors.yearlyDay = yearlyResult.errors.dayOfMonth;
+            } else {
+              delete newErrors.yearlyDay;
+            }
+          }
+          return newErrors;
+        });
+      }
+    }
+
+    // Validate RANDOM_DATE_RANGE fields on blur
+    if (formState.frequency === 'RANDOM_DATE_RANGE') {
+      if (['rangeStartMonth', 'rangeStartDay', 'rangeEndMonth', 'rangeEndDay'].includes(fieldName)) {
+        const rangeResult = validateRandomDateRangeRecurrence({
+          startMonth: formState.rangeStartMonth,
+          startDay: formState.rangeStartDay,
+          endMonth: formState.rangeEndMonth,
+          endDay: formState.rangeEndDay
+        });
+        setErrors(prev => {
+          const newErrors = { ...prev };
+          const fieldMapping = {
+            rangeStartMonth: 'startMonth',
+            rangeStartDay: 'startDay',
+            rangeEndMonth: 'endMonth',
+            rangeEndDay: 'endDay'
+          };
+          const errorKey = fieldMapping[fieldName];
+          if (rangeResult.errors[errorKey]) {
+            newErrors[fieldName] = rangeResult.errors[errorKey];
+          } else {
+            delete newErrors[fieldName];
+          }
+          return newErrors;
+        });
+      }
+    }
+  }, [formState]);
 
   const handleUserToggle = useCallback((userId) => {
     setFormState(prev => {
@@ -179,6 +313,16 @@ export default function NotificationForm({ onSubmit, isSubmitting, isAdmin = fal
       }
       if (formState.frequency === 'MONTHLY' && formState.dayOfMonth !== 'random') {
         recurrenceRule.dayOfMonth = formState.dayOfMonth;
+      }
+      if (formState.frequency === 'YEARLY') {
+        recurrenceRule.month = Number(formState.yearlyMonth);
+        recurrenceRule.dayOfMonth = Number(formState.yearlyDay);
+      }
+      if (formState.frequency === 'RANDOM_DATE_RANGE') {
+        recurrenceRule.startMonth = Number(formState.rangeStartMonth);
+        recurrenceRule.startDay = Number(formState.rangeStartDay);
+        recurrenceRule.endMonth = Number(formState.rangeEndMonth);
+        recurrenceRule.endDay = Number(formState.rangeEndDay);
       }
       request.recurrenceRule = recurrenceRule;
     }
@@ -323,9 +467,13 @@ export default function NotificationForm({ onSubmit, isSubmitting, isAdmin = fal
           <div className={styles.fieldGroup}>
             <label htmlFor="frequency" className={styles.label}>Frequency</label>
             <select id="frequency" name="frequency" value={formState.frequency} onChange={handleInputChange} className={styles.select} disabled={isSubmitting}>
-              <option value="DAILY">Daily</option>
-              <option value="WEEKLY">Weekly</option>
-              <option value="MONTHLY">Monthly</option>
+              {RECURRENCE_TYPES.map(group => (
+                <optgroup key={group.group} label={group.group}>
+                  {group.options.map(option => (
+                    <option key={option.value} value={option.value}>{option.label}</option>
+                  ))}
+                </optgroup>
+              ))}
             </select>
           </div>
 
@@ -347,6 +495,151 @@ export default function NotificationForm({ onSubmit, isSubmitting, isAdmin = fal
                 {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (<option key={day} value={day}>{day}</option>))}
               </select>
             </div>
+          )}
+
+          {formState.frequency === 'YEARLY' && (
+            <>
+              <div className={styles.fieldGroup}>
+                <label htmlFor="yearlyMonth" className={styles.label}>Month</label>
+                <select
+                  id="yearlyMonth"
+                  name="yearlyMonth"
+                  value={formState.yearlyMonth}
+                  onChange={handleInputChange}
+                  onBlur={() => handleFieldBlur('yearlyMonth')}
+                  className={`${styles.select} ${errors.yearlyMonth ? styles.inputError : ''}`}
+                  disabled={isSubmitting}
+                >
+                  <option value="">Select month</option>
+                  {MONTH_NAMES.map((month, index) => (
+                    <option key={index + 1} value={index + 1}>{month}</option>
+                  ))}
+                </select>
+                {errors.yearlyMonth && <span className={styles.errorText}>{errors.yearlyMonth}</span>}
+              </div>
+
+              <div className={styles.fieldGroup}>
+                <label htmlFor="yearlyDay" className={styles.label}>Day</label>
+                <input
+                  type="number"
+                  id="yearlyDay"
+                  name="yearlyDay"
+                  value={formState.yearlyDay}
+                  onChange={handleInputChange}
+                  onBlur={() => handleFieldBlur('yearlyDay')}
+                  className={`${styles.input} ${errors.yearlyDay ? styles.inputError : ''}`}
+                  min={1}
+                  max={formState.yearlyMonth ? getMaxDayForMonth(Number(formState.yearlyMonth)) : 31}
+                  placeholder="Day"
+                  disabled={isSubmitting}
+                />
+                {errors.yearlyDay && <span className={styles.errorText}>{errors.yearlyDay}</span>}
+              </div>
+
+              {formState.yearlyMonth === '2' && formState.yearlyDay === '29' && (
+                <div className={styles.leapYearNote}>
+                  This notification will only trigger in leap years
+                </div>
+              )}
+
+              {formState.yearlyMonth && formState.yearlyDay && (
+                <div className={styles.recurrencePreview}>
+                  {formatRecurrencePreview({
+                    type: 'YEARLY',
+                    month: Number(formState.yearlyMonth),
+                    dayOfMonth: Number(formState.yearlyDay)
+                  })}
+                </div>
+              )}
+            </>
+          )}
+
+          {formState.frequency === 'RANDOM_DATE_RANGE' && (
+            <>
+              <div className={styles.dateRangePicker}>
+                <div className={styles.dateRangeGroup}>
+                  <span className={styles.dateRangeLabel}>Start of range</span>
+                  <div className={styles.dateRangeInputs}>
+                    <select
+                      id="rangeStartMonth"
+                      name="rangeStartMonth"
+                      value={formState.rangeStartMonth}
+                      onChange={handleInputChange}
+                      onBlur={() => handleFieldBlur('rangeStartMonth')}
+                      className={`${styles.select} ${errors.rangeStartMonth ? styles.inputError : ''}`}
+                      disabled={isSubmitting}
+                    >
+                      <option value="">Month</option>
+                      {MONTH_NAMES.map((month, index) => (
+                        <option key={index + 1} value={index + 1}>{month}</option>
+                      ))}
+                    </select>
+                    <input
+                      type="number"
+                      id="rangeStartDay"
+                      name="rangeStartDay"
+                      value={formState.rangeStartDay}
+                      onChange={handleInputChange}
+                      onBlur={() => handleFieldBlur('rangeStartDay')}
+                      className={`${styles.input} ${styles.dayInput} ${errors.rangeStartDay ? styles.inputError : ''}`}
+                      min={1}
+                      max={formState.rangeStartMonth ? getMaxDayForMonth(Number(formState.rangeStartMonth)) : 31}
+                      placeholder="Day"
+                      disabled={isSubmitting}
+                    />
+                  </div>
+                  {errors.rangeStartMonth && <span className={styles.errorText}>{errors.rangeStartMonth}</span>}
+                  {errors.rangeStartDay && <span className={styles.errorText}>{errors.rangeStartDay}</span>}
+                </div>
+
+                <div className={styles.dateRangeGroup}>
+                  <span className={styles.dateRangeLabel}>End of range</span>
+                  <div className={styles.dateRangeInputs}>
+                    <select
+                      id="rangeEndMonth"
+                      name="rangeEndMonth"
+                      value={formState.rangeEndMonth}
+                      onChange={handleInputChange}
+                      onBlur={() => handleFieldBlur('rangeEndMonth')}
+                      className={`${styles.select} ${errors.rangeEndMonth ? styles.inputError : ''}`}
+                      disabled={isSubmitting}
+                    >
+                      <option value="">Month</option>
+                      {MONTH_NAMES.map((month, index) => (
+                        <option key={index + 1} value={index + 1}>{month}</option>
+                      ))}
+                    </select>
+                    <input
+                      type="number"
+                      id="rangeEndDay"
+                      name="rangeEndDay"
+                      value={formState.rangeEndDay}
+                      onChange={handleInputChange}
+                      onBlur={() => handleFieldBlur('rangeEndDay')}
+                      className={`${styles.input} ${styles.dayInput} ${errors.rangeEndDay ? styles.inputError : ''}`}
+                      min={1}
+                      max={formState.rangeEndMonth ? getMaxDayForMonth(Number(formState.rangeEndMonth)) : 31}
+                      placeholder="Day"
+                      disabled={isSubmitting}
+                    />
+                  </div>
+                  {errors.rangeEndMonth && <span className={styles.errorText}>{errors.rangeEndMonth}</span>}
+                  {errors.rangeEndDay && <span className={styles.errorText}>{errors.rangeEndDay}</span>}
+                </div>
+              </div>
+
+              {formState.rangeStartMonth && formState.rangeStartDay && formState.rangeEndMonth && formState.rangeEndDay && (
+                <div className={styles.recurrencePreview}>
+                  {formatRecurrencePreview({
+                    type: 'RANDOM_DATE_RANGE',
+                    startMonth: Number(formState.rangeStartMonth),
+                    startDay: Number(formState.rangeStartDay),
+                    endMonth: Number(formState.rangeEndMonth),
+                    endDay: Number(formState.rangeEndDay)
+                  })}
+                </div>
+              )}
+            </>
           )}
         </div>
       )}
