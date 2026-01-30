@@ -121,6 +121,14 @@
   color: var(--tron-red-light, #ff1a1a);
 }
 
+.randomDateIndicator {
+  composes: indicator;
+  background: rgba(0, 204, 102, 0.15);
+  border-color: #00cc66;
+  color: #00ff88;
+  font-style: italic;
+}
+
 /* =========================
    MESSAGE BODY
    ========================= */
