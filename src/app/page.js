@@ -80,7 +80,7 @@ export default function Home() {
               <Link href="./tasks/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
                 Task Management
               </Link>
-              <Link href="./notifications/manage" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
+              <Link href="./notificationmanage/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
                 Notification Manager
               </Link>
               <Link href="./drive/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>

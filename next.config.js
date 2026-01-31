@@ -4,9 +4,7 @@ const nextConfig = {
   images: {
     unoptimized: true, // Required for static export
   },
-  trailingSlash: true, // Ensures paths work correctly on GitHub Pages
-  assetPrefix:
-    process.env.NODE_ENV === "production" ? "https://dylanjohnpratt.com/" : "", // Use full URL in production, nothing locally
+  trailingSlash: true, // Ensures paths work correctly
 };
 
 export default nextConfig;
