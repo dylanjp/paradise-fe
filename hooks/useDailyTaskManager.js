@@ -1,5 +1,6 @@
 import { useReducer, useMemo, useCallback, useEffect } from "react";
 import { TaskService } from "@/src/lib/taskService";
+import { generateUUID } from "@/utils/uuid";
 
 /**
  * Initial hardcoded daily tasks for demonstration purposes
@@ -112,7 +113,7 @@ const dailyTaskReducer = (state, action) => {
           : 0;
 
       const newTask = {
-        id: id || crypto.randomUUID(),
+        id: id || generateUUID(),
         description: description.trim(),
         completed: false,
         order: maxOrder + 1,
@@ -255,7 +256,7 @@ export function useDailyTaskManager(
 
       // Save previous state for rollback
       const previousTasks = [...state.tasks];
-      const newTaskId = crypto.randomUUID();
+      const newTaskId = generateUUID();
 
       // Calculate order for the new task
       const maxOrder =

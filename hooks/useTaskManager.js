@@ -1,5 +1,6 @@
 import { useReducer, useMemo, useCallback, useEffect } from "react";
 import { TaskService } from "@/src/lib/taskService";
+import { generateUUID } from "@/utils/uuid";
 
 /**
  * --- INTERNAL VALIDATION & REPAIR UTILITIES ---
@@ -11,7 +12,7 @@ const createSafeTask = (task, index = 0, defaultCategory = "personal") => {
   const safeId =
     typeof task.id === "string" && task.id.trim().length > 0
       ? task.id
-      : crypto.randomUUID();
+      : generateUUID();
 
   // 2. Repair Description
   const safeDescription =
@@ -111,7 +112,7 @@ const taskReducer = (state, action) => {
 
       // Logic: Create perfectly valid task object immediately
       const newTask = createSafeTask({
-        id: id || crypto.randomUUID(),
+        id: id || generateUUID(),
         description,
         category,
         completed: false,
@@ -264,7 +265,7 @@ export function useTaskManager(userId) {
     async (description, parentId) => {
       // Save previous state for rollback
       const previousTasks = { ...state.tasks };
-      const newTaskId = crypto.randomUUID();
+      const newTaskId = generateUUID();
 
       // Optimistic update
       dispatch({
