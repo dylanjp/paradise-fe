@@ -77,19 +77,19 @@ export default function Home() {
             // Desktop navigation - show all CTA links
             <>
               {/* <Link href="./projects/" className={styles.navLink}>My Drive</Link> Access to Shared Folder*/}
-              <Link href="./tasks/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
+              <Link href="/tasks/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
                 Task Management
               </Link>
-              <Link href="./notificationmanage/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
+              <Link href="/notificationmanage/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
                 Notification Manager
               </Link>
-              <Link href="./drive/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
+              <Link href="/drive/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
                 Pratt Drive
               </Link>
-              <Link href="./home/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
+              <Link href="/home/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
                 Documentation
               </Link>
-              <Link href="./comingsoon/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
+              <Link href="/comingsoon/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
                 Print Center
               </Link>
             </>
