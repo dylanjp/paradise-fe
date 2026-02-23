@@ -2,8 +2,6 @@
  * Token Storage Module
  * Provides secure JWT token storage with in-memory primary storage
  * and localStorage fallback for persistence across page refreshes.
- *
- * Requirements: 1.2, 1.3, 2.3, 2.5
  */
 
 const TOKEN_KEY = "paradise_auth_token";
