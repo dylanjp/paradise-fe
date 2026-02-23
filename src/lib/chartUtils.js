@@ -1,8 +1,6 @@
 /**
  * Chart Utility Functions
  * Helper functions for processing data for the ContributionChart component
- * 
- * Requirements: 5.1, 5.2, 4.2, 4.3
  */
 
 /**

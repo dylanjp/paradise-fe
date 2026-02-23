@@ -1,0 +1,65 @@
+@font-face {
+  font-family: "TechMono";
+  src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
+}
+
+.grid {
+  font-family: "TechMono";
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 24px;
+  width: 100%;
+  max-width: 1500px;
+  padding: 20px;
+}
+
+.emptyState {
+  font-family: "TechMono";
+  color: #666;
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 60px 20px;
+  width: 100%;
+}
+
+.newFolderCard {
+  font-family: "TechMono";
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #f80206;
+  border-radius: 8px;
+  padding: 20px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.newFolderIcon {
+  font-size: 2.5rem;
+  color: #f80206;
+}
+
+.newFolderInput {
+  font-family: "TechMono";
+  background: transparent;
+  border: 1px solid #f80206;
+  border-radius: 4px;
+  color: #f80206;
+  font-size: 0.85rem;
+  padding: 4px 8px;
+  width: 100%;
+  text-align: center;
+  outline: none;
+}
+
+.newFolderInput:focus {
+  box-shadow: 0 0 8px #f80206;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 16px;
+    padding: 10px;
+  }
+}

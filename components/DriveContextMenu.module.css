@@ -1,0 +1,63 @@
+@font-face {
+  font-family: "TechMono";
+  src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
+}
+
+.contextMenu {
+  font-family: "TechMono";
+  position: absolute;
+  background: rgba(0, 0, 0, 0.95);
+  border: 2px solid #f80206;
+  border-radius: 6px;
+  padding: 4px 0;
+  z-index: 999;
+  min-width: 160px;
+  box-shadow: 0 0 10px #f80206;
+  animation: menuFadeIn 0.15s ease-out;
+}
+
+.menuItem {
+  font-family: "TechMono";
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  color: #f80206;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.menuItem:hover,
+.menuItem:focus {
+  background: rgba(255, 102, 0, 0.15);
+  color: #ff6600;
+  box-shadow: inset 0 0 8px rgba(255, 102, 0, 0.2);
+  outline: none;
+}
+
+.separator {
+  height: 1px;
+  background: rgba(248, 2, 6, 0.4);
+  margin: 4px 8px;
+}
+
+.deleteItem:hover,
+.deleteItem:focus {
+  background: rgba(248, 2, 6, 0.15);
+  color: #ff4444;
+  box-shadow: inset 0 0 8px rgba(248, 2, 6, 0.2);
+}
+
+@keyframes menuFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

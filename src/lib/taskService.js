@@ -1,9 +1,6 @@
 /**
  * TaskService - Frontend service module for backend API communication
  * Handles all HTTP requests to the Java Spring Boot backend for task operations
- *
- * Updated to use apiClient with JWT authentication instead of Basic Auth
- * Requirements: 5.1, 5.4
  */
 
 import apiClient from "./apiClient";
