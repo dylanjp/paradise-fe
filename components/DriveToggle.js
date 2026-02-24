@@ -6,6 +6,7 @@ const DRIVE_OPTIONS = [
   { key: "myDrive", label: "My Drive" },
   { key: "sharedDrive", label: "Shared Drive" },
   { key: "adminDrive", label: "Admin Drive" },
+  { key: "mediaCache", label: "Media Cache" },
 ];
 
 export default function DriveToggle({

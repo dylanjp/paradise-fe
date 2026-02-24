@@ -10,7 +10,7 @@ import DriveContextMenu from "@/components/DriveContextMenu";
 import ColorPicker from "@/components/ColorPicker";
 import PlexUploadModal from "@/components/PlexUploadModal";
 import ConfirmModal from "@/components/ConfirmModal";
-import { myDriveData, sharedDriveData, adminDriveData } from "@/data/driveData";
+import { myDriveData, sharedDriveData, adminDriveData, mediaCacheDriveData } from "@/data/driveData";
 import { buildBreadcrumbPath, generateId, getFileExtension, collectDescendants } from "@/src/lib/driveUtils";
 import { useAuth } from "@/src/context/AuthContext";
 import styles from "./drive.module.css";
@@ -19,6 +19,7 @@ const DRIVE_LABELS = {
   myDrive: "My Drive",
   sharedDrive: "Shared Drive",
   adminDrive: "Admin Drive",
+  mediaCache: "Media Cache",
 };
 
 function formatFileSize(bytes) {
@@ -33,6 +34,7 @@ export default function DrivePage() {
     myDrive: myDriveData,
     sharedDrive: sharedDriveData,
     adminDrive: adminDriveData,
+    mediaCache: mediaCacheDriveData,
   });
   const [activeDrive, setActiveDrive] = useState("myDrive");
   const [currentFolderId, setCurrentFolderId] = useState("root");
@@ -44,6 +46,7 @@ export default function DrivePage() {
   const [deleteConfirm, setDeleteConfirm] = useState(null);
 
   const driveData = driveDataMap[activeDrive];
+  const isMediaCache = activeDrive === "mediaCache";
 
   const closeContextMenu = useCallback(() => {
     setContextMenu(null);
@@ -154,9 +157,19 @@ export default function DrivePage() {
   function handleContextMenu(event, itemId) {
     event.preventDefault();
     event.stopPropagation();
+    if (isMediaCache) return;
     if (!driveData[itemId]) return;
     setContextMenu({ x: event.clientX, y: event.clientY, itemId });
     setShowColorPicker(false);
+  }
+
+  function handleFileDownload(itemId) {
+    const item = driveData[itemId];
+    if (!item || item.type !== "file") return;
+    const link = document.createElement("a");
+    link.href = "#";
+    link.download = item.name;
+    link.click();
   }
 
   function deleteItem(itemId) {
@@ -224,9 +237,10 @@ export default function DrivePage() {
       <div className={styles.pageContent}>
         <h1 className={styles.title}>{DRIVE_LABELS[activeDrive]}</h1>
         <DriveToolbar
-          onNewFolder={() => setNewFolderMode(true)}
+          onNewFolder={() => { if (!isMediaCache) setNewFolderMode(true); }}
           onUploadFile={handleFileUpload}
           onPlexUpload={() => setPlexModalOpen(true)}
+          isMediaCache={isMediaCache}
         />
         <DriveToggle
           activeDrive={activeDrive}
@@ -237,10 +251,12 @@ export default function DrivePage() {
         <FileGrid
           items={getCurrentItems()}
           onFolderClick={navigateToFolder}
+          onFileClick={handleFileDownload}
           onContextMenu={handleContextMenu}
           newFolderMode={newFolderMode}
           onNewFolderSubmit={createFolder}
           onNewFolderCancel={() => setNewFolderMode(false)}
+          isMediaCache={isMediaCache}
         />
         {contextMenu && !showColorPicker && (
           <DriveContextMenu
