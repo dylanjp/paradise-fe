@@ -38,7 +38,10 @@ export default function DriveContextMenu({ x, y, itemType, onChangeColor, onDele
       {itemType === "folder" && (
         <button
           className={styles.menuItem}
-          onClick={onChangeColor}
+          onClick={(e) => {
+            e.stopPropagation();
+            onChangeColor();
+          }}
           role="menuitem"
         >
           Change Color
