@@ -7,10 +7,12 @@ import { FaFolder } from "react-icons/fa";
 export default function FileGrid({
   items,
   onFolderClick,
+  onFileClick,
   onContextMenu,
   newFolderMode,
   onNewFolderSubmit,
   onNewFolderCancel,
+  isMediaCache = false,
 }) {
   const inputRef = useRef(null);
 
@@ -42,13 +44,15 @@ export default function FileGrid({
     }
   };
 
-  if (!newFolderMode && items.length === 0) {
+  const showNewFolder = newFolderMode && !isMediaCache;
+
+  if (!showNewFolder && items.length === 0) {
     return <div className={styles.emptyState}>This folder is empty</div>;
   }
 
   return (
     <div className={styles.grid}>
-      {newFolderMode && (
+      {showNewFolder && (
         <div className={styles.newFolderCard}>
           <FaFolder className={styles.newFolderIcon} />
           <input
@@ -67,7 +71,11 @@ export default function FileGrid({
           key={item.id}
           item={item}
           onClick={
-            item.type === "folder" ? () => onFolderClick(item.id) : undefined
+            item.type === "folder"
+              ? () => onFolderClick(item.id)
+              : isMediaCache && onFileClick
+                ? () => onFileClick(item.id)
+                : undefined
           }
           onContextMenu={(e) => onContextMenu(e, item.id)}
         />
