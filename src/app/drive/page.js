@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Navbar from "@/components/Navbar";
 import Background from "@/components/Background";
 import DriveToolbar from "@/components/DriveToolbar";
@@ -48,6 +48,8 @@ export default function DrivePage() {
   const driveData = driveDataMap[activeDrive];
   const isMediaCache = activeDrive === "mediaCache";
 
+  const colorPickerTransition = useRef(false);
+
   const closeContextMenu = useCallback(() => {
     setContextMenu(null);
     setShowColorPicker(false);
@@ -55,7 +57,10 @@ export default function DrivePage() {
 
   useEffect(() => {
     const handleClick = () => {
-      if (contextMenu) closeContextMenu();
+      if (contextMenu && !colorPickerTransition.current) {
+        closeContextMenu();
+      }
+      colorPickerTransition.current = false;
     };
     document.addEventListener("click", handleClick);
     return () => document.removeEventListener("click", handleClick);
@@ -263,16 +268,21 @@ export default function DrivePage() {
             x={contextMenu.x}
             y={contextMenu.y}
             itemType={driveData[contextMenu.itemId]?.type}
-            onChangeColor={() => setShowColorPicker(true)}
+            onChangeColor={() => {
+              colorPickerTransition.current = true;
+              setShowColorPicker(true);
+            }}
             onDelete={() => deleteItem(contextMenu.itemId)}
             onClose={closeContextMenu}
           />
         )}
         {contextMenu && showColorPicker && (
-          <ColorPicker
-            onSelectColor={(color) => changeFolderColor(contextMenu.itemId, color)}
-            onClose={closeContextMenu}
-          />
+          <div style={{ position: "absolute", left: contextMenu.x, top: contextMenu.y, zIndex: 999 }}>
+            <ColorPicker
+              onSelectColor={(color) => changeFolderColor(contextMenu.itemId, color)}
+              onClose={closeContextMenu}
+            />
+          </div>
         )}
         <PlexUploadModal
           isOpen={plexModalOpen}
