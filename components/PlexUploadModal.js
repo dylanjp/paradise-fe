@@ -4,14 +4,24 @@ import styles from "./PlexUploadModal.module.css";
 import PrimaryButton from "./PrimaryButton";
 import { FaCloudUploadAlt } from "react-icons/fa";
 
-export default function PlexUploadModal({ isOpen, onClose }) {
+import * as driveService from "@/src/lib/driveService";
+
+export default function PlexUploadModal({ isOpen, onClose, userId }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isDragOver, setIsDragOver] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadResult, setUploadResult] = useState(null);
+  const [uploadError, setUploadError] = useState(null);
   const fileInputRef = useRef(null);
 
   const resetAndClose = useCallback(() => {
     setSelectedFile(null);
     setIsDragOver(false);
+    setUploading(false);
+    setUploadProgress(0);
+    setUploadResult(null);
+    setUploadError(null);
     onClose();
   }, [onClose]);
 
@@ -61,7 +71,29 @@ export default function PlexUploadModal({ isOpen, onClose }) {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) setSelectedFile(file);
+    if (file) {
+      setSelectedFile(file);
+      setUploadResult(null);
+      setUploadError(null);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!selectedFile || uploading) return;
+    setUploading(true);
+    setUploadError(null);
+    setUploadResult(null);
+    setUploadProgress(0);
+    try {
+      const result = await driveService.plexUpload(userId, selectedFile, (pct) => {
+        setUploadProgress(pct);
+      });
+      setUploadResult(result);
+    } catch (err) {
+      setUploadError(driveService.getErrorMessage(err));
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
@@ -93,7 +125,29 @@ export default function PlexUploadModal({ isOpen, onClose }) {
           <p className={styles.fileName}>{selectedFile.name}</p>
         )}
 
+        {uploading && (
+          <div className={styles.uploadProgressContainer}>
+            <div className={styles.uploadProgressBar} style={{ width: `${uploadProgress}%` }} />
+            <span className={styles.uploadProgressText}>Uploading… {uploadProgress}%</span>
+          </div>
+        )}
+
+        {uploadResult && (
+          <div className={styles.fileName}>
+            <p>Uploaded: {uploadResult.fileName} ({uploadResult.size})</p>
+          </div>
+        )}
+
+        {uploadError && (
+          <p className={styles.fileName} style={{ color: "#ff4444" }}>{uploadError}</p>
+        )}
+
         <div className={styles.buttonRow}>
+          {selectedFile && !uploadResult && (
+            <PrimaryButton onClick={handleUpload} disabled={uploading}>
+              {uploading ? "Uploading…" : "Upload"}
+            </PrimaryButton>
+          )}
           <PrimaryButton onClick={resetAndClose}>Close</PrimaryButton>
         </div>
       </div>

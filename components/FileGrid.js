@@ -73,7 +73,7 @@ export default function FileGrid({
           onClick={
             item.type === "folder"
               ? () => onFolderClick(item.id)
-              : isMediaCache && onFileClick
+              : onFileClick
                 ? () => onFileClick(item.id)
                 : undefined
           }

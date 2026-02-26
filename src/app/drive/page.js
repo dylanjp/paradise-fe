@@ -10,8 +10,8 @@ import DriveContextMenu from "@/components/DriveContextMenu";
 import ColorPicker from "@/components/ColorPicker";
 import PlexUploadModal from "@/components/PlexUploadModal";
 import ConfirmModal from "@/components/ConfirmModal";
-import { myDriveData, sharedDriveData, adminDriveData, mediaCacheDriveData } from "@/data/driveData";
-import { buildBreadcrumbPath, generateId, getFileExtension, collectDescendants } from "@/src/lib/driveUtils";
+import * as driveService from "@/src/lib/driveService";
+import { buildBreadcrumbPath, collectDescendants } from "@/src/lib/driveUtils";
 import { useAuth } from "@/src/context/AuthContext";
 import styles from "./drive.module.css";
 
@@ -22,20 +22,9 @@ const DRIVE_LABELS = {
   mediaCache: "Media Cache",
 };
 
-function formatFileSize(bytes) {
-  if (bytes < 1024) return bytes + " B";
-  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
-  return (bytes / (1024 * 1024)).toFixed(1) + " MB";
-}
-
 export default function DrivePage() {
-  const { isAdmin } = useAuth();
-  const [driveDataMap, setDriveDataMap] = useState({
-    myDrive: myDriveData,
-    sharedDrive: sharedDriveData,
-    adminDrive: adminDriveData,
-    mediaCache: mediaCacheDriveData,
-  });
+  const { isAdmin, isLoading: authLoading, username } = useAuth();
+  const [driveData, setDriveData] = useState(null);
   const [activeDrive, setActiveDrive] = useState("myDrive");
   const [currentFolderId, setCurrentFolderId] = useState("root");
   const [breadcrumbPath, setBreadcrumbPath] = useState([{ id: "root", name: "My Drive" }]);
@@ -44,11 +33,52 @@ export default function DrivePage() {
   const [plexModalOpen, setPlexModalOpen] = useState(false);
   const [newFolderMode, setNewFolderMode] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
-  const driveData = driveDataMap[activeDrive];
   const isMediaCache = activeDrive === "mediaCache";
 
   const colorPickerTransition = useRef(false);
+
+  // Fetch drive contents on mount and when activeDrive changes
+  useEffect(() => {
+    if (authLoading || !username) return;
+    let cancelled = false;
+    async function fetchDrive() {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await driveService.listDriveContents(username, activeDrive);
+        if (!cancelled) {
+          setDriveData(data);
+          setCurrentFolderId("root");
+          if (data["root"]) {
+            setBreadcrumbPath([{ id: "root", name: data["root"].name }]);
+          }
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(driveService.getErrorMessage(err));
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+    fetchDrive();
+    return () => { cancelled = true; };
+  }, [activeDrive, authLoading, username]);
+
+  // Re-fetch current drive contents (used on DRIVE_ITEM_NOT_FOUND)
+  async function refreshDriveContents() {
+    try {
+      const data = await driveService.listDriveContents(username, activeDrive);
+      setDriveData(data);
+    } catch { /* refresh is best-effort */ }
+  }
 
   const closeContextMenu = useCallback(() => {
     setContextMenu(null);
@@ -76,34 +106,29 @@ export default function DrivePage() {
 
   function switchDrive(driveKey) {
     setActiveDrive(driveKey);
-    setCurrentFolderId("root");
-    const newDriveData = driveDataMap[driveKey];
-    setBreadcrumbPath([{ id: "root", name: newDriveData["root"].name }]);
     closeContextMenu();
     setNewFolderMode(false);
   }
 
-  function createFolder(name) {
-    const id = generateId();
-    const newFolder = {
-      id,
-      name,
-      type: "folder",
-      fileType: null,
-      size: null,
-      color: "#f80206",
-      children: [],
-      parentId: currentFolderId,
-    };
-    setDriveDataMap((prev) => {
-      const currentDrive = { ...prev[activeDrive] };
-      currentDrive[id] = newFolder;
-      currentDrive[currentFolderId] = {
-        ...currentDrive[currentFolderId],
-        children: [...currentDrive[currentFolderId].children, id],
-      };
-      return { ...prev, [activeDrive]: currentDrive };
-    });
+  async function createFolder(name) {
+    setError(null);
+    try {
+      const newItem = await driveService.createFolder(username, activeDrive, name, currentFolderId);
+      setDriveData((prev) => {
+        const updated = { ...prev };
+        updated[newItem.id] = newItem;
+        updated[currentFolderId] = {
+          ...updated[currentFolderId],
+          children: [...updated[currentFolderId].children, newItem.id],
+        };
+        return updated;
+      });
+    } catch (err) {
+      setError(driveService.getErrorMessage(err));
+      if (driveService.getErrorCode(err) === "DRIVE_ITEM_NOT_FOUND") {
+        await refreshDriveContents();
+      }
+    }
     setNewFolderMode(false);
   }
 
@@ -111,44 +136,63 @@ export default function DrivePage() {
     const input = document.createElement("input");
     input.type = "file";
     input.multiple = true;
-    input.onchange = (e) => {
+    input.onchange = async (e) => {
       const files = Array.from(e.target.files);
       if (files.length === 0) return;
-      setDriveDataMap((prev) => {
-        const currentDrive = { ...prev[activeDrive] };
-        const newChildIds = [];
-        files.forEach((file) => {
-          const id = generateId();
-          const ext = getFileExtension(file.name);
-          currentDrive[id] = {
-            id,
-            name: file.name,
-            type: "file",
-            fileType: ext || null,
-            size: formatFileSize(file.size),
-            color: null,
-            children: [],
-            parentId: currentFolderId,
-          };
-          newChildIds.push(id);
-        });
-        currentDrive[currentFolderId] = {
-          ...currentDrive[currentFolderId],
-          children: [...currentDrive[currentFolderId].children, ...newChildIds],
-        };
-        return { ...prev, [activeDrive]: currentDrive };
-      });
+      setUploading(true);
+      setUploadProgress(0);
+      setError(null);
+      for (const file of files) {
+        try {
+          const newItem = await driveService.uploadFile(username, activeDrive, file, currentFolderId, (pct) => {
+            setUploadProgress(pct);
+          });
+          setDriveData((prev) => {
+            const updated = { ...prev };
+            updated[newItem.id] = newItem;
+            updated[currentFolderId] = {
+              ...updated[currentFolderId],
+              children: [...updated[currentFolderId].children, newItem.id],
+            };
+            return updated;
+          });
+        } catch (err) {
+          setError(`Failed to upload "${file.name}": ${driveService.getErrorMessage(err)}`);
+          if (driveService.getErrorCode(err) === "DRIVE_ITEM_NOT_FOUND") {
+            await refreshDriveContents();
+          }
+        }
+      }
+      setUploading(false);
     };
     input.click();
   }
 
-  function changeFolderColor(folderId, color) {
-    setDriveDataMap((prev) => {
-      const currentDrive = { ...prev[activeDrive] };
-      currentDrive[folderId] = { ...currentDrive[folderId], color };
-      return { ...prev, [activeDrive]: currentDrive };
-    });
+  async function changeFolderColor(folderId, color) {
+    const snapshot = driveData[folderId];
+    // Optimistic update
+    setDriveData((prev) => ({
+      ...prev,
+      [folderId]: { ...prev[folderId], color },
+    }));
     closeContextMenu();
+    try {
+      const updated = await driveService.updateItem(username, activeDrive, folderId, { color });
+      setDriveData((prev) => ({
+        ...prev,
+        [folderId]: updated,
+      }));
+    } catch (err) {
+      // Rollback
+      setDriveData((prev) => ({
+        ...prev,
+        [folderId]: snapshot,
+      }));
+      setError(driveService.getErrorMessage(err));
+      if (driveService.getErrorCode(err) === "DRIVE_ITEM_NOT_FOUND") {
+        await refreshDriveContents();
+      }
+    }
   }
 
   function getCurrentItems() {
@@ -168,13 +212,24 @@ export default function DrivePage() {
     setShowColorPicker(false);
   }
 
-  function handleFileDownload(itemId) {
+  async function handleFileDownload(itemId) {
     const item = driveData[itemId];
     if (!item || item.type !== "file") return;
-    const link = document.createElement("a");
-    link.href = "#";
-    link.download = item.name;
-    link.click();
+    setError(null);
+    try {
+      const blob = await driveService.downloadFile(username, activeDrive, itemId);
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = item.name;
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setError(driveService.getErrorMessage(err));
+      if (driveService.getErrorCode(err) === "DRIVE_ITEM_NOT_FOUND") {
+        await refreshDriveContents();
+      }
+    }
   }
 
   function deleteItem(itemId) {
@@ -184,7 +239,7 @@ export default function DrivePage() {
     closeContextMenu();
   }
 
-  function confirmDelete() {
+  async function confirmDelete() {
     if (!deleteConfirm) return;
     const { itemId } = deleteConfirm;
     const item = driveData[itemId];
@@ -196,11 +251,13 @@ export default function DrivePage() {
     const parentId = item.parentId;
     const idsToRemove = collectDescendants(driveData, itemId);
 
+    // Snapshot for rollback
+    const snapshot = { ...driveData };
+
     // If user is inside the deleted folder, navigate to parent
     if (idsToRemove.includes(currentFolderId)) {
       const targetParent = parentId || "root";
       setCurrentFolderId(targetParent);
-      // We need to rebuild breadcrumb after state update, so compute from current driveData
       const updatedDrive = { ...driveData };
       idsToRemove.forEach((id) => delete updatedDrive[id]);
       if (parentId && updatedDrive[parentId]) {
@@ -212,21 +269,35 @@ export default function DrivePage() {
       setBreadcrumbPath(buildBreadcrumbPath(updatedDrive, targetParent));
     }
 
-    setDriveDataMap((prev) => {
-      const currentDrive = { ...prev[activeDrive] };
-      // Remove item from parent's children
-      if (parentId && currentDrive[parentId]) {
-        currentDrive[parentId] = {
-          ...currentDrive[parentId],
-          children: currentDrive[parentId].children.filter((cid) => cid !== itemId),
+    // Optimistic removal
+    setDriveData((prev) => {
+      const updated = { ...prev };
+      if (parentId && updated[parentId]) {
+        updated[parentId] = {
+          ...updated[parentId],
+          children: updated[parentId].children.filter((cid) => cid !== itemId),
         };
       }
-      // Remove all descendant IDs
-      idsToRemove.forEach((id) => delete currentDrive[id]);
-      return { ...prev, [activeDrive]: currentDrive };
+      idsToRemove.forEach((id) => delete updated[id]);
+      return updated;
     });
 
     setDeleteConfirm(null);
+
+    try {
+      await driveService.deleteItem(username, activeDrive, itemId);
+    } catch (err) {
+      // Rollback
+      setDriveData(snapshot);
+      if (idsToRemove.includes(currentFolderId)) {
+        setCurrentFolderId(currentFolderId);
+        setBreadcrumbPath(buildBreadcrumbPath(snapshot, currentFolderId));
+      }
+      setError(driveService.getErrorMessage(err));
+      if (driveService.getErrorCode(err) === "DRIVE_ITEM_NOT_FOUND") {
+        await refreshDriveContents();
+      }
+    }
   }
 
   function cancelDelete() {
@@ -253,7 +324,9 @@ export default function DrivePage() {
           showAdminDrive={isAdmin()}
         />
         <BreadcrumbBar path={breadcrumbPath} onNavigate={navigateToFolder} />
-        <FileGrid
+        {loading && <p className={styles.loadingText}>Loading drive contents…</p>}
+        {error && <p className={styles.errorText}>{error}</p>}
+        {!loading && driveData && <FileGrid
           items={getCurrentItems()}
           onFolderClick={navigateToFolder}
           onFileClick={handleFileDownload}
@@ -262,7 +335,13 @@ export default function DrivePage() {
           onNewFolderSubmit={createFolder}
           onNewFolderCancel={() => setNewFolderMode(false)}
           isMediaCache={isMediaCache}
-        />
+        />}
+        {uploading && (
+          <div className={styles.uploadProgressContainer}>
+            <div className={styles.uploadProgressBar} style={{ width: `${uploadProgress}%` }} />
+            <span className={styles.uploadProgressText}>Uploading… {uploadProgress}%</span>
+          </div>
+        )}
         {contextMenu && !showColorPicker && (
           <DriveContextMenu
             x={contextMenu.x}
@@ -273,6 +352,10 @@ export default function DrivePage() {
               setShowColorPicker(true);
             }}
             onDelete={() => deleteItem(contextMenu.itemId)}
+            onDownload={() => {
+              handleFileDownload(contextMenu.itemId);
+              closeContextMenu();
+            }}
             onClose={closeContextMenu}
           />
         )}
@@ -287,6 +370,7 @@ export default function DrivePage() {
         <PlexUploadModal
           isOpen={plexModalOpen}
           onClose={() => setPlexModalOpen(false)}
+          userId={username}
         />
         <ConfirmModal
           isOpen={deleteConfirm !== null}
