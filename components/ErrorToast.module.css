@@ -17,7 +17,9 @@
   border-radius: 8px;
   background: rgba(0, 0, 0, 0.95);
   font-family: "Share Tech Mono", monospace;
-  animation: slideIn 0.3s ease-out, glow 2s ease-in-out infinite alternate;
+  animation:
+    slideIn 0.3s ease-out,
+    glow 2s ease-in-out infinite alternate;
   max-width: 450px;
   min-width: 300px;
   box-sizing: border-box;
@@ -28,7 +30,7 @@
    ========================= */
 .error {
   border: 2px solid var(--tron-red-primary, #f80206);
-  box-shadow: 
+  box-shadow:
     0 0 15px rgba(248, 2, 6, 0.4),
     inset 0 0 10px rgba(248, 2, 6, 0.05);
 }
@@ -57,7 +59,7 @@
    ========================= */
 .success {
   border: 2px solid #00ff00;
-  box-shadow: 
+  box-shadow:
     0 0 15px rgba(0, 255, 0, 0.4),
     inset 0 0 10px rgba(0, 255, 0, 0.05);
 }
@@ -86,7 +88,7 @@
    ========================= */
 .warning {
   border: 2px solid var(--tron-yellow-active, #ffff00);
-  box-shadow: 
+  box-shadow:
     0 0 15px rgba(255, 255, 0, 0.4),
     inset 0 0 10px rgba(255, 255, 0, 0.05);
 }

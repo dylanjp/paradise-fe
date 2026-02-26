@@ -1,0 +1,53 @@
+@font-face {
+  font-family: "TechMono";
+  src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
+}
+
+.colorPicker {
+  font-family: "TechMono";
+  background: rgba(0, 0, 0, 0.95);
+  border: 2px solid #f80206;
+  border-radius: 6px;
+  padding: 10px;
+  box-shadow: 0 0 10px #f80206;
+  animation: pickerFadeIn 0.15s ease-out;
+}
+
+.swatchGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 196px;
+}
+
+.swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  padding: 0;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.swatch:hover,
+.swatch:focus {
+  transform: scale(1.2);
+  border-color: #fff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+  outline: none;
+}
+
+@keyframes pickerFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

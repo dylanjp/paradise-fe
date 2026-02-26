@@ -213,7 +213,7 @@ const DailyTasksModal = ({
 
     // Sort tasks by order for consistent indexing
     const currentSortedTasks = [...tasks].sort((a, b) => a.order - b.order);
-    
+
     const oldIndex = currentSortedTasks.findIndex((t) => t.id === active.id);
     const newIndex = currentSortedTasks.findIndex((t) => t.id === over.id);
 
@@ -244,7 +244,9 @@ const DailyTasksModal = ({
   const sortedTasks = [...tasks].sort((a, b) => a.order - b.order);
 
   // Get the active task for drag overlay
-  const activeTask = activeId ? sortedTasks.find((t) => t.id === activeId) : null;
+  const activeTask = activeId
+    ? sortedTasks.find((t) => t.id === activeId)
+    : null;
 
   return (
     <div

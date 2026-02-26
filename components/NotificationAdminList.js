@@ -3,70 +3,86 @@
  * Compact admin table for notification management.
  */
 
-import React, { useState } from 'react';
-import styles from './NotificationAdminList.module.css';
+import React, { useState } from "react";
+import styles from "./NotificationAdminList.module.css";
 
 /**
  * Month names for abbreviated display
  */
-const MONTH_NAMES_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const MONTH_NAMES_SHORT = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 
 function formatRecurrenceSummary(rule) {
-  if (!rule) return '-';
-  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  if (!rule) return "-";
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   // Support both 'frequency' and 'type' field names for compatibility
   const ruleType = rule.frequency || rule.type;
 
   switch (ruleType) {
-    case 'DAILY':
-      return 'Daily';
-    case 'WEEKLY':
+    case "DAILY":
+      return "Daily";
+    case "WEEKLY":
       if (rule.dayOfWeek !== undefined) {
         return `Weekly (${dayNames[rule.dayOfWeek]})`;
       }
-      return 'Weekly';
-    case 'MONTHLY':
+      return "Weekly";
+    case "MONTHLY":
       if (rule.dayOfMonth !== undefined) {
         return `Monthly (${rule.dayOfMonth})`;
       }
-      return 'Monthly';
-    case 'YEARLY': {
+      return "Monthly";
+    case "YEARLY": {
       const monthName = MONTH_NAMES_SHORT[rule.month - 1];
       return `Yearly (${monthName} ${rule.dayOfMonth})`;
     }
-    case 'RANDOM_DATE_RANGE': {
+    case "RANDOM_DATE_RANGE": {
       const startMonth = MONTH_NAMES_SHORT[rule.startMonth - 1];
       const endMonth = MONTH_NAMES_SHORT[rule.endMonth - 1];
       return `Random (${startMonth} ${rule.startDay}-${endMonth} ${rule.endDay})`;
     }
     default:
-      return 'Recurring';
+      return "Recurring";
   }
 }
 
 function formatExpiresAt(expiresAt) {
-  if (!expiresAt) return 'Never';
+  if (!expiresAt) return "Never";
   const date = new Date(expiresAt);
   const now = new Date();
-  if (date < now) return 'Expired';
-  return date.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined,
+  if (date < now) return "Expired";
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: date.getFullYear() !== now.getFullYear() ? "numeric" : undefined,
   });
 }
 
 function truncateText(text, maxLength) {
   if (text.length <= maxLength) return text;
-  return text.substring(0, maxLength - 3) + '...';
+  return text.substring(0, maxLength - 3) + "...";
 }
 
 const NotificationAdminList = ({ notifications, onDelete, isDeleting }) => {
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 
   const handleDeleteClick = (id) => setConfirmDeleteId(id);
-  const handleConfirmDelete = (id) => { onDelete(id); setConfirmDeleteId(null); };
+  const handleConfirmDelete = (id) => {
+    onDelete(id);
+    setConfirmDeleteId(null);
+  };
   const handleCancelDelete = () => setConfirmDeleteId(null);
 
   if (!notifications || notifications.length === 0) {
@@ -74,7 +90,9 @@ const NotificationAdminList = ({ notifications, onDelete, isDeleting }) => {
       <div className={styles.container} data-testid="notification-admin-list">
         <div className={styles.emptyState}>
           <p className={styles.emptyText}>No notifications found</p>
-          <p className={styles.emptySubtext}>Create a new notification using the form below.</p>
+          <p className={styles.emptySubtext}>
+            Create a new notification using the form below.
+          </p>
         </div>
       </div>
     );
@@ -96,25 +114,84 @@ const NotificationAdminList = ({ notifications, onDelete, isDeleting }) => {
           </thead>
           <tbody>
             {notifications.map((notification) => {
-              const isExpired = notification.expiresAt && new Date(notification.expiresAt) < new Date();
+              const isExpired =
+                notification.expiresAt &&
+                new Date(notification.expiresAt) < new Date();
               const isConfirming = confirmDeleteId === notification.id;
               const isCurrentlyDeleting = isDeleting === notification.id;
 
               return (
-                <tr key={notification.id} className={styles.row} data-testid="notification-admin-row">
-                  <td className={styles.cell}><span className={styles.subject} title={notification.subject}>{truncateText(notification.subject, 40)}</span></td>
-                  <td className={styles.cell}><span className={`${styles.scopeBadge} ${notification.isGlobal ? styles.globalScope : styles.userScope}`}>{notification.isGlobal ? 'Global' : 'User'}</span></td>
-                  <td className={styles.cell}><span className={`${styles.expiresText} ${isExpired ? styles.expired : ''}`}>{formatExpiresAt(notification.expiresAt)}</span></td>
-                  <td className={styles.cell}><span className={styles.recurrenceText}>{formatRecurrenceSummary(notification.recurrenceRule)}</span></td>
-                  <td className={styles.cell}><span className={`${styles.statusBadge} ${isExpired ? styles.expiredStatus : styles.activeStatus}`}>{isExpired ? 'Expired' : 'Active'}</span></td>
+                <tr
+                  key={notification.id}
+                  className={styles.row}
+                  data-testid="notification-admin-row"
+                >
+                  <td className={styles.cell}>
+                    <span
+                      className={styles.subject}
+                      title={notification.subject}
+                    >
+                      {truncateText(notification.subject, 40)}
+                    </span>
+                  </td>
+                  <td className={styles.cell}>
+                    <span
+                      className={`${styles.scopeBadge} ${notification.isGlobal ? styles.globalScope : styles.userScope}`}
+                    >
+                      {notification.isGlobal ? "Global" : "User"}
+                    </span>
+                  </td>
+                  <td className={styles.cell}>
+                    <span
+                      className={`${styles.expiresText} ${isExpired ? styles.expired : ""}`}
+                    >
+                      {formatExpiresAt(notification.expiresAt)}
+                    </span>
+                  </td>
+                  <td className={styles.cell}>
+                    <span className={styles.recurrenceText}>
+                      {formatRecurrenceSummary(notification.recurrenceRule)}
+                    </span>
+                  </td>
+                  <td className={styles.cell}>
+                    <span
+                      className={`${styles.statusBadge} ${isExpired ? styles.expiredStatus : styles.activeStatus}`}
+                    >
+                      {isExpired ? "Expired" : "Active"}
+                    </span>
+                  </td>
                   <td className={styles.cell}>
                     {isConfirming ? (
                       <div className={styles.confirmActions}>
-                        <button type="button" className={`${styles.confirmButton} ${isCurrentlyDeleting ? styles.loading : ''}`} onClick={() => handleConfirmDelete(notification.id)} disabled={isCurrentlyDeleting} aria-label="Confirm delete">{isCurrentlyDeleting ? '...' : 'Yes'}</button>
-                        <button type="button" className={styles.cancelButton} onClick={handleCancelDelete} disabled={isCurrentlyDeleting} aria-label="Cancel delete">No</button>
+                        <button
+                          type="button"
+                          className={`${styles.confirmButton} ${isCurrentlyDeleting ? styles.loading : ""}`}
+                          onClick={() => handleConfirmDelete(notification.id)}
+                          disabled={isCurrentlyDeleting}
+                          aria-label="Confirm delete"
+                        >
+                          {isCurrentlyDeleting ? "..." : "Yes"}
+                        </button>
+                        <button
+                          type="button"
+                          className={styles.cancelButton}
+                          onClick={handleCancelDelete}
+                          disabled={isCurrentlyDeleting}
+                          aria-label="Cancel delete"
+                        >
+                          No
+                        </button>
                       </div>
                     ) : (
-                      <button type="button" className={styles.deleteButton} onClick={() => handleDeleteClick(notification.id)} disabled={!!isDeleting} aria-label={`Delete notification: ${notification.subject}`}>Delete</button>
+                      <button
+                        type="button"
+                        className={styles.deleteButton}
+                        onClick={() => handleDeleteClick(notification.id)}
+                        disabled={!!isDeleting}
+                        aria-label={`Delete notification: ${notification.subject}`}
+                      >
+                        Delete
+                      </button>
                     )}
                   </td>
                 </tr>

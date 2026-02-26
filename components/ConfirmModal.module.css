@@ -1,0 +1,113 @@
+@font-face {
+  font-family: "TechMono";
+  src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/Orbitron-Bold.ttf") format("truetype");
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: modalFadeIn 0.5s ease-out;
+}
+
+.modal {
+  background: black;
+  border: 2px solid #f80206;
+  padding: 30px;
+  border-radius: 10px;
+  max-width: 450px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 0 20px #f80206;
+  animation: modalPopIn 0.5s ease-out;
+}
+
+.modalTitle {
+  font-family: "Orbitron";
+  font-size: 1.6rem;
+  color: #f80206;
+  margin: 0 0 16px 0;
+  text-shadow: 0 0 5px #f80206;
+}
+
+.message {
+  font-family: "TechMono";
+  color: #f80206;
+  font-size: 1rem;
+  margin: 0 0 24px 0;
+}
+
+.itemName {
+  color: #ff6600;
+}
+
+.buttonRow {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.deleteButton,
+.cancelButton {
+  font-family: "TechMono";
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.deleteButton {
+  background: #f80206;
+  color: black;
+  border: 2px solid #f80206;
+}
+
+.deleteButton:hover {
+  box-shadow: 0 0 12px #f80206;
+  background: #ff4444;
+}
+
+.cancelButton {
+  background: black;
+  color: #f80206;
+  border: 2px solid #f80206;
+}
+
+.cancelButton:hover {
+  box-shadow: 0 0 12px #ff6600;
+  color: #ff6600;
+  border-color: #ff6600;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalPopIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

@@ -3,9 +3,9 @@
  * Container for rendering sorted notification cards.
  */
 
-import React from 'react';
-import NotificationCard from './NotificationCard';
-import styles from './NotificationList.module.css';
+import React from "react";
+import NotificationCard from "./NotificationCard";
+import styles from "./NotificationList.module.css";
 
 const NotificationList = ({
   notifications,
@@ -38,7 +38,9 @@ const NotificationList = ({
             onMarkRead={onMarkRead}
             onMarkUnread={onMarkUnread}
             isActionLoading={loadingActionId === notification.id}
-            loadingAction={loadingActionId === notification.id ? loadingAction : null}
+            loadingAction={
+              loadingActionId === notification.id ? loadingAction : null
+            }
           />
         ))}
       </div>

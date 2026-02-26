@@ -15,13 +15,8 @@ import { useNotifications } from "@/hooks/useNotifications";
 import styles from "./notifications.module.css";
 
 function NotificationReaderContent() {
-  const {
-    notifications,
-    isLoading,
-    error,
-    markAsRead,
-    markAsUnread,
-  } = useNotifications({ sortByUnread: true });
+  const { notifications, isLoading, error, markAsRead, markAsUnread } =
+    useNotifications({ sortByUnread: true });
 
   const { showError } = useToast();
 

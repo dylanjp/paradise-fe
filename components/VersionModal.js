@@ -32,11 +32,20 @@ export default function VersionModal({ onClose }) {
           {isAuthenticated && (
             <div className={styles.authIconsContainer}>
               {isAdmin() && (
-                <Link href="/admin" onClick={handleAdminClick} className={styles.authIcon} aria-label="Admin Panel">
+                <Link
+                  href="/admin"
+                  onClick={handleAdminClick}
+                  className={styles.authIcon}
+                  aria-label="Admin Panel"
+                >
                   <FaUserShield />
                 </Link>
               )}
-              <button onClick={handleLogoutClick} className={styles.authIcon} aria-label="Logout">
+              <button
+                onClick={handleLogoutClick}
+                className={styles.authIcon}
+                aria-label="Logout"
+              >
                 <FaSignOutAlt />
               </button>
             </div>

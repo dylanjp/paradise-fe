@@ -293,7 +293,7 @@
 
 .submitButton:hover:not(:disabled) {
   background: rgba(255, 102, 0, 0.3);
-  box-shadow: 
+  box-shadow:
     0 0 15px rgba(255, 102, 0, 0.5),
     inset 0 0 10px rgba(255, 102, 0, 0.1);
   transform: translateY(-2px);
@@ -408,7 +408,6 @@
     border-width: 3px;
   }
 }
-
 
 /* =========================
    DATE RANGE PICKER

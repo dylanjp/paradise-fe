@@ -3,10 +3,10 @@
  * Toast-style error display component with TRON styling.
  */
 
-'use client';
+"use client";
 
-import React, { useEffect, useCallback } from 'react';
-import styles from './ErrorToast.module.css';
+import React, { useEffect, useCallback } from "react";
+import styles from "./ErrorToast.module.css";
 
 const DEFAULT_DURATION = 5000;
 
@@ -26,28 +26,32 @@ export default function ErrorToast({ toast, onDismiss }) {
     onDismiss(id);
   }, [id, onDismiss]);
 
-  const handleKeyDown = useCallback((e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      handleDismiss();
-    }
-  }, [handleDismiss]);
+  const handleKeyDown = useCallback(
+    (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        handleDismiss();
+      }
+    },
+    [handleDismiss],
+  );
 
-  const typeClass = type === 'success' 
-    ? styles.success 
-    : type === 'warning' 
-      ? styles.warning 
-      : styles.error;
+  const typeClass =
+    type === "success"
+      ? styles.success
+      : type === "warning"
+        ? styles.warning
+        : styles.error;
 
   return (
-    <div 
+    <div
       className={`${styles.toast} ${typeClass}`}
       role="alert"
       aria-live="assertive"
     >
       <div className={styles.content}>
         <span className={styles.icon}>
-          {type === 'success' ? '✓' : type === 'warning' ? '⚠' : '✕'}
+          {type === "success" ? "✓" : type === "warning" ? "⚠" : "✕"}
         </span>
         <p className={styles.message}>{message}</p>
       </div>
