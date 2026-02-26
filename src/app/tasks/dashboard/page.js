@@ -38,7 +38,7 @@ export default function DashboardPage() {
 
   // Perfect days state - Requirements: 1.1, 1.3, 5.1
   // View mode: 'perfect-days' (default) or 'task-completions'
-  const [viewMode, setViewMode] = useState('perfect-days');
+  const [viewMode, setViewMode] = useState("perfect-days");
   const [perfectDays, setPerfectDays] = useState([]);
   const [isLoadingPerfectDays, setIsLoadingPerfectDays] = useState(false);
   const [perfectDaysError, setPerfectDaysError] = useState(null);
@@ -48,8 +48,8 @@ export default function DashboardPage() {
   // For task-completions mode, use years from completion data
   const availableYears = useMemo(() => {
     const currentYear = new Date().getFullYear();
-    
-    if (viewMode === 'perfect-days') {
+
+    if (viewMode === "perfect-days") {
       // Provide a reasonable historical range for perfect days view
       // Current year plus 4 previous years (5 years total)
       const historicalRange = [];
@@ -106,13 +106,13 @@ export default function DashboardPage() {
   // Also fetch on initial mount when userId becomes available
   useEffect(() => {
     if (!userId) return;
-    
+
     // Only fetch perfect days when in perfect-days view mode
     // This ensures we fetch when:
     // 1. Component mounts (viewMode defaults to 'perfect-days')
     // 2. User changes year while in perfect-days mode
     // 3. User switches back to perfect-days mode (handled by task selection effect)
-    if (viewMode === 'perfect-days') {
+    if (viewMode === "perfect-days") {
       fetchPerfectDays(userId, selectedYear);
     }
   }, [userId, fetchPerfectDays, selectedYear, viewMode]);
@@ -124,21 +124,24 @@ export default function DashboardPage() {
       setCompletions([]);
       setCompletionsError(null);
       // Switch to perfect-days view when no task is selected
-      setViewMode('perfect-days');
+      setViewMode("perfect-days");
       return;
     }
 
     // Switch to task-completions view when a task is selected
-    setViewMode('task-completions');
+    setViewMode("task-completions");
 
     const fetchCompletions = async () => {
       setIsLoadingCompletions(true);
       setCompletionsError(null);
 
       try {
-        const data = await TaskService.getDailyTaskCompletions(userId, selectedTaskId);
+        const data = await TaskService.getDailyTaskCompletions(
+          userId,
+          selectedTaskId,
+        );
         setCompletions(data || []);
-        
+
         // Update selected year to most recent year with data
         const years = extractYears(data || []);
         if (years.length > 0 && !years.includes(selectedYear)) {
@@ -236,9 +239,11 @@ export default function DashboardPage() {
               </div>
 
               {/* Error Display for Completions */}
-              {completionsError && viewMode === 'task-completions' && (
+              {completionsError && viewMode === "task-completions" && (
                 <div className={styles.errorContainer}>
-                  <h3 className={styles.errorTitle}>Error Loading Completion History</h3>
+                  <h3 className={styles.errorTitle}>
+                    Error Loading Completion History
+                  </h3>
                   <p className={styles.errorMessage}>{completionsError}</p>
                   <button
                     className={styles.retryButton}
@@ -250,9 +255,11 @@ export default function DashboardPage() {
               )}
 
               {/* Error Display for Perfect Days - Requirements: 5.2 */}
-              {perfectDaysError && viewMode === 'perfect-days' && (
+              {perfectDaysError && viewMode === "perfect-days" && (
                 <div className={styles.errorContainer}>
-                  <h3 className={styles.errorTitle}>Error Loading Perfect Days</h3>
+                  <h3 className={styles.errorTitle}>
+                    Error Loading Perfect Days
+                  </h3>
                   <p className={styles.errorMessage}>{perfectDaysError}</p>
                   <button
                     className={styles.retryButton}
@@ -264,52 +271,65 @@ export default function DashboardPage() {
               )}
 
               {/* Loading Completions State */}
-              {isLoadingCompletions && viewMode === 'task-completions' && (
+              {isLoadingCompletions && viewMode === "task-completions" && (
                 <div className={styles.loadingContainer}>
-                  <span className={styles.loadingText}>Loading completion history...</span>
+                  <span className={styles.loadingText}>
+                    Loading completion history...
+                  </span>
                 </div>
               )}
 
               {/* Loading Perfect Days State - Requirements: 5.1 */}
-              {isLoadingPerfectDays && viewMode === 'perfect-days' && (
+              {isLoadingPerfectDays && viewMode === "perfect-days" && (
                 <div className={styles.loadingContainer}>
-                  <span className={styles.loadingText}>Loading perfect days...</span>
+                  <span className={styles.loadingText}>
+                    Loading perfect days...
+                  </span>
                 </div>
               )}
 
               {/* Perfect Days Chart - Requirements: 1.1, 1.2, 1.4 */}
-              {viewMode === 'perfect-days' && !isLoadingPerfectDays && !perfectDaysError && (
-                <div className={styles.chartSection}>
-                  <h2 className={styles.chartTitle}>Perfect Days</h2>
-                  <ContributionChart
-                    year={selectedYear}
-                    completionDates={filteredPerfectDays}
-                  />
-                  <div className={styles.chartStats}>
-                    <span className={styles.statItem}>
-                      {filteredPerfectDays.length} perfect days in {selectedYear}
-                    </span>
+              {viewMode === "perfect-days" &&
+                !isLoadingPerfectDays &&
+                !perfectDaysError && (
+                  <div className={styles.chartSection}>
+                    <h2 className={styles.chartTitle}>Perfect Days</h2>
+                    <ContributionChart
+                      year={selectedYear}
+                      completionDates={filteredPerfectDays}
+                    />
+                    <div className={styles.chartStats}>
+                      <span className={styles.statItem}>
+                        {filteredPerfectDays.length} perfect days in{" "}
+                        {selectedYear}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               {/* Task Completions Chart */}
-              {viewMode === 'task-completions' && selectedTaskId && !isLoadingCompletions && !completionsError && (
-                <div className={styles.chartSection}>
-                  {selectedTask && (
-                    <h2 className={styles.chartTitle}>{selectedTask.description}</h2>
-                  )}
-                  <ContributionChart
-                    year={selectedYear}
-                    completionDates={filteredCompletions}
-                  />
-                  <div className={styles.chartStats}>
-                    <span className={styles.statItem}>
-                      {filteredCompletions.length} completions in {selectedYear}
-                    </span>
+              {viewMode === "task-completions" &&
+                selectedTaskId &&
+                !isLoadingCompletions &&
+                !completionsError && (
+                  <div className={styles.chartSection}>
+                    {selectedTask && (
+                      <h2 className={styles.chartTitle}>
+                        {selectedTask.description}
+                      </h2>
+                    )}
+                    <ContributionChart
+                      year={selectedYear}
+                      completionDates={filteredCompletions}
+                    />
+                    <div className={styles.chartStats}>
+                      <span className={styles.statItem}>
+                        {filteredCompletions.length} completions in{" "}
+                        {selectedYear}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
             </>
           )}
         </div>

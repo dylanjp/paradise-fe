@@ -3,8 +3,8 @@
  * Displays a single notification with actions.
  */
 
-import React from 'react';
-import styles from './NotificationCard.module.css';
+import React from "react";
+import styles from "./NotificationCard.module.css";
 
 /**
  * Formats an ISO timestamp to a human-readable format
@@ -19,18 +19,18 @@ function formatTimestamp(isoString) {
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     if (diffHours === 0) {
       const diffMinutes = Math.floor(diffMs / (1000 * 60));
-      if (diffMinutes < 1) return 'Just now';
+      if (diffMinutes < 1) return "Just now";
       return `${diffMinutes}m ago`;
     }
     return `${diffHours}h ago`;
   }
-  if (diffDays === 1) return 'Yesterday';
+  if (diffDays === 1) return "Yesterday";
   if (diffDays < 7) return `${diffDays} days ago`;
 
-  return date.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined,
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: date.getFullYear() !== now.getFullYear() ? "numeric" : undefined,
   });
 }
 
@@ -38,45 +38,55 @@ function formatTimestamp(isoString) {
  * Month names for display
  */
 const MONTH_NAMES = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 /**
  * Formats a recurrence rule to a human-readable summary
  */
 function formatRecurrence(rule) {
-  if (!rule) return '';
+  if (!rule) return "";
 
-  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   switch (rule.type) {
-    case 'DAILY':
-      return 'Daily';
-    case 'WEEKLY':
+    case "DAILY":
+      return "Daily";
+    case "WEEKLY":
       if (rule.dayOfWeek !== undefined) {
         return `Weekly on ${dayNames[rule.dayOfWeek]}`;
       }
-      return 'Weekly';
-    case 'MONTHLY':
+      return "Weekly";
+    case "MONTHLY":
       if (rule.dayOfMonth !== undefined) {
         const suffix = getOrdinalSuffix(rule.dayOfMonth);
         return `Monthly on ${rule.dayOfMonth}${suffix}`;
       }
-      return 'Monthly';
-    case 'YEARLY': {
+      return "Monthly";
+    case "YEARLY": {
       const monthName = MONTH_NAMES[rule.month - 1];
       const suffix = getOrdinalSuffix(rule.dayOfMonth);
       return `Yearly on ${monthName} ${rule.dayOfMonth}${suffix}`;
     }
-    case 'RANDOM_DATE_RANGE': {
+    case "RANDOM_DATE_RANGE": {
       const startMonth = MONTH_NAMES[rule.startMonth - 1].substring(0, 3);
       const endMonth = MONTH_NAMES[rule.endMonth - 1].substring(0, 3);
       let display = `Random: ${startMonth} ${rule.startDay} - ${endMonth} ${rule.endDay}`;
       return display;
     }
     default:
-      return 'Recurring';
+      return "Recurring";
   }
 }
 
@@ -84,7 +94,7 @@ function formatRecurrence(rule) {
  * Gets ordinal suffix for a number (1st, 2nd, 3rd, etc.)
  */
 function getOrdinalSuffix(n) {
-  const s = ['th', 'st', 'nd', 'rd'];
+  const s = ["th", "st", "nd", "rd"];
   const v = n % 100;
   return s[(v - 20) % 10] || s[v] || s[0];
 }
@@ -95,9 +105,10 @@ function getOrdinalSuffix(n) {
  * @returns {string|null} Formatted string or null if no random date
  */
 function formatRandomDate(rule) {
-  if (!rule || rule.type !== 'RANDOM_DATE_RANGE') return null;
-  if (rule.randomMonth === undefined || rule.randomDay === undefined) return null;
-  
+  if (!rule || rule.type !== "RANDOM_DATE_RANGE") return null;
+  if (rule.randomMonth === undefined || rule.randomDay === undefined)
+    return null;
+
   const monthName = MONTH_NAMES[rule.randomMonth - 1];
   const suffix = getOrdinalSuffix(rule.randomDay);
   return `This year's date: ${monthName} ${rule.randomDay}${suffix}`;
@@ -111,7 +122,7 @@ function formatExpiration(expiresAt) {
   const now = new Date();
 
   if (date < now) {
-    return 'Expired';
+    return "Expired";
   }
 
   const diffMs = date.getTime() - now.getTime();
@@ -119,13 +130,13 @@ function formatExpiration(expiresAt) {
 
   if (diffDays === 0) {
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-    if (diffHours <= 1) return 'Expires soon';
+    if (diffHours <= 1) return "Expires soon";
     return `Expires in ${diffHours}h`;
   }
-  if (diffDays === 1) return 'Expires tomorrow';
+  if (diffDays === 1) return "Expires tomorrow";
   if (diffDays < 7) return `Expires in ${diffDays} days`;
 
-  return `Expires ${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+  return `Expires ${date.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`;
 }
 
 const NotificationCard = ({
@@ -166,9 +177,7 @@ const NotificationCard = ({
       </header>
 
       <div className={styles.metadata}>
-        <span className={styles.timestamp}>
-          {formatTimestamp(createdAt)}
-        </span>
+        <span className={styles.timestamp}>{formatTimestamp(createdAt)}</span>
 
         {expiresAt && (
           <span className={styles.expirationIndicator}>
@@ -189,15 +198,13 @@ const NotificationCard = ({
         )}
       </div>
 
-      <div className={styles.messageBody}>
-        {messageBody}
-      </div>
+      <div className={styles.messageBody}>{messageBody}</div>
 
       <div className={styles.actions}>
         {isRead ? (
           <button
             type="button"
-            className={`${styles.markUnreadButton} ${loadingAction === 'markUnread' ? styles.loading : ''}`}
+            className={`${styles.markUnreadButton} ${loadingAction === "markUnread" ? styles.loading : ""}`}
             onClick={handleMarkUnread}
             disabled={isActionLoading}
             aria-label="Mark as unread"
@@ -207,7 +214,7 @@ const NotificationCard = ({
         ) : (
           <button
             type="button"
-            className={`${styles.markReadButton} ${loadingAction === 'markRead' ? styles.loading : ''}`}
+            className={`${styles.markReadButton} ${loadingAction === "markRead" ? styles.loading : ""}`}
             onClick={handleMarkRead}
             disabled={isActionLoading}
             aria-label="Mark as read"

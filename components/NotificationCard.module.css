@@ -15,7 +15,10 @@
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 1rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .card:hover {
@@ -27,14 +30,14 @@
    ========================= */
 .unread {
   border-color: var(--tron-yellow-active, #ffff00);
-  box-shadow: 
+  box-shadow:
     0 0 10px var(--tron-yellow-active, #ffff00),
     0 0 20px rgba(255, 255, 0, 0.3),
     inset 0 0 10px rgba(255, 255, 0, 0.05);
 }
 
 .unread:hover {
-  box-shadow: 
+  box-shadow:
     0 0 15px var(--tron-yellow-active, #ffff00),
     0 0 30px rgba(255, 255, 0, 0.4),
     inset 0 0 15px rgba(255, 255, 0, 0.08);

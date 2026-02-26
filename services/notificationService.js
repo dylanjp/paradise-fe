@@ -11,7 +11,7 @@ import apiClient from "@/src/lib/apiClient";
 export class NotificationError extends Error {
   constructor(message, code, status) {
     super(message);
-    this.name = 'NotificationError';
+    this.name = "NotificationError";
     this.code = code;
     this.status = status;
   }
@@ -21,11 +21,11 @@ export class NotificationError extends Error {
  * Transforms API errors into user-friendly NotificationError instances
  */
 function handleApiError(error, operation) {
-  if (error instanceof TypeError && error.message === 'Failed to fetch') {
+  if (error instanceof TypeError && error.message === "Failed to fetch") {
     return new NotificationError(
-      'Unable to connect to server. Please check your network connection.',
+      "Unable to connect to server. Please check your network connection.",
       undefined,
-      0
+      0,
     );
   }
 
@@ -33,68 +33,68 @@ function handleApiError(error, operation) {
 
   if (apiError.status === 404) {
     return new NotificationError(
-      'Notification not found. It may have been deleted.',
-      'NOTIFICATION_NOT_FOUND',
-      404
+      "Notification not found. It may have been deleted.",
+      "NOTIFICATION_NOT_FOUND",
+      404,
     );
   }
 
   if (apiError.status === 400) {
     const code = apiError.data?.code;
-    if (code === 'ACTION_ALREADY_CREATED') {
+    if (code === "ACTION_ALREADY_CREATED") {
       return new NotificationError(
-        'A TODO has already been created from this notification.',
-        'ACTION_ALREADY_CREATED',
-        400
+        "A TODO has already been created from this notification.",
+        "ACTION_ALREADY_CREATED",
+        400,
       );
     }
-    if (code === 'NOTIFICATION_EXPIRED') {
+    if (code === "NOTIFICATION_EXPIRED") {
       return new NotificationError(
-        'Cannot perform this action on an expired notification.',
-        'NOTIFICATION_EXPIRED',
-        400
+        "Cannot perform this action on an expired notification.",
+        "NOTIFICATION_EXPIRED",
+        400,
       );
     }
     return new NotificationError(
-      apiError.message || 'Invalid request.',
-      'VALIDATION_ERROR',
-      400
+      apiError.message || "Invalid request.",
+      "VALIDATION_ERROR",
+      400,
     );
   }
 
   if (apiError.status === 401) {
     return new NotificationError(
-      'Session expired. Please log in again.',
-      'UNAUTHORIZED',
-      401
+      "Session expired. Please log in again.",
+      "UNAUTHORIZED",
+      401,
     );
   }
 
   if (apiError.status === 403) {
     return new NotificationError(
-      'You do not have permission to perform this action.',
-      'UNAUTHORIZED',
-      403
+      "You do not have permission to perform this action.",
+      "UNAUTHORIZED",
+      403,
     );
   }
 
   if (apiError.status && apiError.status >= 500) {
     return new NotificationError(
-      'Server error. Please try again later.',
+      "Server error. Please try again later.",
       undefined,
-      apiError.status
+      apiError.status,
     );
   }
 
   return new NotificationError(
     `Failed to ${operation}. Please try again.`,
     undefined,
-    apiError.status
+    apiError.status,
   );
 }
 
-const NOTIFICATIONS_BASE = '/api/notifications';
-const USERS_BASE = '/admin/users';
+const NOTIFICATIONS_BASE = "/api/notifications";
+const USERS_BASE = "/admin/users";
 
 export const notificationService = {
   async getUsers() {
@@ -103,7 +103,7 @@ export const notificationService = {
       // Handle both response formats: { users: [...] } or [...]
       return response.users || response || [];
     } catch (error) {
-      throw handleApiError(error, 'fetch users');
+      throw handleApiError(error, "fetch users");
     }
   },
   async getNotifications(includeExpired = false) {
@@ -114,7 +114,7 @@ export const notificationService = {
       const data = await apiClient.get(endpoint);
       return data;
     } catch (error) {
-      throw handleApiError(error, 'fetch notifications');
+      throw handleApiError(error, "fetch notifications");
     }
   },
 
@@ -123,7 +123,7 @@ export const notificationService = {
       const data = await apiClient.get(`${NOTIFICATIONS_BASE}/${id}`);
       return data;
     } catch (error) {
-      throw handleApiError(error, 'fetch notification');
+      throw handleApiError(error, "fetch notification");
     }
   },
 
@@ -131,7 +131,7 @@ export const notificationService = {
     try {
       await apiClient.post(`${NOTIFICATIONS_BASE}/${id}/read`, {});
     } catch (error) {
-      throw handleApiError(error, 'mark notification as read');
+      throw handleApiError(error, "mark notification as read");
     }
   },
 
@@ -139,7 +139,7 @@ export const notificationService = {
     try {
       await apiClient.post(`${NOTIFICATIONS_BASE}/${id}/unread`, {});
     } catch (error) {
-      throw handleApiError(error, 'mark notification as unread');
+      throw handleApiError(error, "mark notification as unread");
     }
   },
 
@@ -147,7 +147,7 @@ export const notificationService = {
     try {
       await apiClient.post(`${NOTIFICATIONS_BASE}/${id}/action`, {});
     } catch (error) {
-      throw handleApiError(error, 'create TODO from notification');
+      throw handleApiError(error, "create TODO from notification");
     }
   },
 
@@ -156,7 +156,7 @@ export const notificationService = {
       const data = await apiClient.post(NOTIFICATIONS_BASE, request);
       return data;
     } catch (error) {
-      throw handleApiError(error, 'create notification');
+      throw handleApiError(error, "create notification");
     }
   },
 
@@ -164,25 +164,28 @@ export const notificationService = {
     try {
       await apiClient.delete(`${NOTIFICATIONS_BASE}/${id}`);
     } catch (error) {
-      throw handleApiError(error, 'delete notification');
+      throw handleApiError(error, "delete notification");
     }
   },
 
   async hasUnreadNotifications() {
     try {
       const notifications = await this.getNotifications(false);
-      return notifications.some(n => !n.isRead);
+      return notifications.some((n) => !n.isRead);
     } catch (error) {
-      throw handleApiError(error, 'check unread notifications');
+      throw handleApiError(error, "check unread notifications");
     }
   },
 
   async processRecurring() {
     try {
-      const data = await apiClient.post(`${NOTIFICATIONS_BASE}/process-recurring`, {});
+      const data = await apiClient.post(
+        `${NOTIFICATIONS_BASE}/process-recurring`,
+        {},
+      );
       return data;
     } catch (error) {
-      throw handleApiError(error, 'process recurring notifications');
+      throw handleApiError(error, "process recurring notifications");
     }
   },
 };

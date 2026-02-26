@@ -141,7 +141,10 @@ const Navbar = forwardRef(function Navbar(_props, ref) {
               >
                 <SiLetsencrypt />
               </a>
-              <NotificationIcon hasUnread={hasUnread} onClick={() => setMenuOpen(false)} />
+              <NotificationIcon
+                hasUnread={hasUnread}
+                onClick={() => setMenuOpen(false)}
+              />
             </div>
           </div>
         )}

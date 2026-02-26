@@ -1,0 +1,46 @@
+@font-face {
+  font-family: "TechMono";
+  src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  font-family: "TechMono";
+  padding: 8px 0;
+}
+
+.segmentWrapper {
+  display: inline-flex;
+  align-items: center;
+}
+
+.separator {
+  color: #f80206;
+  margin: 0 2px;
+  user-select: none;
+}
+
+.segment {
+  background: none;
+  border: none;
+  color: #f80206;
+  font-family: "TechMono";
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 2px 4px;
+  transition: color 0.2s ease;
+}
+
+.segment:hover {
+  color: #ff6600;
+}
+
+.current {
+  color: #ff4444;
+  font-family: "TechMono";
+  font-size: 1rem;
+  padding: 2px 4px;
+  font-weight: bold;
+}

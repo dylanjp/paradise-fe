@@ -1,9 +1,6 @@
 /**
  * TaskService - Frontend service module for backend API communication
  * Handles all HTTP requests to the Java Spring Boot backend for task operations
- *
- * Updated to use apiClient with JWT authentication instead of Basic Auth
- * Requirements: 5.1, 5.4
  */
 
 import apiClient from "./apiClient";
@@ -254,7 +251,10 @@ export const TaskService = {
    * @returns {Promise<string[]>} Array of ISO date strings (YYYY-MM-DD)
    */
   getDailyTaskCompletions: async (userId, taskId) => {
-    const endpoint = buildApiEndpoint(userId, `tasks/daily/${taskId}/completions`);
+    const endpoint = buildApiEndpoint(
+      userId,
+      `tasks/daily/${taskId}/completions`,
+    );
 
     try {
       const data = await apiClient.get(endpoint);

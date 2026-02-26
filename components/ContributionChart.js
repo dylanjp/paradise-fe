@@ -1,8 +1,12 @@
-'use client';
+"use client";
 
-import { useState, useMemo } from 'react';
-import { generateYearDays, groupByWeek, generateMonthLabels } from '../src/lib/chartUtils';
-import styles from './ContributionChart.module.css';
+import { useState, useMemo } from "react";
+import {
+  generateYearDays,
+  groupByWeek,
+  generateMonthLabels,
+} from "../src/lib/chartUtils";
+import styles from "./ContributionChart.module.css";
 
 /**
  * Individual day square in the contribution chart
@@ -12,11 +16,11 @@ import styles from './ContributionChart.module.css';
 const DaySquare = ({ date, isCompleted }) => {
   const [showTooltip, setShowTooltip] = useState(false);
 
-  const formattedDate = new Date(date).toLocaleDateString('en-US', {
-    weekday: 'short',
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric'
+  const formattedDate = new Date(date).toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
   });
 
   return (
@@ -24,14 +28,18 @@ const DaySquare = ({ date, isCompleted }) => {
       className={`${styles.daySquare} ${isCompleted ? styles.completed : styles.empty}`}
       onMouseEnter={() => setShowTooltip(true)}
       onMouseLeave={() => setShowTooltip(false)}
-      aria-label={`${formattedDate}: ${isCompleted ? 'Completed' : 'Not completed'}`}
+      aria-label={`${formattedDate}: ${isCompleted ? "Completed" : "Not completed"}`}
       role="gridcell"
     >
       {showTooltip && (
         <div className={styles.tooltip}>
           <span className={styles.tooltipDate}>{formattedDate}</span>
-          <span className={isCompleted ? styles.tooltipCompleted : styles.tooltipIncomplete}>
-            {isCompleted ? '✓ Completed' : 'Not completed'}
+          <span
+            className={
+              isCompleted ? styles.tooltipCompleted : styles.tooltipIncomplete
+            }
+          >
+            {isCompleted ? "✓ Completed" : "Not completed"}
           </span>
         </div>
       )}
@@ -97,10 +105,14 @@ const ContributionChart = ({ year, completionDates = [] }) => {
         </div>
 
         {/* Weeks container */}
-        <div className={styles.weeksContainer} role="grid" aria-label={`Contribution chart for ${year}`}>
+        <div
+          className={styles.weeksContainer}
+          role="grid"
+          aria-label={`Contribution chart for ${year}`}
+        >
           {weeks.map((week, weekIndex) => (
             <div key={weekIndex} className={styles.week} role="row">
-              {week.map((day, dayIndex) => (
+              {week.map((day, dayIndex) =>
                 day ? (
                   <DaySquare
                     key={day.date}
@@ -108,9 +120,13 @@ const ContributionChart = ({ year, completionDates = [] }) => {
                     isCompleted={completionSet.has(day.date)}
                   />
                 ) : (
-                  <div key={`empty-${dayIndex}`} className={styles.emptySquare} role="gridcell" />
-                )
-              ))}
+                  <div
+                    key={`empty-${dayIndex}`}
+                    className={styles.emptySquare}
+                    role="gridcell"
+                  />
+                ),
+              )}
             </div>
           ))}
         </div>

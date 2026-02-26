@@ -403,7 +403,6 @@ a.secondary {
   font-size: 14px !important;
 }
 
-
 /* Loading indicator styles for initial health check */
 .loadingIndicator {
   display: flex;
@@ -422,7 +421,8 @@ a.secondary {
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
