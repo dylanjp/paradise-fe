@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import styles from "./DriveContextMenu.module.css";
 
-export default function DriveContextMenu({ x, y, itemType, onChangeColor, onDelete, onClose }) {
+export default function DriveContextMenu({ x, y, itemType, onChangeColor, onDelete, onDownload, onClose }) {
   const menuRef = useRef(null);
 
   useEffect(() => {
@@ -48,6 +48,21 @@ export default function DriveContextMenu({ x, y, itemType, onChangeColor, onDele
         </button>
       )}
       {itemType === "folder" && <div className={styles.separator} />}
+      {itemType === "file" && onDownload && (
+        <>
+          <button
+            className={styles.menuItem}
+            onClick={(e) => {
+              e.stopPropagation();
+              onDownload();
+            }}
+            role="menuitem"
+          >
+            Download
+          </button>
+          <div className={styles.separator} />
+        </>
+      )}
       <button
         className={`${styles.menuItem} ${styles.deleteItem}`}
         onClick={onDelete}

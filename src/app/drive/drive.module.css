@@ -71,3 +71,62 @@
     padding-top: 40px;
   }
 }
+
+/* Loading indicator */
+.loadingText {
+  font-family: "TechMono";
+  color: var(--tron-red-light, #ff1a1a);
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 40px 0;
+  opacity: 0.7;
+}
+
+/* Error message */
+.errorText {
+  font-family: "TechMono";
+  color: #ff4444;
+  font-size: 1rem;
+  text-align: center;
+  padding: 20px;
+  background: rgba(255, 68, 68, 0.1);
+  border: 1px solid rgba(255, 68, 68, 0.3);
+  border-radius: 8px;
+  margin: 10px 0;
+}
+
+/* Upload progress bar */
+.uploadProgressContainer {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  height: 28px;
+  background: rgba(255, 26, 26, 0.1);
+  border: 1px solid rgba(255, 26, 26, 0.3);
+  border-radius: 6px;
+  margin: 16px auto;
+  overflow: hidden;
+}
+
+.uploadProgressBar {
+  height: 100%;
+  background: var(--tron-red-light, #ff1a1a);
+  opacity: 0.7;
+  transition: width 0.2s ease;
+  border-radius: 6px;
+}
+
+.uploadProgressText {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "TechMono";
+  font-size: 0.85rem;
+  color: var(--tron-red-light, #ff1a1a);
+  text-shadow: 0 0 6px rgba(248, 2, 6, 0.5);
+}
