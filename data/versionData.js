@@ -3,8 +3,10 @@
 const versionData = [
   {
     version: "v0.0.3",
-    releaseDate: "2026-02-01",
+    releaseDate: "2026-02-25",
     notes: [
+      "NEW FEATURE: My Drive!",
+      "NEW FEATURE: Upload to Plex",
       "Fixed refresh issues on pages ",
       "Removed some bloat",
       "Enchanced some Mobile views",
