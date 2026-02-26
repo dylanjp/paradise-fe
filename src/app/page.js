@@ -44,7 +44,9 @@ export default function Home() {
         <Background />
         <main className={styles.main}>
           <div className={styles.loadingIndicator}>
-            <span className={styles.loadingText}>Checking backend status...</span>
+            <span className={styles.loadingText}>
+              Checking backend status...
+            </span>
           </div>
         </main>
       </div>
@@ -68,7 +70,7 @@ export default function Home() {
           {authLoading ? null : !isAuthenticated ? (
             // Not logged in - show Login button
             <PrimaryButton
-              onClick={() => router.push('/login')}
+              onClick={() => router.push("/login")}
               disabled={isHealthy === false}
             >
               Login
@@ -77,26 +79,41 @@ export default function Home() {
             // Desktop navigation - show all CTA links
             <>
               {/* <Link href="./projects/" className={styles.navLink}>My Drive</Link> Access to Shared Folder*/}
-              <Link href="/tasks/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
+              <Link
+                href="/tasks/"
+                className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ""}`}
+              >
                 Task Management
               </Link>
-              <Link href="/notificationmanage/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
+              <Link
+                href="/notificationmanage/"
+                className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ""}`}
+              >
                 Notification Manager
               </Link>
-              <Link href="/drive/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
+              <Link
+                href="/drive/"
+                className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ""}`}
+              >
                 Pratt Drive
               </Link>
-              <Link href="/home/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
+              <Link
+                href="/home/"
+                className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ""}`}
+              >
                 Documentation
               </Link>
-              <Link href="/comingsoon/" className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ''}`}>
+              <Link
+                href="/comingsoon/"
+                className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ""}`}
+              >
                 Print Center
               </Link>
             </>
           ) : (
             // Mobile navigation - show PrimaryButton
             <PrimaryButton
-              className={`${styles.mobileNavButton} ${isHealthy === false ? styles.disabledLink : ''}`}
+              className={`${styles.mobileNavButton} ${isHealthy === false ? styles.disabledLink : ""}`}
               onClick={() => {
                 navbarRef.current?.openMenu();
               }}

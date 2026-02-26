@@ -27,7 +27,12 @@ export default function ColorPicker({ onSelectColor, onClose }) {
   };
 
   return (
-    <div className={styles.colorPicker} role="group" aria-label="Color picker" onClick={(e) => e.stopPropagation()}>
+    <div
+      className={styles.colorPicker}
+      role="group"
+      aria-label="Color picker"
+      onClick={(e) => e.stopPropagation()}
+    >
       <div className={styles.swatchGrid}>
         {COLORS.map((color) => (
           <button

@@ -2,7 +2,15 @@
 import { useEffect, useRef } from "react";
 import styles from "./DriveContextMenu.module.css";
 
-export default function DriveContextMenu({ x, y, itemType, onChangeColor, onDelete, onDownload, onClose }) {
+export default function DriveContextMenu({
+  x,
+  y,
+  itemType,
+  onChangeColor,
+  onDelete,
+  onDownload,
+  onClose,
+}) {
   const menuRef = useRef(null);
 
   useEffect(() => {

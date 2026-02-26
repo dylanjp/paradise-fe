@@ -100,13 +100,13 @@ const TaskContainer = ({
       if (task.id === draggedId) {
         // Determine the new parentId for the dragged task
         let newParentId = draggedTask.parentId; // Default: keep existing parentId
-        
+
         if (isNestingAction) {
           // Dropped on a dropzone - nest under that task
           newParentId = targetId;
         }
         // If not a nesting action, preserve the original parentId (just reordering)
-        
+
         return {
           ...task,
           order: index + 1,
@@ -157,11 +157,9 @@ const TaskContainer = ({
                       isFromNotification={task.createdFromNotification === true}
                     />
                     {/* Nesting Helper: Show for all root tasks to allow nesting */}
-                    {!task.parentId &&
-                      activeId &&
-                      activeId !== task.id && (
-                        <DropZone taskId={task.id} isVisible={true} />
-                      )}
+                    {!task.parentId && activeId && activeId !== task.id && (
+                      <DropZone taskId={task.id} isVisible={true} />
+                    )}
                   </div>
                 );
               })}

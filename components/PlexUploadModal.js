@@ -85,9 +85,13 @@ export default function PlexUploadModal({ isOpen, onClose, userId }) {
     setUploadResult(null);
     setUploadProgress(0);
     try {
-      const result = await driveService.plexUpload(userId, selectedFile, (pct) => {
-        setUploadProgress(pct);
-      });
+      const result = await driveService.plexUpload(
+        userId,
+        selectedFile,
+        (pct) => {
+          setUploadProgress(pct);
+        },
+      );
       setUploadResult(result);
     } catch (err) {
       setUploadError(driveService.getErrorMessage(err));
@@ -98,7 +102,12 @@ export default function PlexUploadModal({ isOpen, onClose, userId }) {
 
   return (
     <div className={styles.modalOverlay} onClick={handleOverlayClick}>
-      <div className={styles.modal} role="dialog" aria-modal="true" aria-label="Upload Video to Plex">
+      <div
+        className={styles.modal}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Upload Video to Plex"
+      >
         <h2 className={styles.modalTitle}>Upload Video to Plex</h2>
 
         <div
@@ -121,25 +130,32 @@ export default function PlexUploadModal({ isOpen, onClose, userId }) {
           />
         </div>
 
-        {selectedFile && (
-          <p className={styles.fileName}>{selectedFile.name}</p>
-        )}
+        {selectedFile && <p className={styles.fileName}>{selectedFile.name}</p>}
 
         {uploading && (
           <div className={styles.uploadProgressContainer}>
-            <div className={styles.uploadProgressBar} style={{ width: `${uploadProgress}%` }} />
-            <span className={styles.uploadProgressText}>Uploading… {uploadProgress}%</span>
+            <div
+              className={styles.uploadProgressBar}
+              style={{ width: `${uploadProgress}%` }}
+            />
+            <span className={styles.uploadProgressText}>
+              Uploading… {uploadProgress}%
+            </span>
           </div>
         )}
 
         {uploadResult && (
           <div className={styles.fileName}>
-            <p>Uploaded: {uploadResult.fileName} ({uploadResult.size})</p>
+            <p>
+              Uploaded: {uploadResult.fileName} ({uploadResult.size})
+            </p>
           </div>
         )}
 
         {uploadError && (
-          <p className={styles.fileName} style={{ color: "#ff4444" }}>{uploadError}</p>
+          <p className={styles.fileName} style={{ color: "#ff4444" }}>
+            {uploadError}
+          </p>
         )}
 
         <div className={styles.buttonRow}>
