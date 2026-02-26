@@ -3,11 +3,11 @@
  * Navbar icon with unread status indication.
  */
 
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { FaExclamation } from 'react-icons/fa';
-import styles from './NotificationIcon.module.css';
+import { useRouter } from "next/navigation";
+import { FaExclamation } from "react-icons/fa";
+import styles from "./NotificationIcon.module.css";
 
 /**
  * NotificationIcon displays the notification bell icon with visual indication
@@ -20,18 +20,18 @@ export function NotificationIcon({ hasUnread, onClick }) {
     if (onClick) {
       onClick();
     }
-    router.push('/notifications');
+    router.push("/notifications");
   };
 
   return (
     <span
-      className={`${styles.icon} ${hasUnread ? styles.unread : ''}`}
+      className={`${styles.icon} ${hasUnread ? styles.unread : ""}`}
       onClick={handleClick}
       role="button"
       tabIndex={0}
-      aria-label={hasUnread ? 'Notifications (unread)' : 'Notifications'}
+      aria-label={hasUnread ? "Notifications (unread)" : "Notifications"}
       onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
+        if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           handleClick();
         }

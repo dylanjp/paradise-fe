@@ -2,7 +2,12 @@
 import PrimaryButton from "./PrimaryButton";
 import styles from "./DriveToolbar.module.css";
 
-export default function DriveToolbar({ onNewFolder, onUploadFile, onPlexUpload, isMediaCache = false }) {
+export default function DriveToolbar({
+  onNewFolder,
+  onUploadFile,
+  onPlexUpload,
+  isMediaCache = false,
+}) {
   if (isMediaCache) {
     return (
       <div className={styles.toolbar} role="toolbar" aria-label="Drive actions">
@@ -21,4 +26,3 @@ export default function DriveToolbar({ onNewFolder, onUploadFile, onPlexUpload, 
     </div>
   );
 }
-

@@ -27,7 +27,9 @@ export default function DrivePage() {
   const [driveData, setDriveData] = useState(null);
   const [activeDrive, setActiveDrive] = useState("myDrive");
   const [currentFolderId, setCurrentFolderId] = useState("root");
-  const [breadcrumbPath, setBreadcrumbPath] = useState([{ id: "root", name: "My Drive" }]);
+  const [breadcrumbPath, setBreadcrumbPath] = useState([
+    { id: "root", name: "My Drive" },
+  ]);
   const [contextMenu, setContextMenu] = useState(null);
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [plexModalOpen, setPlexModalOpen] = useState(false);
@@ -50,7 +52,10 @@ export default function DrivePage() {
       setLoading(true);
       setError(null);
       try {
-        const data = await driveService.listDriveContents(username, activeDrive);
+        const data = await driveService.listDriveContents(
+          username,
+          activeDrive,
+        );
         if (!cancelled) {
           setDriveData(data);
           setCurrentFolderId("root");
@@ -69,7 +74,9 @@ export default function DrivePage() {
       }
     }
     fetchDrive();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [activeDrive, authLoading, username]);
 
   // Re-fetch current drive contents (used on DRIVE_ITEM_NOT_FOUND)
@@ -77,7 +84,9 @@ export default function DrivePage() {
     try {
       const data = await driveService.listDriveContents(username, activeDrive);
       setDriveData(data);
-    } catch { /* refresh is best-effort */ }
+    } catch {
+      /* refresh is best-effort */
+    }
   }
 
   const closeContextMenu = useCallback(() => {
@@ -113,7 +122,12 @@ export default function DrivePage() {
   async function createFolder(name) {
     setError(null);
     try {
-      const newItem = await driveService.createFolder(username, activeDrive, name, currentFolderId);
+      const newItem = await driveService.createFolder(
+        username,
+        activeDrive,
+        name,
+        currentFolderId,
+      );
       setDriveData((prev) => {
         const updated = { ...prev };
         updated[newItem.id] = newItem;
@@ -144,9 +158,15 @@ export default function DrivePage() {
       setError(null);
       for (const file of files) {
         try {
-          const newItem = await driveService.uploadFile(username, activeDrive, file, currentFolderId, (pct) => {
-            setUploadProgress(pct);
-          });
+          const newItem = await driveService.uploadFile(
+            username,
+            activeDrive,
+            file,
+            currentFolderId,
+            (pct) => {
+              setUploadProgress(pct);
+            },
+          );
           setDriveData((prev) => {
             const updated = { ...prev };
             updated[newItem.id] = newItem;
@@ -157,7 +177,9 @@ export default function DrivePage() {
             return updated;
           });
         } catch (err) {
-          setError(`Failed to upload "${file.name}": ${driveService.getErrorMessage(err)}`);
+          setError(
+            `Failed to upload "${file.name}": ${driveService.getErrorMessage(err)}`,
+          );
           if (driveService.getErrorCode(err) === "DRIVE_ITEM_NOT_FOUND") {
             await refreshDriveContents();
           }
@@ -177,7 +199,12 @@ export default function DrivePage() {
     }));
     closeContextMenu();
     try {
-      const updated = await driveService.updateItem(username, activeDrive, folderId, { color });
+      const updated = await driveService.updateItem(
+        username,
+        activeDrive,
+        folderId,
+        { color },
+      );
       setDriveData((prev) => ({
         ...prev,
         [folderId]: updated,
@@ -217,7 +244,11 @@ export default function DrivePage() {
     if (!item || item.type !== "file") return;
     setError(null);
     try {
-      const blob = await driveService.downloadFile(username, activeDrive, itemId);
+      const blob = await driveService.downloadFile(
+        username,
+        activeDrive,
+        itemId,
+      );
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
@@ -263,7 +294,9 @@ export default function DrivePage() {
       if (parentId && updatedDrive[parentId]) {
         updatedDrive[parentId] = {
           ...updatedDrive[parentId],
-          children: updatedDrive[parentId].children.filter((cid) => cid !== itemId),
+          children: updatedDrive[parentId].children.filter(
+            (cid) => cid !== itemId,
+          ),
         };
       }
       setBreadcrumbPath(buildBreadcrumbPath(updatedDrive, targetParent));
@@ -313,7 +346,9 @@ export default function DrivePage() {
       <div className={styles.pageContent}>
         <h1 className={styles.title}>{DRIVE_LABELS[activeDrive]}</h1>
         <DriveToolbar
-          onNewFolder={() => { if (!isMediaCache) setNewFolderMode(true); }}
+          onNewFolder={() => {
+            if (!isMediaCache) setNewFolderMode(true);
+          }}
           onUploadFile={handleFileUpload}
           onPlexUpload={() => setPlexModalOpen(true)}
           isMediaCache={isMediaCache}
@@ -324,22 +359,31 @@ export default function DrivePage() {
           showAdminDrive={isAdmin()}
         />
         <BreadcrumbBar path={breadcrumbPath} onNavigate={navigateToFolder} />
-        {loading && <p className={styles.loadingText}>Loading drive contents…</p>}
+        {loading && (
+          <p className={styles.loadingText}>Loading drive contents…</p>
+        )}
         {error && <p className={styles.errorText}>{error}</p>}
-        {!loading && driveData && <FileGrid
-          items={getCurrentItems()}
-          onFolderClick={navigateToFolder}
-          onFileClick={handleFileDownload}
-          onContextMenu={handleContextMenu}
-          newFolderMode={newFolderMode}
-          onNewFolderSubmit={createFolder}
-          onNewFolderCancel={() => setNewFolderMode(false)}
-          isMediaCache={isMediaCache}
-        />}
+        {!loading && driveData && (
+          <FileGrid
+            items={getCurrentItems()}
+            onFolderClick={navigateToFolder}
+            onFileClick={handleFileDownload}
+            onContextMenu={handleContextMenu}
+            newFolderMode={newFolderMode}
+            onNewFolderSubmit={createFolder}
+            onNewFolderCancel={() => setNewFolderMode(false)}
+            isMediaCache={isMediaCache}
+          />
+        )}
         {uploading && (
           <div className={styles.uploadProgressContainer}>
-            <div className={styles.uploadProgressBar} style={{ width: `${uploadProgress}%` }} />
-            <span className={styles.uploadProgressText}>Uploading… {uploadProgress}%</span>
+            <div
+              className={styles.uploadProgressBar}
+              style={{ width: `${uploadProgress}%` }}
+            />
+            <span className={styles.uploadProgressText}>
+              Uploading… {uploadProgress}%
+            </span>
           </div>
         )}
         {contextMenu && !showColorPicker && (
@@ -360,9 +404,18 @@ export default function DrivePage() {
           />
         )}
         {contextMenu && showColorPicker && (
-          <div style={{ position: "absolute", left: contextMenu.x, top: contextMenu.y, zIndex: 999 }}>
+          <div
+            style={{
+              position: "absolute",
+              left: contextMenu.x,
+              top: contextMenu.y,
+              zIndex: 999,
+            }}
+          >
             <ColorPicker
-              onSelectColor={(color) => changeFolderColor(contextMenu.itemId, color)}
+              onSelectColor={(color) =>
+                changeFolderColor(contextMenu.itemId, color)
+              }
               onClose={closeContextMenu}
             />
           </div>

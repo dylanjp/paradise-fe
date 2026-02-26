@@ -355,8 +355,8 @@ export function useDailyTaskManager(
         // Update each task with changed order on the backend
         await Promise.all(
           changedTasks.map((task) =>
-            TaskService.updateDailyTask(userId, task.id, { order: task.order })
-          )
+            TaskService.updateDailyTask(userId, task.id, { order: task.order }),
+          ),
         );
       } catch (error) {
         // Rollback on failure
@@ -367,7 +367,7 @@ export function useDailyTaskManager(
         });
       }
     },
-    [userId, state.tasks]
+    [userId, state.tasks],
   );
 
   return {

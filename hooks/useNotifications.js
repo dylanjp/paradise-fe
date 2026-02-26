@@ -3,8 +3,10 @@
  * Custom hook for managing notification state and operations.
  */
 
-import { useState, useCallback, useEffect } from 'react';
-import notificationService, { NotificationError } from '@/services/notificationService';
+import { useState, useCallback, useEffect } from "react";
+import notificationService, {
+  NotificationError,
+} from "@/services/notificationService";
 
 /**
  * Sorts notifications: unread first, then by createdAt descending (newest first)
@@ -40,7 +42,7 @@ export function useNotifications(options = {}) {
       const message =
         err instanceof NotificationError
           ? err.message
-          : 'Failed to fetch notifications';
+          : "Failed to fetch notifications";
       setError(message);
     } finally {
       setIsLoading(false);
@@ -57,7 +59,7 @@ export function useNotifications(options = {}) {
 
       setNotifications((prev) => {
         const updated = prev.map((n) =>
-          n.id === id ? { ...n, isRead: true } : n
+          n.id === id ? { ...n, isRead: true } : n,
         );
         return sortByUnread ? sortNotifications(updated) : updated;
       });
@@ -69,11 +71,11 @@ export function useNotifications(options = {}) {
         const message =
           err instanceof NotificationError
             ? err.message
-            : 'Failed to mark notification as read';
+            : "Failed to mark notification as read";
         setError(message);
       }
     },
-    [notifications, sortByUnread]
+    [notifications, sortByUnread],
   );
 
   const markAsUnread = useCallback(
@@ -82,7 +84,7 @@ export function useNotifications(options = {}) {
 
       setNotifications((prev) => {
         const updated = prev.map((n) =>
-          n.id === id ? { ...n, isRead: false } : n
+          n.id === id ? { ...n, isRead: false } : n,
         );
         return sortByUnread ? sortNotifications(updated) : updated;
       });
@@ -94,11 +96,11 @@ export function useNotifications(options = {}) {
         const message =
           err instanceof NotificationError
             ? err.message
-            : 'Failed to mark notification as unread';
+            : "Failed to mark notification as unread";
         setError(message);
       }
     },
-    [notifications, sortByUnread]
+    [notifications, sortByUnread],
   );
 
   const createAction = useCallback(
@@ -106,7 +108,7 @@ export function useNotifications(options = {}) {
       const previousNotifications = [...notifications];
 
       setNotifications((prev) =>
-        prev.map((n) => (n.id === id ? { ...n, actionCreated: true } : n))
+        prev.map((n) => (n.id === id ? { ...n, actionCreated: true } : n)),
       );
 
       try {
@@ -116,11 +118,11 @@ export function useNotifications(options = {}) {
         const message =
           err instanceof NotificationError
             ? err.message
-            : 'Failed to create TODO from notification';
+            : "Failed to create TODO from notification";
         setError(message);
       }
     },
-    [notifications]
+    [notifications],
   );
 
   const deleteNotification = useCallback(
@@ -136,11 +138,11 @@ export function useNotifications(options = {}) {
         const message =
           err instanceof NotificationError
             ? err.message
-            : 'Failed to delete notification';
+            : "Failed to delete notification";
         setError(message);
       }
     },
-    [notifications]
+    [notifications],
   );
 
   return {

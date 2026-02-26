@@ -251,7 +251,10 @@ export const TaskService = {
    * @returns {Promise<string[]>} Array of ISO date strings (YYYY-MM-DD)
    */
   getDailyTaskCompletions: async (userId, taskId) => {
-    const endpoint = buildApiEndpoint(userId, `tasks/daily/${taskId}/completions`);
+    const endpoint = buildApiEndpoint(
+      userId,
+      `tasks/daily/${taskId}/completions`,
+    );
 
     try {
       const data = await apiClient.get(endpoint);

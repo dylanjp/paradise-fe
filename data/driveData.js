@@ -1,14 +1,22 @@
 // driveData.js
 
 export const myDriveData = {
-  "root": {
+  root: {
     id: "root",
     name: "My Drive",
     type: "folder",
     fileType: null,
     size: null,
     color: null,
-    children: ["folder-documents", "folder-music", "folder-videos", "folder-photos", "file-report", "file-notes", "file-readme"],
+    children: [
+      "folder-documents",
+      "folder-music",
+      "folder-videos",
+      "folder-photos",
+      "file-report",
+      "file-notes",
+      "file-readme",
+    ],
     parentId: null,
   },
   "folder-documents": {
@@ -164,14 +172,18 @@ export const myDriveData = {
 };
 
 export const sharedDriveData = {
-  "root": {
+  root: {
     id: "root",
     name: "Shared Drive",
     type: "folder",
     fileType: null,
     size: null,
     color: null,
-    children: ["shared-folder-team", "shared-folder-company", "shared-file-notes"],
+    children: [
+      "shared-folder-team",
+      "shared-folder-company",
+      "shared-file-notes",
+    ],
     parentId: null,
   },
   "shared-folder-team": {
@@ -247,7 +259,7 @@ export const sharedDriveData = {
 };
 
 export const adminDriveData = {
-  "root": {
+  root: {
     id: "root",
     name: "Admin Drive",
     type: "folder",
@@ -320,14 +332,19 @@ export const adminDriveData = {
 };
 
 export const mediaCacheDriveData = {
-  "root": {
+  root: {
     id: "root",
     name: "Media Cache",
     type: "folder",
     fileType: null,
     size: null,
     color: null,
-    children: ["mc-folder-movies", "mc-folder-music", "mc-folder-images", "mc-file-readme"],
+    children: [
+      "mc-folder-movies",
+      "mc-folder-music",
+      "mc-folder-images",
+      "mc-file-readme",
+    ],
     parentId: null,
   },
   "mc-folder-movies": {

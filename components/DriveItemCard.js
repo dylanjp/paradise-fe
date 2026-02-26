@@ -3,7 +3,10 @@ import styles from "./DriveItemCard.module.css";
 import { getIconForType } from "@/src/lib/driveUtils";
 
 export default function DriveItemCard({ item, onClick, onContextMenu }) {
-  const { icon: IconComponent, color } = getIconForType(item.type, item.fileType);
+  const { icon: IconComponent, color } = getIconForType(
+    item.type,
+    item.fileType,
+  );
   const iconColor = item.type === "folder" && item.color ? item.color : color;
 
   const handleClick = () => {

@@ -19,17 +19,12 @@ import notificationService from "@/services/notificationService";
 import styles from "./manage.module.css";
 
 function NotificationManagerContent() {
-  const {
-    notifications,
-    isLoading,
-    error,
-    refetch,
-    deleteNotification,
-  } = useNotifications({ includeExpired: true, sortByUnread: false });
+  const { notifications, isLoading, error, refetch, deleteNotification } =
+    useNotifications({ includeExpired: true, sortByUnread: false });
 
   const { showError, showSuccess } = useToast();
   const { isAdmin, username } = useAuth();
-  
+
   // Cache isAdmin result to avoid re-running effects
   const isAdminUser = isAdmin();
 
@@ -44,8 +39,9 @@ function NotificationManagerContent() {
   useEffect(() => {
     if (isAdminUser) {
       setUsersLoading(true);
-      notificationService.getUsers()
-        .then(data => setUsers(data || []))
+      notificationService
+        .getUsers()
+        .then((data) => setUsers(data || []))
         .catch(() => setUsers([]))
         .finally(() => setUsersLoading(false));
     }
@@ -69,7 +65,7 @@ function NotificationManagerContent() {
         setDeletingId(undefined);
       }
     },
-    [deleteNotification, showSuccess, showError]
+    [deleteNotification, showSuccess, showError],
   );
 
   const handleCreateNotification = useCallback(
@@ -80,14 +76,15 @@ function NotificationManagerContent() {
         showSuccess("Notification created successfully");
         await refetch();
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Failed to create notification";
+        const message =
+          err instanceof Error ? err.message : "Failed to create notification";
         showError(message);
         throw err;
       } finally {
         setIsSubmitting(false);
       }
     },
-    [refetch, showSuccess, showError]
+    [refetch, showSuccess, showError],
   );
 
   const handleProcessRecurring = useCallback(async () => {
@@ -99,11 +96,16 @@ function NotificationManagerContent() {
       if (result.errors > 0) {
         showError(`Processed with ${result.errors} error(s)`);
       } else {
-        showSuccess(`Processed ${result.notificationsProcessed} notifications, created ${result.todosCreated} TODOs`);
+        showSuccess(
+          `Processed ${result.notificationsProcessed} notifications, created ${result.todosCreated} TODOs`,
+        );
       }
       await refetch();
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to process recurring notifications";
+      const message =
+        err instanceof Error
+          ? err.message
+          : "Failed to process recurring notifications";
       showError(message);
     } finally {
       setIsProcessing(false);
@@ -114,7 +116,12 @@ function NotificationManagerContent() {
     <div className={styles.page}>
       <Navbar />
       <Background />
-      <motion.div className={styles.hero} initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
+      <motion.div
+        className={styles.hero}
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+      >
         <h1 className={styles.title}>NOTIFICATION MANAGER</h1>
       </motion.div>
 
@@ -123,14 +130,28 @@ function NotificationManagerContent() {
           <div className={styles.section}>
             <h2 className={styles.sectionTitle}>Admin Actions</h2>
             <div className={styles.adminActions}>
-              <button className={`${styles.processButton} ${isProcessing ? styles.loading : ''}`} onClick={handleProcessRecurring} disabled={isProcessing}>
-                {isProcessing ? 'Processing...' : 'Process Recurring Notifications'}
+              <button
+                className={`${styles.processButton} ${isProcessing ? styles.loading : ""}`}
+                onClick={handleProcessRecurring}
+                disabled={isProcessing}
+              >
+                {isProcessing
+                  ? "Processing..."
+                  : "Process Recurring Notifications"}
               </button>
               {processingResult && (
                 <div className={styles.processingResult}>
-                  <p>Processed: {processingResult.notificationsProcessed} | Created: {processingResult.todosCreated} | Errors: {processingResult.errors}</p>
+                  <p>
+                    Processed: {processingResult.notificationsProcessed} |
+                    Created: {processingResult.todosCreated} | Errors:{" "}
+                    {processingResult.errors}
+                  </p>
                   {processingResult.errorMessages.length > 0 && (
-                    <ul className={styles.errorList}>{processingResult.errorMessages.map((msg, i) => (<li key={i}>{msg}</li>))}</ul>
+                    <ul className={styles.errorList}>
+                      {processingResult.errorMessages.map((msg, i) => (
+                        <li key={i}>{msg}</li>
+                      ))}
+                    </ul>
                   )}
                 </div>
               )}

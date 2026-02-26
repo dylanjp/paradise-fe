@@ -109,7 +109,7 @@
 }
 
 .completed:hover {
-  box-shadow: 
+  box-shadow:
     0 0 8px #00ff00,
     0 0 12px rgba(0, 255, 0, 0.5);
   transform: scale(1.1);
@@ -145,7 +145,7 @@
 }
 
 .tooltip::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 100%;
   left: 50%;
@@ -172,7 +172,6 @@
   font-size: 0.7rem;
   color: rgba(255, 255, 255, 0.5);
 }
-
 
 /* Legend */
 .legend {
