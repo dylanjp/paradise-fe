@@ -7,6 +7,9 @@ export default function ConfirmModal({
   itemName,
   onConfirm,
   onCancel,
+  title = "Confirm Delete",
+  message,
+  confirmLabel = "Delete",
 }) {
   const handleKeyDown = useCallback(
     (e) => {
@@ -27,22 +30,26 @@ export default function ConfirmModal({
     if (e.target === e.currentTarget) onCancel();
   };
 
+  const defaultMessage = (
+    <>
+      Are you sure you want to delete{" "}
+      <span className={styles.itemName}>{itemName}</span>?
+    </>
+  );
+
   return (
     <div className={styles.modalOverlay} onClick={handleOverlayClick}>
       <div
         className={styles.modal}
         role="dialog"
         aria-modal="true"
-        aria-label="Confirm Delete"
+        aria-label={title}
       >
-        <h2 className={styles.modalTitle}>Confirm Delete</h2>
-        <p className={styles.message}>
-          Are you sure you want to delete{" "}
-          <span className={styles.itemName}>{itemName}</span>?
-        </p>
+        <h2 className={styles.modalTitle}>{title}</h2>
+        <p className={styles.message}>{message || defaultMessage}</p>
         <div className={styles.buttonRow}>
           <button className={styles.deleteButton} onClick={onConfirm}>
-            Delete
+            {confirmLabel}
           </button>
           <button className={styles.cancelButton} onClick={onCancel}>
             Cancel

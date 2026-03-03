@@ -69,13 +69,15 @@
   transition: all 0.3s ease;
 }
 
-.deleteButton {
+.deleteButton,
+.confirmButton {
   background: #f80206;
   color: black;
   border: 2px solid #f80206;
 }
 
-.deleteButton:hover {
+.deleteButton:hover,
+.confirmButton:hover {
   box-shadow: 0 0 12px #f80206;
   background: #ff4444;
 }

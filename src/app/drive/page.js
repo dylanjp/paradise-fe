@@ -35,6 +35,10 @@ export default function DrivePage() {
   const [plexModalOpen, setPlexModalOpen] = useState(false);
   const [newFolderMode, setNewFolderMode] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [dragSourceId, setDragSourceId] = useState(null);
+  const [moveConfirm, setMoveConfirm] = useState(null);
+  const [breadcrumbDragOverId, setBreadcrumbDragOverId] = useState(null);
+  const [moveMode, setMoveMode] = useState(null); // { itemId, itemName } when move mode is active
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -337,6 +341,155 @@ export default function DrivePage() {
     setDeleteConfirm(null);
   }
 
+  function handleDragStart(e, itemId) {
+    const item = driveData[itemId];
+    if (!item) return;
+    setDragSourceId(itemId);
+    e.dataTransfer.setData("text/plain", itemId);
+    e.dataTransfer.setData("application/x-item-name", item.name);
+    e.dataTransfer.effectAllowed = "move";
+  }
+
+  function handleDragEnd() {
+    setDragSourceId(null);
+  }
+
+  function handleDropOnFolder(destinationId) {
+    if (!dragSourceId || !driveData[dragSourceId]) return;
+    const dest = driveData[destinationId];
+    if (!dest || dest.type !== "folder" || destinationId === dragSourceId) return;
+    setMoveConfirm({
+      itemId: dragSourceId,
+      itemName: driveData[dragSourceId].name,
+      destinationId,
+      destinationName: dest.name,
+    });
+  }
+
+  function handleDropOnBreadcrumb(segmentId, segmentName) {
+    if (!dragSourceId || !driveData[dragSourceId]) return;
+    if (segmentId === currentFolderId) return;
+    setMoveConfirm({
+      itemId: dragSourceId,
+      itemName: driveData[dragSourceId].name,
+      destinationId: segmentId,
+      destinationName: segmentName,
+    });
+  }
+
+  function cancelMove() {
+    setMoveConfirm(null);
+    setMoveMode(null);
+    setDragSourceId(null);
+  }
+
+  function startMoveMode(itemId) {
+    const item = driveData[itemId];
+    if (!item) return;
+    setMoveMode({ itemId, itemName: item.name });
+    setDragSourceId(itemId);
+    closeContextMenu();
+  }
+
+  function handleMoveTarget(destinationId, destinationName) {
+    if (!moveMode) return;
+    if (destinationId === moveMode.itemId) return;
+    if (destinationId === currentFolderId) return;
+    const dest = driveData[destinationId];
+    if (!dest || dest.type !== "folder") return;
+    setMoveConfirm({
+      itemId: moveMode.itemId,
+      itemName: moveMode.itemName,
+      destinationId,
+      destinationName,
+    });
+    setMoveMode(null);
+    setDragSourceId(null);
+  }
+
+  async function confirmMove() {
+    if (!moveConfirm) return;
+    const { itemId, destinationId } = moveConfirm;
+    const item = driveData[itemId];
+    if (!item) {
+      setMoveConfirm(null);
+      await refreshDriveContents();
+      return;
+    }
+    const oldParentId = item.parentId;
+
+    try {
+      const newItem = await driveService.moveItem(
+        username,
+        activeDrive,
+        itemId,
+        destinationId,
+      );
+
+      setDriveData((prev) => {
+        const updated = { ...prev };
+
+        // Remove old item from old parent's children
+        if (oldParentId && updated[oldParentId]) {
+          updated[oldParentId] = {
+            ...updated[oldParentId],
+            children: updated[oldParentId].children.filter(
+              (cid) => cid !== itemId,
+            ),
+          };
+        }
+
+        // Remove old item entry (and descendants if folder)
+        const idsToRemove = collectDescendants(prev, itemId);
+        idsToRemove.forEach((id) => delete updated[id]);
+
+        // Add new item to destination folder's children
+        if (updated[destinationId]) {
+          updated[destinationId] = {
+            ...updated[destinationId],
+            children: [...updated[destinationId].children, newItem.id],
+          };
+        }
+
+        // Set new item entry
+        updated[newItem.id] = newItem;
+
+        return updated;
+      });
+
+      // If current folder was inside the moved folder and no longer exists
+      setDriveData((prev) => {
+        if (!prev[currentFolderId]) {
+          // Navigate to nearest valid ancestor
+          const ancestors = buildBreadcrumbPath(prev, oldParentId || "root");
+          const validAncestor =
+            ancestors.length > 0 ? ancestors[ancestors.length - 1].id : "root";
+          setCurrentFolderId(validAncestor);
+          setBreadcrumbPath(buildBreadcrumbPath(prev, validAncestor));
+        }
+        return prev;
+      });
+    } catch (err) {
+      const status = err?.status;
+      if (status === 404) {
+        setError("This item no longer exists.");
+        await refreshDriveContents();
+      } else if (status === 409) {
+        setError(
+          "An item with that name already exists in the destination folder, or the move would create a circular reference.",
+        );
+      } else if (status === 400) {
+        setError("The root folder cannot be moved.");
+      } else if (status === 403) {
+        setError("You do not have permission to move this item.");
+      } else {
+        setError(driveService.getErrorMessage(err));
+      }
+    }
+
+    setMoveConfirm(null);
+  }
+
   return (
     <div className={styles.page}>
       <div className={styles.pageBackground}>
@@ -358,11 +511,32 @@ export default function DrivePage() {
           onDriveChange={switchDrive}
           showAdminDrive={isAdmin()}
         />
-        <BreadcrumbBar path={breadcrumbPath} onNavigate={navigateToFolder} />
+        <BreadcrumbBar
+          path={breadcrumbPath}
+          onNavigate={navigateToFolder}
+          onSegmentDragOver={(e, segmentId) => setBreadcrumbDragOverId(segmentId)}
+          onSegmentDragLeave={() => setBreadcrumbDragOverId(null)}
+          onSegmentDrop={(e, segmentId, segmentName) => {
+            setBreadcrumbDragOverId(null);
+            handleDropOnBreadcrumb(segmentId, segmentName);
+          }}
+          dragOverSegmentId={breadcrumbDragOverId}
+          isMediaCache={isMediaCache}
+          moveMode={moveMode}
+          onMoveTarget={handleMoveTarget}
+        />
         {loading && (
           <p className={styles.loadingText}>Loading drive contents…</p>
         )}
         {error && <p className={styles.errorText}>{error}</p>}
+        {moveMode && (
+          <div className={styles.moveModeBar}>
+            <span>Select a folder to move <strong>{moveMode.itemName}</strong> into</span>
+            <button className={styles.moveModeCancelButton} onClick={cancelMove}>
+              Cancel
+            </button>
+          </div>
+        )}
         {!loading && driveData && (
           <FileGrid
             items={getCurrentItems()}
@@ -373,6 +547,12 @@ export default function DrivePage() {
             onNewFolderSubmit={createFolder}
             onNewFolderCancel={() => setNewFolderMode(false)}
             isMediaCache={isMediaCache}
+            dragSourceId={dragSourceId}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+            onDropOnFolder={handleDropOnFolder}
+            moveMode={moveMode}
+            onMoveTarget={handleMoveTarget}
           />
         )}
         {uploading && (
@@ -400,6 +580,7 @@ export default function DrivePage() {
               handleFileDownload(contextMenu.itemId);
               closeContextMenu();
             }}
+            onMove={() => startMoveMode(contextMenu.itemId)}
             onClose={closeContextMenu}
           />
         )}
@@ -430,6 +611,18 @@ export default function DrivePage() {
           itemName={deleteConfirm?.itemName || ""}
           onConfirm={confirmDelete}
           onCancel={cancelDelete}
+        />
+        <ConfirmModal
+          isOpen={moveConfirm !== null}
+          onConfirm={confirmMove}
+          onCancel={cancelMove}
+          title="Confirm Move"
+          message={
+            moveConfirm
+              ? `Are you sure you want to move ${moveConfirm.itemName} to ${moveConfirm.destinationName}?`
+              : ""
+          }
+          confirmLabel="Yes"
         />
       </div>
     </div>
