@@ -94,3 +94,12 @@
   color: #999;
   text-align: center;
 }
+
+.dragging {
+  opacity: 0.4;
+}
+
+.dragOver {
+  border-color: #ff6600;
+  box-shadow: 0 0 15px #ff6600;
+}

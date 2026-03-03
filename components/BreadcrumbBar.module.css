@@ -44,3 +44,9 @@
   padding: 2px 4px;
   font-weight: bold;
 }
+
+.dragOver {
+  background: rgba(255, 102, 0, 0.2);
+  border-radius: 4px;
+  color: #ff6600;
+}
