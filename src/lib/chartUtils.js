@@ -3,6 +3,8 @@
  * Helper functions for processing data for the ContributionChart component
  */
 
+import { MONTH_NAMES_SHORT } from "@/utils/dateConstants";
+
 /**
  * Generate all days for a given year
  * @param {number} year - The year to generate days for
@@ -75,20 +77,6 @@ export function extractYears(dates) {
  * @returns {Array<{month: string, weekIndex: number}>} Array of month label objects
  */
 export function generateMonthLabels(year) {
-  const monthNames = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
   const labels = [];
 
   for (let month = 0; month < 12; month++) {
@@ -104,7 +92,7 @@ export function generateMonthLabels(year) {
     const weekIndex = Math.floor((dayOfYear + startDayOffset) / 7);
 
     labels.push({
-      month: monthNames[month],
+      month: MONTH_NAMES_SHORT[month],
       weekIndex: weekIndex,
     });
   }

@@ -7,8 +7,8 @@
 
 import React, { useState, useCallback, useEffect } from "react";
 import styles from "./NotificationForm.module.css";
+import { MONTH_NAMES } from "@/utils/dateConstants";
 import {
-  MONTH_NAMES,
   getMaxDayForMonth,
   validateYearlyRecurrence,
   validateRandomDateRangeRecurrence,

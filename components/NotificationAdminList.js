@@ -5,58 +5,7 @@
 
 import React, { useState } from "react";
 import styles from "./NotificationAdminList.module.css";
-
-/**
- * Month names for abbreviated display
- */
-const MONTH_NAMES_SHORT = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
-function formatRecurrenceSummary(rule) {
-  if (!rule) return "-";
-  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-  // Support both 'frequency' and 'type' field names for compatibility
-  const ruleType = rule.frequency || rule.type;
-
-  switch (ruleType) {
-    case "DAILY":
-      return "Daily";
-    case "WEEKLY":
-      if (rule.dayOfWeek !== undefined) {
-        return `Weekly (${dayNames[rule.dayOfWeek]})`;
-      }
-      return "Weekly";
-    case "MONTHLY":
-      if (rule.dayOfMonth !== undefined) {
-        return `Monthly (${rule.dayOfMonth})`;
-      }
-      return "Monthly";
-    case "YEARLY": {
-      const monthName = MONTH_NAMES_SHORT[rule.month - 1];
-      return `Yearly (${monthName} ${rule.dayOfMonth})`;
-    }
-    case "RANDOM_DATE_RANGE": {
-      const startMonth = MONTH_NAMES_SHORT[rule.startMonth - 1];
-      const endMonth = MONTH_NAMES_SHORT[rule.endMonth - 1];
-      return `Random (${startMonth} ${rule.startDay}-${endMonth} ${rule.endDay})`;
-    }
-    default:
-      return "Recurring";
-  }
-}
+import { formatRecurrence } from "@/utils/dateConstants";
 
 function formatExpiresAt(expiresAt) {
   if (!expiresAt) return "Never";
@@ -150,7 +99,7 @@ const NotificationAdminList = ({ notifications, onDelete, isDeleting }) => {
                   </td>
                   <td className={styles.cell}>
                     <span className={styles.recurrenceText}>
-                      {formatRecurrenceSummary(notification.recurrenceRule)}
+                      {formatRecurrence(notification.recurrenceRule, { compact: true })}
                     </span>
                   </td>
                   <td className={styles.cell}>
