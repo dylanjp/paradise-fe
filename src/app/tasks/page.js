@@ -19,9 +19,7 @@ export default function TasksPage() {
 
   // Only use the userId once auth has finished loading to prevent race conditions on refresh
   // This ensures we don't fetch tasks with a fallback userId before the real one is available
-  const USER_ID = isAuthLoading
-    ? null
-    : username || process.env.NEXT_PUBLIC_PARADISE_USER_ID || "default-user";
+  const USER_ID = isAuthLoading ? null : username || null;
   const {
     currentTasks,
     activeCategory,
