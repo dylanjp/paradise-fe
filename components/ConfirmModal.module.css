@@ -94,22 +94,44 @@
   border-color: #ff6600;
 }
 
+/* ═══ TRON Modal Materialize ═══ */
 @keyframes modalFadeIn {
-  from {
+  0% {
     opacity: 0;
+    backdrop-filter: blur(0px);
   }
-  to {
+  100% {
     opacity: 1;
+    backdrop-filter: blur(2px);
   }
 }
 
 @keyframes modalPopIn {
-  from {
-    transform: scale(0.9);
+  0% {
+    transform: scale(0.7) translateY(20px);
     opacity: 0;
+    border-color: #00d4ff;
+    box-shadow: 0 0 30px #00d4ff, inset 0 0 15px rgba(0, 212, 255, 0.1);
+    filter: brightness(2);
   }
-  to {
-    transform: scale(1);
+  30% {
+    transform: scale(0.95) translateY(5px);
+    opacity: 0.7;
+    border-color: #00d4ff;
+    box-shadow: 0 0 25px #00d4ff;
+    filter: brightness(1.5);
+  }
+  60% {
+    transform: scale(1.02) translateY(0);
+    border-color: #f80206;
+    box-shadow: 0 0 20px #f80206;
+    filter: brightness(1.2);
+  }
+  100% {
+    transform: scale(1) translateY(0);
     opacity: 1;
+    border-color: #f80206;
+    box-shadow: 0 0 20px #f80206;
+    filter: brightness(1);
   }
 }

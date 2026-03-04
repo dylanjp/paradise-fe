@@ -3,6 +3,54 @@
   src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
 }
 
+/* ═══ TRON Grid Reveal ═══ */
+@keyframes gridReveal {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes gridLineFlash {
+  0% {
+    opacity: 0.4;
+    background-size: 50px 50px;
+  }
+  50% {
+    opacity: 0.15;
+    background-size: 50px 50px;
+  }
+  100% {
+    opacity: 0;
+    background-size: 50px 50px;
+  }
+}
+
+@keyframes emptyStateFlicker {
+  0% {
+    opacity: 0;
+    color: #00d4ff;
+    text-shadow: 0 0 10px #00d4ff;
+  }
+  40% {
+    opacity: 0.6;
+    color: #00d4ff;
+    text-shadow: 0 0 15px #00d4ff;
+  }
+  70% {
+    opacity: 0.4;
+    color: #888;
+    text-shadow: none;
+  }
+  100% {
+    opacity: 1;
+    color: #666;
+    text-shadow: none;
+  }
+}
+
 .grid {
   font-family: "TechMono";
   display: grid;
@@ -11,6 +59,24 @@
   width: 100%;
   max-width: 1500px;
   padding: 20px;
+  position: relative;
+  animation: gridReveal 0.5s ease-out 0.5s backwards;
+}
+
+/* Subtle TRON grid lines that flash on load */
+.grid::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 212, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 255, 0.08) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  animation: gridLineFlash 2s ease-out 0.5s forwards;
+  opacity: 0;
+  z-index: 0;
+  border-radius: 8px;
 }
 
 .emptyState {
@@ -20,6 +86,28 @@
   text-align: center;
   padding: 60px 20px;
   width: 100%;
+  animation: emptyStateFlicker 1.2s ease-out;
+}
+
+@keyframes newFolderMaterialize {
+  0% {
+    opacity: 0;
+    border-color: #00d4ff;
+    box-shadow: 0 0 15px #00d4ff;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 0.8;
+    border-color: #00d4ff;
+    box-shadow: 0 0 10px #00d4ff;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    border-color: #f80206;
+    box-shadow: none;
+    transform: scale(1);
+  }
 }
 
 .newFolderCard {
@@ -32,6 +120,7 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
+  animation: newFolderMaterialize 0.6s ease-out;
 }
 
 .newFolderIcon {

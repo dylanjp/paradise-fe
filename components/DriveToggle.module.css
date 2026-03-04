@@ -3,6 +3,55 @@
   src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
 }
 
+/* ═══ TRON Power-On Sequence ═══ */
+@keyframes togglePowerOn {
+  0% {
+    opacity: 0;
+    border-color: transparent;
+    color: transparent;
+    transform: scaleX(0.3);
+    filter: brightness(0);
+  }
+  30% {
+    opacity: 0.6;
+    border-color: #00d4ff;
+    color: #00d4ff;
+    transform: scaleX(0.8);
+    filter: brightness(2);
+    box-shadow: 0 0 12px #00d4ff, inset 0 0 8px rgba(0, 212, 255, 0.2);
+  }
+  50% {
+    opacity: 0.8;
+    border-color: #00d4ff;
+    color: #00d4ff;
+    transform: scaleX(1);
+    filter: brightness(1.5);
+  }
+  75% {
+    border-color: #f80206;
+    color: #f80206;
+    filter: brightness(1.2);
+    box-shadow: 0 0 8px rgba(248, 2, 6, 0.3);
+  }
+  100% {
+    opacity: 1;
+    border-color: var(--tron-red-primary, #f80206);
+    color: var(--tron-red-primary, #f80206);
+    transform: scaleX(1);
+    filter: brightness(1);
+    box-shadow: none;
+  }
+}
+
+@keyframes toggleBorderTrace {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 .toggleContainer {
   display: flex;
   gap: 0;
@@ -30,6 +79,21 @@
     box-shadow 0.25s ease,
     border-color 0.25s ease;
   position: relative;
+  animation: togglePowerOn 0.8s ease-out backwards;
+}
+
+/* Staggered boot-up delays */
+.toggleButton:nth-child(1) {
+  animation-delay: 0.4s;
+}
+.toggleButton:nth-child(2) {
+  animation-delay: 0.55s;
+}
+.toggleButton:nth-child(3) {
+  animation-delay: 0.7s;
+}
+.toggleButton:nth-child(4) {
+  animation-delay: 0.85s;
 }
 
 .toggleButton:first-child {
