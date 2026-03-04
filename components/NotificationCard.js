@@ -5,6 +5,11 @@
 
 import React from "react";
 import styles from "./NotificationCard.module.css";
+import {
+  MONTH_NAMES,
+  getOrdinalSuffix,
+  formatRecurrence,
+} from "@/utils/dateConstants";
 
 /**
  * Formats an ISO timestamp to a human-readable format
@@ -32,71 +37,6 @@ function formatTimestamp(isoString) {
     day: "numeric",
     year: date.getFullYear() !== now.getFullYear() ? "numeric" : undefined,
   });
-}
-
-/**
- * Month names for display
- */
-const MONTH_NAMES = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
-/**
- * Formats a recurrence rule to a human-readable summary
- */
-function formatRecurrence(rule) {
-  if (!rule) return "";
-
-  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-  switch (rule.type) {
-    case "DAILY":
-      return "Daily";
-    case "WEEKLY":
-      if (rule.dayOfWeek !== undefined) {
-        return `Weekly on ${dayNames[rule.dayOfWeek]}`;
-      }
-      return "Weekly";
-    case "MONTHLY":
-      if (rule.dayOfMonth !== undefined) {
-        const suffix = getOrdinalSuffix(rule.dayOfMonth);
-        return `Monthly on ${rule.dayOfMonth}${suffix}`;
-      }
-      return "Monthly";
-    case "YEARLY": {
-      const monthName = MONTH_NAMES[rule.month - 1];
-      const suffix = getOrdinalSuffix(rule.dayOfMonth);
-      return `Yearly on ${monthName} ${rule.dayOfMonth}${suffix}`;
-    }
-    case "RANDOM_DATE_RANGE": {
-      const startMonth = MONTH_NAMES[rule.startMonth - 1].substring(0, 3);
-      const endMonth = MONTH_NAMES[rule.endMonth - 1].substring(0, 3);
-      let display = `Random: ${startMonth} ${rule.startDay} - ${endMonth} ${rule.endDay}`;
-      return display;
-    }
-    default:
-      return "Recurring";
-  }
-}
-
-/**
- * Gets ordinal suffix for a number (1st, 2nd, 3rd, etc.)
- */
-function getOrdinalSuffix(n) {
-  const s = ["th", "st", "nd", "rd"];
-  const v = n % 100;
-  return s[(v - 20) % 10] || s[v] || s[0];
 }
 
 /**

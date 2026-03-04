@@ -58,13 +58,6 @@ export function getFileExtension(filename) {
 }
 
 /**
- * Generates a simple unique ID for new items.
- */
-export function generateId() {
-  return Date.now().toString(36) + Math.random().toString(36).substr(2);
-}
-
-/**
  * Walks up the parentId chain from the given folderId to root,
  * returning an array of { id, name } objects in root-first order.
  */
