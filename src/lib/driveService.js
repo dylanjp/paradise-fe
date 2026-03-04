@@ -83,6 +83,10 @@ export async function downloadFile(userId, driveKey, itemId) {
   if (token) headers["Authorization"] = `Bearer ${token}`;
   const response = await fetch(url, { method: "GET", headers });
   if (!response.ok) {
+    if (response.status === 401) {
+      apiClient.handleUnauthorized();
+      throw new apiClient.AuthenticationError("Session expired");
+    }
     let errorData = null;
     try {
       errorData = await response.json();
@@ -125,6 +129,11 @@ function xhrUpload(url, formData, onProgress, errorLabel) {
           resolve(null);
         }
       } else {
+        if (xhr.status === 401) {
+          apiClient.handleUnauthorized();
+          reject(new apiClient.AuthenticationError("Session expired"));
+          return;
+        }
         let errorData = null;
         try {
           errorData = JSON.parse(xhr.responseText);
