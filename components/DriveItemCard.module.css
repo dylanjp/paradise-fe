@@ -3,14 +3,72 @@
   src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
 }
 
-@keyframes fadeInUp {
-  from {
+/* ═══ TRON Card Materialization ═══ */
+
+/* Phase 1: Wireframe outline appears */
+@keyframes tronMaterialize {
+  0% {
     opacity: 0;
-    transform: translateY(20px);
+    border-color: transparent;
+    background: transparent;
+    transform: scale(0.7) translateY(15px);
+    filter: blur(4px) brightness(0);
+    box-shadow: none;
   }
-  to {
+  15% {
+    opacity: 0.4;
+    border-color: #00d4ff;
+    background: transparent;
+    transform: scale(0.85) translateY(10px);
+    filter: blur(2px) brightness(2);
+    box-shadow:
+      0 0 10px #00d4ff,
+      inset 0 0 15px rgba(0, 212, 255, 0.1);
+  }
+  35% {
+    opacity: 0.7;
+    border-color: #00d4ff;
+    background: rgba(0, 212, 255, 0.05);
+    transform: scale(0.95) translateY(5px);
+    filter: blur(0px) brightness(1.5);
+    box-shadow:
+      0 0 15px #00d4ff,
+      inset 0 0 20px rgba(0, 212, 255, 0.08);
+  }
+  55% {
+    opacity: 0.9;
+    border-color: #00a0cc;
+    background: rgba(0, 0, 0, 0.6);
+    transform: scale(1.02) translateY(0);
+    filter: brightness(1.3);
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+  }
+  75% {
+    border-color: #f80206;
+    background: rgba(0, 0, 0, 0.75);
+    transform: scale(1) translateY(0);
+    filter: brightness(1.1);
+    box-shadow: 0 0 8px rgba(248, 2, 6, 0.3);
+  }
+  100% {
     opacity: 1;
-    transform: translateY(0);
+    border-color: #f80206;
+    background: rgba(0, 0, 0, 0.8);
+    transform: scale(1) translateY(0);
+    filter: brightness(1) blur(0px);
+    box-shadow: none;
+  }
+}
+
+/* Scan line flash across card on materialize */
+@keyframes cardScanFlash {
+  0% {
+    top: -100%;
+    opacity: 1;
+  }
+  100% {
+    top: 200%;
+    opacity: 0;
   }
 }
 
@@ -29,34 +87,46 @@
     transform 0.3s,
     box-shadow 0.3s;
   opacity: 0;
-  transform: translateY(20px);
-  animation: fadeInUp 0.8s ease-out forwards;
+  animation: tronMaterialize 0.9s ease-out forwards;
+  position: relative;
+  overflow: hidden;
 }
 
-.card:nth-child(1) {
-  animation-delay: 0.05s;
+/* Scan line flash inside each card */
+.card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 212, 255, 0.6),
+    rgba(0, 255, 255, 0.8),
+    rgba(0, 212, 255, 0.6),
+    transparent
+  );
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+  pointer-events: none;
+  animation: cardScanFlash 0.6s ease-out forwards;
+  animation-delay: inherit;
+  z-index: 2;
 }
-.card:nth-child(2) {
-  animation-delay: 0.1s;
-}
-.card:nth-child(3) {
-  animation-delay: 0.15s;
-}
-.card:nth-child(4) {
-  animation-delay: 0.2s;
-}
-.card:nth-child(5) {
-  animation-delay: 0.25s;
-}
-.card:nth-child(6) {
-  animation-delay: 0.3s;
-}
-.card:nth-child(7) {
-  animation-delay: 0.35s;
-}
-.card:nth-child(8) {
-  animation-delay: 0.4s;
-}
+
+/* Staggered materialization delays */
+.card:nth-child(1) { animation-delay: 0.6s; }
+.card:nth-child(2) { animation-delay: 0.68s; }
+.card:nth-child(3) { animation-delay: 0.76s; }
+.card:nth-child(4) { animation-delay: 0.84s; }
+.card:nth-child(5) { animation-delay: 0.92s; }
+.card:nth-child(6) { animation-delay: 1.0s; }
+.card:nth-child(7) { animation-delay: 1.08s; }
+.card:nth-child(8) { animation-delay: 1.16s; }
+.card:nth-child(9) { animation-delay: 1.24s; }
+.card:nth-child(10) { animation-delay: 1.32s; }
+.card:nth-child(11) { animation-delay: 1.4s; }
+.card:nth-child(12) { animation-delay: 1.48s; }
 
 .card:hover,
 .card:focus {
@@ -93,4 +163,13 @@
   font-size: 0.75rem;
   color: #999;
   text-align: center;
+}
+
+.dragging {
+  opacity: 0.4;
+}
+
+.dragOver {
+  border-color: #ff6600;
+  box-shadow: 0 0 15px #ff6600;
 }
