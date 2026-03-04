@@ -18,9 +18,7 @@ export default function DashboardPage() {
   const { username, isLoading: isAuthLoading } = useAuth();
 
   // Only use the userId once auth has finished loading
-  const userId = isAuthLoading
-    ? null
-    : username || process.env.NEXT_PUBLIC_PARADISE_USER_ID || "default-user";
+  const userId = isAuthLoading ? null : username || null;
 
   // Daily tasks from existing hook
   const {

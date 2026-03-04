@@ -83,6 +83,10 @@ export async function downloadFile(userId, driveKey, itemId) {
   if (token) headers["Authorization"] = `Bearer ${token}`;
   const response = await fetch(url, { method: "GET", headers });
   if (!response.ok) {
+    if (response.status === 401) {
+      apiClient.handleUnauthorized();
+      throw new apiClient.AuthenticationError("Session expired");
+    }
     let errorData = null;
     try {
       errorData = await response.json();
@@ -98,12 +102,10 @@ export async function downloadFile(userId, driveKey, itemId) {
   return response.blob();
 }
 
-/** POST /users/{userId}/drives/{driveKey}/files — multipart/form-data */
-export function uploadFile(userId, driveKey, file, parentId, onProgress) {
-  const url = `${API_BASE_URL}/users/${userId}/drives/${driveKey}/files`;
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("parentId", parentId);
+/**
+ * Internal helper: performs a multipart/form-data POST via XMLHttpRequest with progress tracking.
+ */
+function xhrUpload(url, formData, onProgress, errorLabel) {
   const token = getToken();
 
   return new Promise((resolve, reject) => {
@@ -127,6 +129,11 @@ export function uploadFile(userId, driveKey, file, parentId, onProgress) {
           resolve(null);
         }
       } else {
+        if (xhr.status === 401) {
+          apiClient.handleUnauthorized();
+          reject(new apiClient.AuthenticationError("Session expired"));
+          return;
+        }
         let errorData = null;
         try {
           errorData = JSON.parse(xhr.responseText);
@@ -135,7 +142,7 @@ export function uploadFile(userId, driveKey, file, parentId, onProgress) {
         }
         reject(
           new apiClient.ApiError(
-            errorData?.message || "Upload failed",
+            errorData?.message || `${errorLabel} failed`,
             xhr.status,
             errorData,
           ),
@@ -144,9 +151,18 @@ export function uploadFile(userId, driveKey, file, parentId, onProgress) {
     };
 
     xhr.onerror = () =>
-      reject(new apiClient.ApiError("Upload failed", 0, null));
+      reject(new apiClient.ApiError(`${errorLabel} failed`, 0, null));
     xhr.send(formData);
   });
+}
+
+/** POST /users/{userId}/drives/{driveKey}/files — multipart/form-data */
+export function uploadFile(userId, driveKey, file, parentId, onProgress) {
+  const url = `${API_BASE_URL}/users/${userId}/drives/${driveKey}/files`;
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("parentId", parentId);
+  return xhrUpload(url, formData, onProgress, "Upload");
 }
 
 /** POST /users/{userId}/plex/upload — multipart/form-data */
@@ -154,47 +170,5 @@ export function plexUpload(userId, file, onProgress) {
   const url = `${API_BASE_URL}/users/${userId}/plex/upload`;
   const formData = new FormData();
   formData.append("file", file);
-  const token = getToken();
-
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", url);
-    if (token) xhr.setRequestHeader("Authorization", `Bearer ${token}`);
-
-    if (onProgress) {
-      xhr.upload.addEventListener("progress", (e) => {
-        if (e.lengthComputable) {
-          onProgress(Math.round((e.loaded / e.total) * 100));
-        }
-      });
-    }
-
-    xhr.onload = () => {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        try {
-          resolve(JSON.parse(xhr.responseText));
-        } catch {
-          resolve(null);
-        }
-      } else {
-        let errorData = null;
-        try {
-          errorData = JSON.parse(xhr.responseText);
-        } catch {
-          /* not JSON */
-        }
-        reject(
-          new apiClient.ApiError(
-            errorData?.message || "Plex upload failed",
-            xhr.status,
-            errorData,
-          ),
-        );
-      }
-    };
-
-    xhr.onerror = () =>
-      reject(new apiClient.ApiError("Plex upload failed", 0, null));
-    xhr.send(formData);
-  });
+  return xhrUpload(url, formData, onProgress, "Plex upload");
 }

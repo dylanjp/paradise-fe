@@ -2,20 +2,15 @@ import React, { useState, useCallback, useMemo } from "react";
 import {
   DndContext,
   closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
   DragOverlay,
   useDroppable,
 } from "@dnd-kit/core";
 import {
   SortableContext,
-  sortableKeyboardCoordinates,
   verticalListSortingStrategy,
   arrayMove,
 } from "@dnd-kit/sortable";
+import { useDndSensors } from "@/hooks/useDndSensors";
 import TaskRow from "./TaskRow";
 import AddTaskButtons from "./AddTaskButtons";
 import styles from "./TaskContainer.module.css";
@@ -53,16 +48,7 @@ const TaskContainer = ({
 }) => {
   const [activeId, setActiveId] = useState(null);
 
-  // Configuration for various input types
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(TouchSensor, {
-      activationConstraint: { delay: 250, tolerance: 5 },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    }),
-  );
+  const sensors = useDndSensors();
 
   // Dnd-kit requires a flat list of IDs for the SortableContext
   const sortableIds = useMemo(() => {

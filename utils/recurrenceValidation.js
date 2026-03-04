@@ -3,6 +3,8 @@
  * Provides validation and formatting functions for YEARLY and RANDOM_DATE_RANGE recurrence types.
  */
 
+import { MONTH_NAMES, getOrdinalSuffix } from "./dateConstants";
+
 /**
  * Days per month lookup (February uses 29 for leap year support)
  */
@@ -22,51 +24,12 @@ const DAYS_IN_MONTH = {
 };
 
 /**
- * Month names for display
- */
-const MONTH_NAMES = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
-/**
  * Gets the maximum day for a given month
  * @param {number} month - Month value (1-12)
  * @returns {number} Maximum day for the month
  */
 function getMaxDayForMonth(month) {
   return DAYS_IN_MONTH[month] || 31;
-}
-
-/**
- * Gets ordinal suffix for a day number
- * @param {number} day - Day of month (1-31)
- * @returns {string} Ordinal suffix (st, nd, rd, th)
- */
-function getOrdinalSuffix(day) {
-  if (day >= 11 && day <= 13) {
-    return "th";
-  }
-  switch (day % 10) {
-    case 1:
-      return "st";
-    case 2:
-      return "nd";
-    case 3:
-      return "rd";
-    default:
-      return "th";
-  }
 }
 
 /**
@@ -292,9 +255,7 @@ function formatRecurrencePreview(rule) {
 
 export {
   DAYS_IN_MONTH,
-  MONTH_NAMES,
   getMaxDayForMonth,
-  getOrdinalSuffix,
   validateMonth,
   validateDayForMonth,
   validateYearlyRecurrence,
