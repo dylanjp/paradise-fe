@@ -16,8 +16,11 @@ const ERROR_MESSAGES = {
   DRIVE_ITEM_NOT_FOUND: "This item no longer exists.",
   DRIVE_UNAVAILABLE:
     "The drive service is temporarily unavailable. Please try again later.",
-  DRIVE_ITEM_CONFLICT: "A folder with that name already exists.",
+  DRIVE_ITEM_CONFLICT:
+    "An item with that name already exists in the destination folder, or the move would create a circular reference.",
   DRIVE_ROOT_DELETION: "The root folder cannot be deleted.",
+  DRIVE_ROOT_MOVE: "The root folder cannot be moved.",
+  DRIVE_ACCESS_DENIED: "You do not have permission to move this item.",
   DOWNLOAD_FOLDER: "Folders cannot be downloaded.",
 };
 
@@ -56,6 +59,14 @@ export async function updateItem(userId, driveKey, itemId, updates) {
   return apiClient.put(
     `/users/${userId}/drives/${driveKey}/items/${itemId}`,
     updates,
+  );
+}
+
+/** PUT /users/{userId}/drives/{driveKey}/items/{itemId}/move */
+export async function moveItem(userId, driveKey, itemId, parentId) {
+  return apiClient.put(
+    `/users/${userId}/drives/${driveKey}/items/${itemId}/move`,
+    { parentId },
   );
 }
 

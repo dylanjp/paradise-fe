@@ -9,6 +9,7 @@ export default function DriveContextMenu({
   onChangeColor,
   onDelete,
   onDownload,
+  onMove,
   onClose,
 }) {
   const menuRef = useRef(null);
@@ -67,6 +68,21 @@ export default function DriveContextMenu({
             role="menuitem"
           >
             Download
+          </button>
+          <div className={styles.separator} />
+        </>
+      )}
+      {onMove && (
+        <>
+          <button
+            className={styles.menuItem}
+            onClick={(e) => {
+              e.stopPropagation();
+              onMove();
+            }}
+            role="menuitem"
+          >
+            Move
           </button>
           <div className={styles.separator} />
         </>

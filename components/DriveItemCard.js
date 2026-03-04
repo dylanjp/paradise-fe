@@ -2,7 +2,19 @@
 import styles from "./DriveItemCard.module.css";
 import { getIconForType } from "@/src/lib/driveUtils";
 
-export default function DriveItemCard({ item, onClick, onContextMenu }) {
+export default function DriveItemCard({
+  item,
+  onClick,
+  onContextMenu,
+  draggable = false,
+  onDragStart,
+  onDragEnd,
+  onDragOver,
+  onDragLeave,
+  onDrop,
+  isDragOver = false,
+  isDragging = false,
+}) {
   const { icon: IconComponent, color } = getIconForType(
     item.type,
     item.fileType,
@@ -20,11 +32,21 @@ export default function DriveItemCard({ item, onClick, onContextMenu }) {
     }
   };
 
+  let className = styles.card;
+  if (isDragging) className += ` ${styles.dragging}`;
+  if (isDragOver) className += ` ${styles.dragOver}`;
+
   return (
     <div
-      className={styles.card}
+      className={className}
       onClick={handleClick}
       onContextMenu={handleContextMenu}
+      draggable={draggable}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+      onDragOver={onDragOver}
+      onDragLeave={onDragLeave}
+      onDrop={onDrop}
       role="button"
       tabIndex={0}
       aria-label={`${item.name}${item.size ? `, ${item.size}` : ""}`}

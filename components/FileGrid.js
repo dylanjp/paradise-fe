@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import styles from "./FileGrid.module.css";
 import DriveItemCard from "./DriveItemCard";
 import { FaFolder } from "react-icons/fa";
@@ -13,8 +13,15 @@ export default function FileGrid({
   onNewFolderSubmit,
   onNewFolderCancel,
   isMediaCache = false,
+  dragSourceId = null,
+  onDragStart,
+  onDragEnd,
+  onDropOnFolder,
+  moveMode = null,
+  onMoveTarget,
 }) {
   const inputRef = useRef(null);
+  const [dragOverItemId, setDragOverItemId] = useState(null);
 
   useEffect(() => {
     if (newFolderMode && inputRef.current) {
@@ -66,20 +73,47 @@ export default function FileGrid({
           />
         </div>
       )}
-      {items.map((item) => (
-        <DriveItemCard
-          key={item.id}
-          item={item}
-          onClick={
-            item.type === "folder"
-              ? () => onFolderClick(item.id)
-              : onFileClick
-                ? () => onFileClick(item.id)
-                : undefined
-          }
-          onContextMenu={(e) => onContextMenu(e, item.id)}
-        />
-      ))}
+      {items.map((item) => {
+        const isMoveSource = moveMode && moveMode.itemId === item.id;
+        const isMoveTarget = moveMode && !isMoveSource && item.type === "folder";
+
+        return (
+          <DriveItemCard
+            key={item.id}
+            item={item}
+            onClick={
+              isMoveTarget
+                ? () => onMoveTarget(item.id, item.name)
+                : item.type === "folder"
+                  ? () => onFolderClick(item.id)
+                  : onFileClick
+                    ? () => onFileClick(item.id)
+                    : undefined
+            }
+            onContextMenu={(e) => onContextMenu(e, item.id)}
+            draggable={!isMediaCache && !moveMode}
+            isDragging={item.id === dragSourceId}
+            isDragOver={item.id === dragOverItemId || isMoveTarget}
+            onDragStart={(e) => onDragStart && onDragStart(e, item.id)}
+            onDragEnd={() => {
+              setDragOverItemId(null);
+              if (onDragEnd) onDragEnd();
+            }}
+            onDragOver={(e) => {
+              if (item.type === "folder" && item.id !== dragSourceId) {
+                e.preventDefault();
+                setDragOverItemId(item.id);
+              }
+            }}
+            onDragLeave={() => setDragOverItemId(null)}
+            onDrop={(e) => {
+              e.preventDefault();
+              setDragOverItemId(null);
+              if (onDropOnFolder) onDropOnFolder(item.id);
+            }}
+          />
+        );
+      })}
     </div>
   );
 }
