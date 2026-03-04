@@ -33,29 +33,171 @@
 
 /* Content section that will be animated */
 .pageContent {
-  animation: pageLoad 0.8s ease-out;
+  animation: pageLoad 1.2s ease-out;
   z-index: 1;
   margin-top: 20px;
   width: 100%;
   max-width: 1500px;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Title styling */
+/* Scan line sweeps down the content on initial load */
+.pageContent::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #00d4ff,
+    #00ffff,
+    #00d4ff,
+    transparent
+  );
+  box-shadow: 0 0 15px #00d4ff, 0 0 30px rgba(0, 212, 255, 0.4);
+  z-index: 100;
+  pointer-events: none;
+  animation: scanLineDown 1.5s ease-out 0.3s forwards;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+/* Title styling - TRON glitch materialization */
 .title {
   font-family: "TechMono";
   font-size: 3rem;
   text-shadow: 0 0 10px var(--glow-red-primary, #f80206);
+  animation: titleGlitch 1.8s ease-out;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Animation for page load */
+/* Cyan scan line accent across the title */
+.title::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 212, 255, 0.15),
+    rgba(0, 255, 255, 0.3),
+    rgba(0, 212, 255, 0.15),
+    transparent
+  );
+  animation: titleScanLine 1s ease-out 0.8s forwards;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════
+   TRON STARTUP ANIMATIONS
+   ═══════════════════════════════════════════════ */
+
+/* Page content boot sequence */
 @keyframes pageLoad {
-  from {
+  0% {
     opacity: 0;
     transform: translateY(-20px);
+    filter: brightness(0);
   }
-  to {
+  30% {
+    opacity: 0.6;
+    filter: brightness(2) hue-rotate(-40deg);
+  }
+  60% {
+    opacity: 0.9;
+    filter: brightness(1.3) hue-rotate(-20deg);
+  }
+  100% {
     opacity: 1;
     transform: translateY(0);
+    filter: brightness(1) hue-rotate(0deg);
+  }
+}
+
+/* Horizontal scan line that sweeps down the page on load */
+@keyframes scanLineDown {
+  0% {
+    top: -2px;
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+/* Title glitch materialization */
+@keyframes titleGlitch {
+  0% {
+    opacity: 0;
+    letter-spacing: 30px;
+    filter: blur(10px);
+    text-shadow: 0 0 40px #00d4ff;
+  }
+  20% {
+    opacity: 0.5;
+    letter-spacing: 15px;
+    filter: blur(4px);
+    text-shadow:
+      -2px 0 #ff0000,
+      2px 0 #00d4ff,
+      0 0 30px #00d4ff;
+  }
+  35% {
+    opacity: 0.8;
+    letter-spacing: 5px;
+    filter: blur(1px);
+    text-shadow:
+      1px 0 #ff0000,
+      -1px 0 #00d4ff,
+      0 0 20px #00d4ff;
+  }
+  50% {
+    opacity: 1;
+    letter-spacing: 2px;
+    filter: blur(0px);
+    text-shadow: 0 0 20px #00d4ff;
+  }
+  60% {
+    text-shadow: 0 0 15px #00d4ff, 0 0 30px rgba(0, 212, 255, 0.5);
+  }
+  80% {
+    text-shadow: 0 0 12px #f80206, 0 0 25px rgba(248, 2, 6, 0.4);
+  }
+  100% {
+    letter-spacing: normal;
+    text-shadow: 0 0 10px var(--glow-red-primary, #f80206);
+  }
+}
+
+/* Title scan line accent */
+@keyframes titleScanLine {
+  0% {
+    left: -100%;
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+/* Loading text glow pulse */
+@keyframes loadingPulse {
+  0%, 100% {
+    text-shadow: 0 0 5px #f80206;
+    opacity: 0.5;
+  }
+  50% {
+    text-shadow: 0 0 20px #00d4ff, 0 0 40px rgba(0, 212, 255, 0.3);
+    opacity: 1;
   }
 }
 
@@ -72,14 +214,14 @@
   }
 }
 
-/* Loading indicator */
+/* Loading indicator - TRON pulse */
 .loadingText {
   font-family: "TechMono";
   color: var(--tron-red-light, #ff1a1a);
   font-size: 1.1rem;
   text-align: center;
   padding: 40px 0;
-  opacity: 0.7;
+  animation: loadingPulse 2s ease-in-out infinite;
 }
 
 /* Error message */

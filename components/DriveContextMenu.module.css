@@ -54,13 +54,32 @@
   box-shadow: inset 0 0 8px rgba(248, 2, 6, 0.2);
 }
 
+/* ═══ TRON Context Menu Materialize ═══ */
 @keyframes menuFadeIn {
-  from {
+  0% {
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(0.85);
+    border-color: #00d4ff;
+    box-shadow: 0 0 20px #00d4ff;
+    filter: brightness(2);
   }
-  to {
+  40% {
+    opacity: 0.8;
+    transform: scale(1.02);
+    border-color: #00d4ff;
+    box-shadow: 0 0 15px #00d4ff;
+    filter: brightness(1.5);
+  }
+  70% {
+    border-color: #f80206;
+    box-shadow: 0 0 12px #f80206;
+    filter: brightness(1.1);
+  }
+  100% {
     opacity: 1;
     transform: scale(1);
+    border-color: #f80206;
+    box-shadow: 0 0 10px #f80206;
+    filter: brightness(1);
   }
 }
