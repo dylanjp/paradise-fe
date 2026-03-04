@@ -87,7 +87,7 @@
     transform 0.3s,
     box-shadow 0.3s;
   opacity: 0;
-  animation: tronMaterialize 0.9s ease-out forwards;
+  animation: tronMaterialize 0.4s ease-out forwards;
   position: relative;
   overflow: hidden;
 }
@@ -109,24 +109,24 @@
   );
   box-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
   pointer-events: none;
-  animation: cardScanFlash 0.6s ease-out forwards;
+  animation: cardScanFlash 0.3s ease-out forwards;
   animation-delay: inherit;
   z-index: 2;
 }
 
-/* Staggered materialization delays */
-.card:nth-child(1) { animation-delay: 0.6s; }
-.card:nth-child(2) { animation-delay: 0.68s; }
-.card:nth-child(3) { animation-delay: 0.76s; }
-.card:nth-child(4) { animation-delay: 0.84s; }
-.card:nth-child(5) { animation-delay: 0.92s; }
-.card:nth-child(6) { animation-delay: 1.0s; }
-.card:nth-child(7) { animation-delay: 1.08s; }
-.card:nth-child(8) { animation-delay: 1.16s; }
-.card:nth-child(9) { animation-delay: 1.24s; }
-.card:nth-child(10) { animation-delay: 1.32s; }
-.card:nth-child(11) { animation-delay: 1.4s; }
-.card:nth-child(12) { animation-delay: 1.48s; }
+/* Staggered materialization delays — kept tight to avoid sluggish feel */
+.card:nth-child(1) { animation-delay: 0.05s; }
+.card:nth-child(2) { animation-delay: 0.08s; }
+.card:nth-child(3) { animation-delay: 0.11s; }
+.card:nth-child(4) { animation-delay: 0.14s; }
+.card:nth-child(5) { animation-delay: 0.17s; }
+.card:nth-child(6) { animation-delay: 0.20s; }
+.card:nth-child(7) { animation-delay: 0.23s; }
+.card:nth-child(8) { animation-delay: 0.26s; }
+.card:nth-child(9) { animation-delay: 0.29s; }
+.card:nth-child(10) { animation-delay: 0.32s; }
+.card:nth-child(11) { animation-delay: 0.35s; }
+.card:nth-child(12) { animation-delay: 0.38s; }
 
 .card:hover,
 .card:focus {
