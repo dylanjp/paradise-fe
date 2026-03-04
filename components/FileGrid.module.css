@@ -60,7 +60,7 @@
   max-width: 1500px;
   padding: 20px;
   position: relative;
-  animation: gridReveal 0.5s ease-out 0.5s backwards;
+  animation: gridReveal 0.3s ease-out 0.1s backwards;
 }
 
 /* Subtle TRON grid lines that flash on load */
@@ -73,7 +73,7 @@
     linear-gradient(90deg, rgba(0, 212, 255, 0.08) 1px, transparent 1px);
   background-size: 50px 50px;
   pointer-events: none;
-  animation: gridLineFlash 2s ease-out 0.5s forwards;
+  animation: gridLineFlash 1s ease-out 0.1s forwards;
   opacity: 0;
   z-index: 0;
   border-radius: 8px;

@@ -33,7 +33,7 @@
 
 /* Content section that will be animated */
 .pageContent {
-  animation: pageLoad 1.2s ease-out;
+  animation: pageLoad 0.5s ease-out;
   z-index: 1;
   margin-top: 20px;
   width: 100%;
@@ -60,7 +60,7 @@
   box-shadow: 0 0 15px #00d4ff, 0 0 30px rgba(0, 212, 255, 0.4);
   z-index: 100;
   pointer-events: none;
-  animation: scanLineDown 1.5s ease-out 0.3s forwards;
+  animation: scanLineDown 0.8s ease-out 0.1s forwards;
   opacity: 0;
   animation-fill-mode: forwards;
 }
@@ -70,7 +70,7 @@
   font-family: "TechMono";
   font-size: 3rem;
   text-shadow: 0 0 10px var(--glow-red-primary, #f80206);
-  animation: titleGlitch 1.8s ease-out;
+  animation: titleGlitch 0.8s ease-out;
   position: relative;
   overflow: hidden;
 }
@@ -91,7 +91,7 @@
     rgba(0, 212, 255, 0.15),
     transparent
   );
-  animation: titleScanLine 1s ease-out 0.8s forwards;
+  animation: titleScanLine 0.5s ease-out 0.4s forwards;
   pointer-events: none;
 }
 

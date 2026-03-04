@@ -231,7 +231,12 @@ export default function DrivePage() {
     if (!currentFolder) return [];
     return currentFolder.children
       .map((childId) => driveData[childId])
-      .filter(Boolean);
+      .filter(Boolean)
+      .sort((a, b) => {
+        if (a.type === "folder" && b.type !== "folder") return -1;
+        if (a.type !== "folder" && b.type === "folder") return 1;
+        return 0;
+      });
   }
 
   function handleContextMenu(event, itemId) {
