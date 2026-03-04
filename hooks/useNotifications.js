@@ -53,54 +53,44 @@ export function useNotifications(options = {}) {
     refetch();
   }, [refetch]);
 
-  const markAsRead = useCallback(
-    async (id) => {
+  const toggleReadStatus = useCallback(
+    async (id, isRead) => {
       const previousNotifications = [...notifications];
 
       setNotifications((prev) => {
         const updated = prev.map((n) =>
-          n.id === id ? { ...n, isRead: true } : n,
+          n.id === id ? { ...n, isRead } : n,
         );
         return sortByUnread ? sortNotifications(updated) : updated;
       });
 
       try {
-        await notificationService.markAsRead(id);
+        if (isRead) {
+          await notificationService.markAsRead(id);
+        } else {
+          await notificationService.markAsUnread(id);
+        }
       } catch (err) {
         setNotifications(previousNotifications);
+        const action = isRead ? "read" : "unread";
         const message =
           err instanceof NotificationError
             ? err.message
-            : "Failed to mark notification as read";
+            : `Failed to mark notification as ${action}`;
         setError(message);
       }
     },
     [notifications, sortByUnread],
   );
 
+  const markAsRead = useCallback(
+    (id) => toggleReadStatus(id, true),
+    [toggleReadStatus],
+  );
+
   const markAsUnread = useCallback(
-    async (id) => {
-      const previousNotifications = [...notifications];
-
-      setNotifications((prev) => {
-        const updated = prev.map((n) =>
-          n.id === id ? { ...n, isRead: false } : n,
-        );
-        return sortByUnread ? sortNotifications(updated) : updated;
-      });
-
-      try {
-        await notificationService.markAsUnread(id);
-      } catch (err) {
-        setNotifications(previousNotifications);
-        const message =
-          err instanceof NotificationError
-            ? err.message
-            : "Failed to mark notification as unread";
-        setError(message);
-      }
-    },
-    [notifications, sortByUnread],
+    (id) => toggleReadStatus(id, false),
+    [toggleReadStatus],
   );
 
   const createAction = useCallback(

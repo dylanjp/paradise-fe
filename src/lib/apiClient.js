@@ -30,6 +30,17 @@ export function clearLogoutCallback() {
 }
 
 /**
+ * Handles 401 responses from direct fetch/XHR calls that bypass the request() function.
+ * Clears the token and triggers the logout callback.
+ */
+export function handleUnauthorized() {
+  clearToken();
+  if (logoutCallback) {
+    logoutCallback();
+  }
+}
+
+/**
  * Custom error class for API errors
  */
 export class ApiError extends Error {
@@ -211,6 +222,7 @@ const apiClient = {
   delete: del,
   setLogoutCallback,
   clearLogoutCallback,
+  handleUnauthorized,
   ApiError,
   AuthenticationError,
   AuthorizationError,

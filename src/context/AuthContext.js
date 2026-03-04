@@ -21,6 +21,7 @@ import {
   decodeJWT,
   isTokenExpired,
 } from "../lib/tokenStorage";
+import { setLogoutCallback, clearLogoutCallback } from "../lib/apiClient";
 
 // Create the Auth Context
 const AuthContext = createContext(null);
@@ -91,6 +92,13 @@ export function AuthProvider({ children }) {
     setUsername(null);
     setRoles([]);
   }, []);
+
+  // Wire up the API client's 401 logout callback so expired tokens
+  // trigger a full auth state reset (not just token clearance)
+  useEffect(() => {
+    setLogoutCallback(clearAuthState);
+    return () => clearLogoutCallback();
+  }, [clearAuthState]);
 
   /**
    * Login function - sends credentials to API and stores token on success
