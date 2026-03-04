@@ -9,7 +9,7 @@ const versionData = [
       "Drag items onto folder cards or breadcrumb segments to move them",
       "Move confirmation modal to prevent accidental moves",
       "Visual drag-and-drop highlighting for valid drop targets",
-      "Read-only drives (e.g. Media Cache) are protected from move operations",
+      "Media Cache will load much faster",
     ],
   },
   {
