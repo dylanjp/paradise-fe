@@ -1,6 +1,15 @@
 // versionData.js
 
 const versionData = [
+    {
+    version: "v0.0.4.1",
+    releaseDate: "2026-03-08",
+    notes: [
+      "Fixed the Caching system for Media Cache",
+      "Optimzed the code base",
+      "Notifications fix"
+    ],
+  },
   {
     version: "v0.0.4",
     releaseDate: "2026-03-03",
