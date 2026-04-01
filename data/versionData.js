@@ -2,12 +2,11 @@
 
 const versionData = [
     {
-    version: "v0.0.4.1",
+    version: "v0.0.5",
     releaseDate: "2026-03-08",
     notes: [
-      "Fixed the Caching system for Media Cache",
-      "Optimzed the code base",
-      "Notifications fix"
+      "Fixes for Mobile",
+      "NEW FEATURE: Documentation!",
     ],
   },
   {
