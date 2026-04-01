@@ -315,10 +315,32 @@
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
+  .modalOverlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
   .modal {
-    width: 95%;
+    width: 100%;
     max-height: 85vh;
     padding: 1rem;
+    border-radius: 12px 12px 0 0;
+    border-bottom: none;
+    animation: modalSlideUp 0.3s ease-out;
+  }
+
+  .modalHeader {
+    padding-bottom: 0.75rem;
+  }
+
+  .closeButton {
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
   }
 
   .modalTitle {
@@ -327,11 +349,13 @@
 
   .buttonContainer {
     flex-direction: column;
+    padding-bottom: env(safe-area-inset-bottom, 0.5rem);
   }
 
   .addTaskButton,
   .dashboardButton {
     width: 100%;
+    min-height: 44px;
   }
 
   .dailyTaskRow {
@@ -353,5 +377,16 @@
 
   .taskText {
     font-size: 1rem;
+  }
+}
+
+@keyframes modalSlideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
 }
