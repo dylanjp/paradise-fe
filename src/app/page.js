@@ -98,7 +98,7 @@ export default function Home() {
                 Pratt Drive
               </Link>
               <Link
-                href="/home/"
+                href="/docs/"
                 className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ""}`}
               >
                 Documentation
@@ -107,7 +107,7 @@ export default function Home() {
                 href="/comingsoon/"
                 className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ""}`}
               >
-                Print Center
+                Pratt Health Portal
               </Link>
             </>
           ) : (

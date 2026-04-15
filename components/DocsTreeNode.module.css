@@ -1,0 +1,88 @@
+.nodeContainer {
+  user-select: none;
+}
+
+.nodeRow {
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.85rem;
+  color: var(--tron-orange-primary, #ff6600);
+  transition: background-color 0.2s ease, color 0.2s ease;
+  border-left: 2px solid transparent;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nodeRow:hover {
+  background: rgba(248, 2, 6, 0.1);
+  color: var(--tron-red-light, #ff1a1a);
+}
+
+.nodeRow:focus-visible {
+  outline: 1px solid var(--tron-red-primary, #f80206);
+  outline-offset: -1px;
+}
+
+.selected {
+  background: rgba(248, 2, 6, 0.15);
+  color: var(--tron-red-primary, #f80206);
+  border-left-color: var(--tron-red-primary, #f80206);
+  text-shadow: 0 0 6px var(--glow-red-primary, #f80206);
+}
+
+.chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  margin-right: 4px;
+  font-size: 0.65rem;
+  color: var(--tron-red-primary, #f80206);
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.chevronSpacer {
+  width: 16px;
+  margin-right: 4px;
+  flex-shrink: 0;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+  font-size: 0.85rem;
+  color: inherit;
+  flex-shrink: 0;
+}
+
+.nodeName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.childrenContainer {
+  /* Children animate in */
+}
+
+/* Mobile: larger touch targets */
+@media (max-width: 768px) {
+  .nodeRow {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+
+  .chevron {
+    width: 20px;
+    font-size: 0.75rem;
+  }
+
+  .icon {
+    font-size: 0.95rem;
+  }
+}
