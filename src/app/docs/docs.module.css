@@ -1,0 +1,85 @@
+/* Main page container */
+.page {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Background layer */
+.pageBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+}
+
+/* Docs layout: sidebar + content side by side */
+.docsLayout {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  margin-top: 60px; /* Space for fixed navbar */
+  height: calc(100vh - 60px);
+  overflow: hidden;
+}
+
+/* Sidebar loading state */
+.sidebarLoading,
+.sidebarError {
+  width: 280px;
+  min-width: 280px;
+  height: calc(100vh - 60px);
+  align-self: stretch;
+  background: rgba(0, 0, 0, 0.92);
+  border-right: 1px solid var(--tron-red-primary, #f80206);
+  box-shadow: 1px 0 15px rgba(248, 2, 6, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  flex-shrink: 0;
+}
+
+.sidebarLoadingText {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.85rem;
+  color: var(--tron-orange-primary, #ff6600);
+  letter-spacing: 2px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.sidebarErrorText {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.85rem;
+  color: var(--tron-red-primary, #f80206);
+  text-align: center;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* ========================= */
+/* MOBILE RESPONSIVE         */
+/* ========================= */
+@media (max-width: 768px) {
+  .docsLayout {
+    /* Keep flex-direction row — sidebar is a fixed overlay on mobile,
+       so the content area just takes full width naturally */
+    flex-direction: row;
+  }
+
+  .sidebarLoading,
+  .sidebarError {
+    display: none;
+  }
+}

@@ -22,7 +22,7 @@ const Navbar = forwardRef(function Navbar(_props, ref) {
     { name: "Task Management", href: "/tasks/" },
     { name: "Notification Manager", href: "/notificationmanage/" },
     { name: "Pratt Drive", href: "/drive/" },
-    { name: "Documentation", href: "/home/" },
+    { name: "Documentation", href: "/docs/" },
     { name: "Print Center", href: "/comingsoon/" },
   ];
 
