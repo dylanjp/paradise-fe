@@ -1,0 +1,132 @@
+/* Sidebar panel */
+.sidebar {
+  width: 280px;
+  min-width: 280px;
+  background: rgba(0, 0, 0, 0.92);
+  border-right: 1px solid var(--tron-red-primary, #f80206);
+  box-shadow: 1px 0 15px rgba(248, 2, 6, 0.3);
+  display: flex;
+  flex-direction: column;
+  /* Use both height and min-height to guarantee full stretch.
+     align-self ensures the sidebar fills the cross axis of the flex parent. */
+  height: calc(100vh - 60px);
+  min-height: 0;
+  align-self: stretch;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Sidebar header */
+.sidebarHeader {
+  padding: 1rem 1rem 0.75rem;
+  border-bottom: 1px solid rgba(248, 2, 6, 0.3);
+  flex-shrink: 0;
+}
+
+.sidebarTitle {
+  font-family: "Orbitron", "Share Tech Mono", monospace;
+  font-size: 0.8rem;
+  color: var(--tron-red-primary, #f80206);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0;
+  text-shadow: 0 0 8px var(--glow-red-primary, #f80206);
+}
+
+/* Tree container with scrolling */
+.treeContainer {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.5rem 0;
+}
+
+/* Custom scrollbar */
+.treeContainer::-webkit-scrollbar {
+  width: 4px;
+}
+
+.treeContainer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.treeContainer::-webkit-scrollbar-thumb {
+  background: var(--tron-red-primary, #f80206);
+  border-radius: 2px;
+}
+
+/* Empty state */
+.emptyTree {
+  font-family: "Share Tech Mono", monospace;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: center;
+  padding: 2rem 1rem;
+  font-size: 0.85rem;
+}
+
+/* Mobile toggle button - hidden on desktop */
+.mobileToggle {
+  display: none;
+}
+
+/* Backdrop - hidden on desktop */
+.backdrop {
+  display: none;
+}
+
+/* ========================= */
+/* MOBILE RESPONSIVE         */
+/* ========================= */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 60px; /* Below the navbar */
+    left: 0;
+    width: 280px;
+    min-width: 280px;
+    height: calc(100vh - 60px);
+    z-index: 200;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebarOpen {
+    transform: translateX(0);
+  }
+
+  .mobileToggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    z-index: 201;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid var(--tron-red-primary, #f80206);
+    color: var(--tron-red-primary, #f80206);
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(248, 2, 6, 0.4);
+    transition: all 0.2s ease;
+  }
+
+  .mobileToggle:hover {
+    box-shadow: 0 0 25px rgba(248, 2, 6, 0.6);
+    background: rgba(248, 2, 6, 0.15);
+  }
+
+  .backdrop {
+    display: block;
+    position: fixed;
+    top: 60px; /* Below the navbar */
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - 60px);
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 199;
+  }
+}
