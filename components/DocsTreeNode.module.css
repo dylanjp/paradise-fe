@@ -10,7 +10,9 @@
   font-family: "Share Tech Mono", monospace;
   font-size: 0.85rem;
   color: var(--tron-orange-primary, #ff6600);
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
   border-left: 2px solid transparent;
   white-space: nowrap;
   overflow: hidden;

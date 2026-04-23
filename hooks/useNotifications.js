@@ -58,9 +58,7 @@ export function useNotifications(options = {}) {
       const previousNotifications = [...notifications];
 
       setNotifications((prev) => {
-        const updated = prev.map((n) =>
-          n.id === id ? { ...n, isRead } : n,
-        );
+        const updated = prev.map((n) => (n.id === id ? { ...n, isRead } : n));
         return sortByUnread ? sortNotifications(updated) : updated;
       });
 

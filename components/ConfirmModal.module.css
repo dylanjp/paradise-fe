@@ -111,7 +111,9 @@
     transform: scale(0.7) translateY(20px);
     opacity: 0;
     border-color: #00d4ff;
-    box-shadow: 0 0 30px #00d4ff, inset 0 0 15px rgba(0, 212, 255, 0.1);
+    box-shadow:
+      0 0 30px #00d4ff,
+      inset 0 0 15px rgba(0, 212, 255, 0.1);
     filter: brightness(2);
   }
   30% {

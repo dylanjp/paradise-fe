@@ -37,9 +37,7 @@ export default function DocsPage() {
         <div className={styles.docsLayout}>
           {isTreeLoading ? (
             <aside className={styles.sidebarLoading}>
-              <span className={styles.sidebarLoadingText}>
-                LOADING TREE...
-              </span>
+              <span className={styles.sidebarLoadingText}>LOADING TREE...</span>
             </aside>
           ) : treeError ? (
             <aside className={styles.sidebarError}>

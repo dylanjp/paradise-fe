@@ -115,18 +115,42 @@
 }
 
 /* Staggered materialization delays — kept tight to avoid sluggish feel */
-.card:nth-child(1) { animation-delay: 0.05s; }
-.card:nth-child(2) { animation-delay: 0.08s; }
-.card:nth-child(3) { animation-delay: 0.11s; }
-.card:nth-child(4) { animation-delay: 0.14s; }
-.card:nth-child(5) { animation-delay: 0.17s; }
-.card:nth-child(6) { animation-delay: 0.20s; }
-.card:nth-child(7) { animation-delay: 0.23s; }
-.card:nth-child(8) { animation-delay: 0.26s; }
-.card:nth-child(9) { animation-delay: 0.29s; }
-.card:nth-child(10) { animation-delay: 0.32s; }
-.card:nth-child(11) { animation-delay: 0.35s; }
-.card:nth-child(12) { animation-delay: 0.38s; }
+.card:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.card:nth-child(2) {
+  animation-delay: 0.08s;
+}
+.card:nth-child(3) {
+  animation-delay: 0.11s;
+}
+.card:nth-child(4) {
+  animation-delay: 0.14s;
+}
+.card:nth-child(5) {
+  animation-delay: 0.17s;
+}
+.card:nth-child(6) {
+  animation-delay: 0.2s;
+}
+.card:nth-child(7) {
+  animation-delay: 0.23s;
+}
+.card:nth-child(8) {
+  animation-delay: 0.26s;
+}
+.card:nth-child(9) {
+  animation-delay: 0.29s;
+}
+.card:nth-child(10) {
+  animation-delay: 0.32s;
+}
+.card:nth-child(11) {
+  animation-delay: 0.35s;
+}
+.card:nth-child(12) {
+  animation-delay: 0.38s;
+}
 
 .card:hover,
 .card:focus {

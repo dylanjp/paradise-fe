@@ -1,13 +1,15 @@
 // versionData.js
 
 const versionData = [
-    {
+  {
+    version: "v1.0",
+    releaseDate: "2026-03-08",
+    notes: ["Fixes for Mobile", "NEW FEATURE:Pratt Health Portal"],
+  },
+  {
     version: "v0.0.5",
     releaseDate: "2026-03-08",
-    notes: [
-      "Fixes for Mobile",
-      "NEW FEATURE: Documentation!",
-    ],
+    notes: ["Fixes for Mobile", "NEW FEATURE: Documentation!"],
   },
   {
     version: "v0.0.4",

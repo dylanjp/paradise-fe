@@ -75,7 +75,8 @@ export default function FileGrid({
       )}
       {items.map((item) => {
         const isMoveSource = moveMode && moveMode.itemId === item.id;
-        const isMoveTarget = moveMode && !isMoveSource && item.type === "folder";
+        const isMoveTarget =
+          moveMode && !isMoveSource && item.type === "folder";
 
         return (
           <DriveItemCard
