@@ -23,7 +23,7 @@ const Navbar = forwardRef(function Navbar(_props, ref) {
     { name: "Notification Manager", href: "/notificationmanage/" },
     { name: "Pratt Drive", href: "/drive/" },
     { name: "Documentation", href: "/docs/" },
-    { name: "Pratt Health Portal", href: "/comingsoon/" },
+    { name: "Pratt Health Portal", href: "/health/" },
   ];
 
   const [menuOpen, setMenuOpen] = useState(false);

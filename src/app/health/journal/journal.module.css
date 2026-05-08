@@ -1,0 +1,212 @@
+/* =========================
+   DAILY JOURNAL SCREEN STYLES
+   Entry form + History list with accordion.
+   ========================= */
+
+.page {
+  padding: 24px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-family: var(--hp-font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--hp-accent-cyan);
+}
+
+.viewToggle {
+  display: flex;
+  gap: 8px;
+}
+
+/* =========================
+   FORM LAYOUT
+   ========================= */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================
+   SLEEP DURATION DISPLAY
+   ========================= */
+
+.sleepDisplay {
+  font-family: var(--hp-font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--hp-accent-cyan);
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.6), 0 0 16px rgba(0, 229, 255, 0.3);
+  text-align: center;
+  padding: 12px;
+}
+
+/* =========================
+   SUCCESS MESSAGE
+   ========================= */
+
+.successMsg {
+  color: var(--hp-accent-green);
+  font-family: var(--hp-font-display);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  padding: 12px;
+}
+
+/* =========================
+   ERROR BANNER
+   ========================= */
+
+.errorBanner {
+  color: var(--hp-accent-red);
+  font-family: var(--hp-font-body);
+  font-size: 13px;
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255, 68, 68, 0.3);
+  border-radius: 2px;
+  background: rgba(255, 68, 68, 0.08);
+}
+
+/* =========================
+   HISTORY LIST
+   ========================= */
+
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.entryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: background-color 200ms ease;
+  border-radius: 2px;
+}
+
+.entryHeader:hover {
+  background: rgba(0, 229, 255, 0.06);
+}
+
+.entryHeader:focus-visible {
+  outline: 2px solid var(--hp-cyan, #00e5ff);
+  outline-offset: 2px;
+}
+
+.entryDate {
+  font-family: var(--hp-font-display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--hp-accent-cyan);
+}
+
+.entrySummary {
+  font-family: var(--hp-font-body);
+  font-size: 12px;
+  color: var(--hp-text-muted);
+}
+
+.chevron {
+  font-size: 12px;
+  color: var(--hp-text-muted);
+  transition: transform 0.2s ease;
+}
+
+.chevronOpen {
+  transform: rotate(90deg);
+}
+
+.entryDetails {
+  padding: 12px;
+  border-top: 1px solid rgba(0, 229, 255, 0.12);
+}
+
+.detailRow {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-family: var(--hp-font-body);
+  font-size: 13px;
+}
+
+.detailLabel {
+  color: var(--hp-text-muted);
+  min-width: 80px;
+}
+
+.detailValue {
+  color: var(--hp-text-primary);
+}
+
+/* =========================
+   ACTIONS
+   ========================= */
+
+.actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* =========================
+   LOADING STATE
+   ========================= */
+
+.loading {
+  font-family: var(--hp-font-body);
+  font-size: 13px;
+  color: var(--hp-text-muted);
+  text-align: center;
+  padding: 24px;
+}
+
+/* =========================
+   EMPTY STATE
+   ========================= */
+
+.emptyState {
+  font-family: var(--hp-font-body);
+  font-size: 13px;
+  color: var(--hp-text-muted);
+  text-align: center;
+  padding: 24px;
+}
+
+/* =========================
+   MODAL BODY
+   ========================= */
+
+.modalActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}

@@ -99,7 +99,9 @@ const NotificationAdminList = ({ notifications, onDelete, isDeleting }) => {
                   </td>
                   <td className={styles.cell}>
                     <span className={styles.recurrenceText}>
-                      {formatRecurrence(notification.recurrenceRule, { compact: true })}
+                      {formatRecurrence(notification.recurrenceRule, {
+                        compact: true,
+                      })}
                     </span>
                   </td>
                   <td className={styles.cell}>

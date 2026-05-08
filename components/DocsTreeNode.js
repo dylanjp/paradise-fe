@@ -18,7 +18,12 @@ import styles from "./DocsTreeNode.module.css";
  * @param {function} onSelectFile - Callback when a file is clicked
  * @param {number} depth - Nesting depth for indentation
  */
-export default function DocsTreeNode({ node, selectedPath, onSelectFile, depth = 0 }) {
+export default function DocsTreeNode({
+  node,
+  selectedPath,
+  onSelectFile,
+  depth = 0,
+}) {
   const [isExpanded, setIsExpanded] = useState(false);
   const isFolder = node.type === "folder";
   const isSelected = !isFolder && node.path === selectedPath;
@@ -39,9 +44,7 @@ export default function DocsTreeNode({ node, selectedPath, onSelectFile, depth =
   };
 
   // Strip .md extension for display
-  const displayName = isFolder
-    ? node.name
-    : node.name.replace(/\.md$/, "");
+  const displayName = isFolder ? node.name : node.name.replace(/\.md$/, "");
 
   return (
     <div className={styles.nodeContainer}>

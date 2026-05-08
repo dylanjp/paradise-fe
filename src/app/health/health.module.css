@@ -1,0 +1,133 @@
+/* =========================
+   FONT LOADING
+   Health-specific fonts loaded via @font-face,
+   scoped to the health layout wrapper class.
+   ========================= */
+
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/Orbitron-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/Orbitron-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/Orbitron-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Share Tech Mono";
+  src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+/* =========================
+   DESIGN TOKENS (CSS Custom Properties)
+   Scoped to .healthRoot so they don't leak
+   into the rest of the app.
+   ========================= */
+
+.healthRoot {
+  /* Base colors — translucent so grid/particle backgrounds show through */
+  --hp-bg: #04080f;
+  --hp-bg-card: rgba(2, 14, 30, 0.88);
+  --hp-bg-card-solid: rgba(2, 14, 30, 0.92);
+  --hp-bg-input: rgba(0, 20, 40, 0.8);
+  --hp-bg-sidebar: rgba(0, 4, 12, 0.6);
+  --hp-bg-status: rgba(2, 8, 20, 0.9);
+  --hp-bg-overlay: rgba(0, 4, 12, 0.7);
+
+  /* Accent colors */
+  --hp-cyan: #00e5ff;
+  --hp-magenta: #e040fb;
+  --hp-amber: #ffaa00;
+  --hp-green: #00ff9d;
+  --hp-red: #ff4444;
+
+  /* Text colors — matching prototype exactly */
+  --hp-text-primary: #a0d4e8;
+  --hp-text-muted: rgba(0, 180, 220, 0.5);
+  --hp-text-ghost: rgba(0, 180, 220, 0.3);
+
+  /* Glow effects — matching prototype box-shadow values */
+  --hp-glow-cyan: 0 0 24px rgba(0,229,255,0.06), inset 0 0 24px rgba(0,229,255,0.03);
+  --hp-glow-text-cyan: 0 0 10px rgba(0,229,255,0.6);
+  --hp-glow-btn-hover: 0 0 16px rgba(0,229,255,0.3), inset 0 0 16px rgba(0,229,255,0.08);
+
+  /* Borders */
+  --hp-border-radius: 2px;
+  --hp-border-subtle: rgba(0, 229, 255, 0.18);
+  --hp-border-input: rgba(0, 229, 255, 0.25);
+
+  /* Fonts */
+  --hp-font-display: "Orbitron", sans-serif;
+  --hp-font-body: "Share Tech Mono", monospace;
+
+  /* Animations */
+  --hp-transition-speed: 200ms;
+  --hp-animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Layout */
+  font-family: var(--hp-font-body);
+  color: var(--hp-text-primary);
+  background: var(--hp-bg);
+  min-height: 100vh;
+  cursor: none;
+}
+
+.healthRoot,
+.healthRoot *,
+.healthRoot button,
+.healthRoot a,
+.healthRoot input,
+.healthRoot select,
+.healthRoot textarea,
+.healthRoot [role="button"] {
+  cursor: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .healthRoot,
+  .healthRoot *,
+  .healthRoot button,
+  .healthRoot a,
+  .healthRoot input,
+  .healthRoot select,
+  .healthRoot textarea,
+  .healthRoot [role="button"] {
+    cursor: auto !important;
+  }
+}
+
+/* =========================
+   MAIN CONTENT AREA
+   Padding-top accounts for the fixed
+   StatusBar height (~40px) plus spacing.
+   ========================= */
+
+/* =========================
+   GLOBAL FOCUS INDICATORS
+   Ensure all links and interactive elements
+   within the health root have visible focus.
+   ========================= */
+
+.healthRoot a:focus-visible {
+  outline: 2px solid var(--hp-cyan, #00e5ff);
+  outline-offset: 2px;
+}
+
+.content {
+  padding-top: 56px;
+  position: relative;
+}

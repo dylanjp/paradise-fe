@@ -1,0 +1,233 @@
+/* =========================
+   HEALTH DOCUMENTS SCREEN STYLES
+   Upload zone, category filters, document list.
+   ========================= */
+
+.page {
+  padding: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-family: var(--hp-font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--hp-accent-amber);
+}
+
+/* =========================
+   UPLOAD ZONE
+   ========================= */
+
+.uploadZone {
+  border: 2px dashed rgba(255, 170, 0, 0.3);
+  border-radius: 2px;
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 200ms ease, background-color 200ms ease,
+    box-shadow 200ms ease;
+  margin-bottom: 20px;
+}
+
+.uploadZone:hover {
+  border-color: var(--hp-accent-amber, #ffaa00);
+  background: rgba(255, 170, 0, 0.05);
+  box-shadow: 0 0 12px rgba(255, 170, 0, 0.2);
+}
+
+.uploadZone:focus-visible {
+  outline: 2px solid var(--hp-accent-amber);
+  outline-offset: 2px;
+}
+
+.uploadZoneActive {
+  border-color: var(--hp-accent-amber);
+}
+
+.uploadText {
+  color: var(--hp-text-muted);
+  font-family: var(--hp-font-body);
+  font-size: 13px;
+}
+
+.categorySelector {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.categorySelectorBtn {
+  padding: 4px 10px;
+  border-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
+  color: var(--hp-text-muted);
+  font-family: var(--hp-font-body);
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 200ms ease, border-color 200ms ease;
+}
+
+.categorySelectorBtn:hover:not(.categorySelectorBtnActive) {
+  border-color: rgba(255, 170, 0, 0.5);
+  color: var(--hp-text-primary, #a0d4e8);
+  background: rgba(255, 170, 0, 0.06);
+}
+
+.categorySelectorBtn:focus-visible {
+  outline: 2px solid var(--hp-accent-amber);
+  outline-offset: 2px;
+}
+
+.categorySelectorBtnActive {
+  background: rgba(255, 170, 0, 0.15);
+  border-color: var(--hp-accent-amber);
+  color: var(--hp-accent-amber);
+}
+
+/* =========================
+   FILTER BAR
+   ========================= */
+
+.filterBar {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.filterBtn {
+  padding: 4px 10px;
+  border-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
+  color: var(--hp-text-muted);
+  font-family: var(--hp-font-body);
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 200ms ease, border-color 200ms ease;
+}
+
+.filterBtn:hover:not(.filterBtnActive) {
+  border-color: rgba(0, 229, 255, 0.5);
+  color: var(--hp-text-primary, #a0d4e8);
+  background: rgba(0, 229, 255, 0.06);
+}
+
+.filterBtn:focus-visible {
+  outline: 2px solid var(--hp-accent-cyan);
+  outline-offset: 2px;
+}
+
+.filterBtnActive {
+  background: rgba(0, 229, 255, 0.15);
+  border-color: var(--hp-accent-cyan);
+  color: var(--hp-accent-cyan);
+}
+
+/* =========================
+   DOCUMENT LIST
+   ========================= */
+
+.docList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.docRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+}
+
+.docInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.docName {
+  font-family: var(--hp-font-body);
+  font-size: 13px;
+  color: var(--hp-text-primary);
+}
+
+.docMeta {
+  font-family: var(--hp-font-body);
+  font-size: 11px;
+  color: var(--hp-text-muted);
+}
+
+.categoryBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--hp-font-body);
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+.docActions {
+  display: flex;
+  gap: 8px;
+}
+
+/* =========================
+   ERROR BANNER
+   ========================= */
+
+.errorBanner {
+  color: var(--hp-accent-red);
+  font-family: var(--hp-font-body);
+  font-size: 13px;
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255, 68, 68, 0.3);
+  border-radius: 2px;
+  background: rgba(255, 68, 68, 0.08);
+}
+
+/* =========================
+   MODAL ACTIONS
+   ========================= */
+
+.modalActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+/* =========================
+   LOADING & EMPTY STATE
+   ========================= */
+
+.loading {
+  font-family: var(--hp-font-body);
+  font-size: 13px;
+  color: var(--hp-text-muted);
+  text-align: center;
+  padding: 24px;
+}
+
+.emptyState {
+  font-family: var(--hp-font-body);
+  font-size: 13px;
+  color: var(--hp-text-muted);
+  text-align: center;
+  padding: 24px;
+}

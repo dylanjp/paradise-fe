@@ -1,0 +1,67 @@
+/* TTextarea — styled textarea */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-family: var(--hp-font-display, "Orbitron", sans-serif);
+  font-size: 11px;
+  text-transform: uppercase;
+  color: rgba(0, 229, 255, 0.55);
+  letter-spacing: 0.5px;
+}
+
+.textarea {
+  width: 100%;
+  padding: 8px 10px;
+  background: var(--hp-bg-input, rgba(0, 20, 40, 0.8));
+  border: 1px solid var(--hp-border-input, rgba(0, 229, 255, 0.25));
+  border-radius: var(--hp-border-radius, 2px);
+  font-family: var(--hp-font-body, "Share Tech Mono", monospace);
+  font-size: 13px;
+  color: #e0e0e0;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.textarea::placeholder {
+  color: rgba(224, 224, 224, 0.35);
+}
+
+.textarea:focus {
+  border-color: var(--hp-cyan, #00e5ff);
+  box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.15),
+    0 0 16px rgba(0, 229, 255, 0.1);
+}
+
+.textarea:focus-visible {
+  outline: none;
+}
+
+/* ── Error state ── */
+.textareaError {
+  border-color: var(--hp-red, #ff4444);
+}
+
+.textareaError:focus {
+  border-color: var(--hp-red, #ff4444);
+  box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.15),
+    0 0 16px rgba(255, 68, 68, 0.1);
+}
+
+.errorText {
+  font-family: var(--hp-font-body, "Share Tech Mono", monospace);
+  font-size: 11px;
+  color: var(--hp-red, #ff4444);
+  margin: 0;
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .textarea {
+    transition-duration: 0s;
+  }
+}

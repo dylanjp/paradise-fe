@@ -18,7 +18,9 @@
     color: #00d4ff;
     transform: scaleX(0.8);
     filter: brightness(2);
-    box-shadow: 0 0 12px #00d4ff, inset 0 0 8px rgba(0, 212, 255, 0.2);
+    box-shadow:
+      0 0 12px #00d4ff,
+      inset 0 0 8px rgba(0, 212, 255, 0.2);
   }
   50% {
     opacity: 0.8;

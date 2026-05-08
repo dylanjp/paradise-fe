@@ -18,9 +18,10 @@ export default function BreadcrumbBar({
         const isLast = index === path.length - 1;
         const isDragOver = dragOverSegmentId === segment.id;
         const isMoveTarget = moveMode && !isLast;
-        const segmentClass = isDragOver || isMoveTarget
-          ? `${styles.segment} ${styles.dragOver}`
-          : styles.segment;
+        const segmentClass =
+          isDragOver || isMoveTarget
+            ? `${styles.segment} ${styles.dragOver}`
+            : styles.segment;
         const currentClass = isDragOver
           ? `${styles.current} ${styles.dragOver}`
           : styles.current;
@@ -54,7 +55,11 @@ export default function BreadcrumbBar({
           <span key={segment.id} className={styles.segmentWrapper}>
             {index > 0 && <span className={styles.separator}>{" > "}</span>}
             {isLast ? (
-              <span className={currentClass} aria-current="page" {...dragHandlers}>
+              <span
+                className={currentClass}
+                aria-current="page"
+                {...dragHandlers}
+              >
                 {segment.name}
               </span>
             ) : (

@@ -1,0 +1,372 @@
+/* =========================
+   APPOINTMENTS SCREEN STYLES
+   Tabs, appointment cards, reminders section, modals.
+   ========================= */
+
+.page {
+  padding: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--hp-border-subtle);
+  padding-bottom: 12px;
+}
+
+.title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--hp-font-display);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--hp-accent-green, #00ff9d);
+  margin: 0;
+}
+
+.titleIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid var(--hp-accent-green, #00ff9d);
+  font-family: var(--hp-font-body);
+  font-size: 11px;
+  font-weight: 400;
+}
+
+/* =========================
+   TABS — pill toggle
+   ========================= */
+
+.tabList {
+  display: flex;
+  gap: 0;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 28px;
+  border: 1px solid var(--hp-border-subtle);
+  cursor: pointer;
+  font-family: var(--hp-font-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  background: transparent;
+  color: var(--hp-text-muted);
+  transition: color 200ms ease, background-color 200ms ease,
+    border-color 200ms ease;
+}
+
+.tab:first-child {
+  border-right: none;
+}
+
+.tabIcon {
+  font-size: 11px;
+  line-height: 1;
+}
+
+.tab:hover:not(.tabActive) {
+  color: var(--hp-text-primary, #a0d4e8);
+  background: rgba(0, 255, 157, 0.04);
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--hp-accent-cyan);
+  outline-offset: 2px;
+}
+
+.tabActive {
+  background: rgba(0, 255, 157, 0.08);
+  border-color: var(--hp-accent-green, #00ff9d);
+  color: var(--hp-accent-green, #00ff9d);
+}
+
+.tabPanel {
+  min-height: 120px;
+}
+
+/* =========================
+   APPOINTMENT LIST
+   ========================= */
+
+.apptList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.apptCard {
+  position: relative;
+  padding: 14px 16px;
+  padding-right: 48px; /* leave room for delete button */
+}
+
+.apptDoctor {
+  font-family: var(--hp-font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--hp-accent-green, #00ff9d);
+  margin-bottom: 8px;
+}
+
+.apptMetaRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.apptSpecialty {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 2px;
+  font-family: var(--hp-font-body);
+  font-size: 10px;
+  letter-spacing: 1px;
+  background: rgba(0, 255, 157, 0.12);
+  border: 1px solid rgba(0, 255, 157, 0.4);
+  color: var(--hp-accent-green, #00ff9d);
+}
+
+.apptDate {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--hp-font-body);
+  font-size: 12px;
+  color: var(--hp-text-muted);
+}
+
+.apptNotes {
+  font-family: var(--hp-font-body);
+  font-size: 12px;
+  color: var(--hp-text-primary, #a0d4e8);
+  margin-top: 4px;
+}
+
+/* =========================
+   DELETE ICON BUTTON
+   Small red square in card top-right
+   ========================= */
+
+.deleteIconBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid rgba(255, 68, 68, 0.5);
+  background: rgba(255, 68, 68, 0.08);
+  color: var(--hp-red, #ff4444);
+  border-radius: 2px;
+  font-family: var(--hp-font-body);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 150ms ease, border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.deleteIconBtn:hover {
+  background: rgba(255, 68, 68, 0.18);
+  border-color: var(--hp-red, #ff4444);
+  box-shadow: 0 0 8px rgba(255, 68, 68, 0.4);
+}
+
+.deleteIconBtn:focus-visible {
+  outline: 2px solid var(--hp-red, #ff4444);
+  outline-offset: 2px;
+}
+
+/* =========================
+   REMINDERS SECTION
+   ========================= */
+
+.remindersSection {
+  margin-top: 32px;
+  padding-top: 20px;
+}
+
+.remindersHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.remindersTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--hp-font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--hp-accent-amber, #ffaa00);
+  margin: 0;
+}
+
+.remindersTitleIcon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.reminderList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.reminderCard {
+  position: relative;
+  padding: 14px 48px 14px 16px; /* room for X button on right */
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.reminderIcon {
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.reminderBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.reminderText {
+  font-family: var(--hp-font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--hp-accent-amber, #ffaa00);
+}
+
+.reminderTrigger {
+  font-family: var(--hp-font-body);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: var(--hp-text-muted);
+}
+
+.reminderNotes {
+  font-family: var(--hp-font-body);
+  font-size: 11px;
+  color: var(--hp-text-primary, #a0d4e8);
+  margin-top: 2px;
+}
+
+/* =========================
+   TYPE TOGGLE (Add Appointment form)
+   ========================= */
+
+.typeToggle {
+  display: flex;
+  gap: 8px;
+}
+
+.typeBtn {
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: var(--hp-font-body);
+  font-size: 12px;
+  background: transparent;
+  color: var(--hp-text-muted);
+  transition: background 200ms ease, border-color 200ms ease, color 200ms ease;
+}
+
+.typeBtn:hover:not(.typeBtnActive) {
+  border-color: rgba(0, 255, 157, 0.5);
+  color: var(--hp-text-primary, #a0d4e8);
+  background: rgba(0, 255, 157, 0.06);
+}
+
+.typeBtn:focus-visible {
+  outline: 2px solid var(--hp-accent-cyan);
+  outline-offset: 2px;
+}
+
+.typeBtnActive {
+  border-color: var(--hp-accent-green);
+  background: rgba(0, 255, 157, 0.1);
+  color: var(--hp-accent-green);
+}
+
+/* =========================
+   ERROR BANNER
+   ========================= */
+
+.errorBanner {
+  color: var(--hp-accent-red);
+  font-family: var(--hp-font-body);
+  font-size: 13px;
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255, 68, 68, 0.3);
+  border-radius: 2px;
+  background: rgba(255, 68, 68, 0.08);
+}
+
+/* =========================
+   MODAL FORM & ACTIONS
+   ========================= */
+
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modalActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+/* =========================
+   LOADING & EMPTY STATE
+   ========================= */
+
+.loading {
+  font-family: var(--hp-font-body);
+  font-size: 13px;
+  color: var(--hp-text-muted);
+  text-align: center;
+  padding: 24px;
+}
+
+.emptyState {
+  font-family: var(--hp-font-body);
+  font-size: 13px;
+  color: var(--hp-text-muted);
+  text-align: center;
+  padding: 24px;
+}

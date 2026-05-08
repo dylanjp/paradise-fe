@@ -56,14 +56,17 @@ export function useDocumentation() {
         const data = await fetchDocsTree();
         if (!cancelled) setTree(data);
       } catch (err) {
-        if (!cancelled) setTreeError(err.message || "Failed to load documentation tree");
+        if (!cancelled)
+          setTreeError(err.message || "Failed to load documentation tree");
       } finally {
         if (!cancelled) setIsTreeLoading(false);
       }
     }
 
     loadTree();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // Fetch file content when selectedPath changes
@@ -84,14 +87,17 @@ export function useDocumentation() {
         const markdown = await fetchDocsFile(selectedPath);
         if (!cancelled) setContent(markdown);
       } catch (err) {
-        if (!cancelled) setContentError(err.message || "Failed to load document");
+        if (!cancelled)
+          setContentError(err.message || "Failed to load document");
       } finally {
         if (!cancelled) setIsContentLoading(false);
       }
     }
 
     loadFile();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [selectedPath]);
 
   const selectFile = useCallback((path) => {

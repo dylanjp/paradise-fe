@@ -362,7 +362,8 @@ export default function DrivePage() {
   function handleDropOnFolder(destinationId) {
     if (!dragSourceId || !driveData[dragSourceId]) return;
     const dest = driveData[destinationId];
-    if (!dest || dest.type !== "folder" || destinationId === dragSourceId) return;
+    if (!dest || dest.type !== "folder" || destinationId === dragSourceId)
+      return;
     setMoveConfirm({
       itemId: dragSourceId,
       itemName: driveData[dragSourceId].name,
@@ -519,7 +520,9 @@ export default function DrivePage() {
         <BreadcrumbBar
           path={breadcrumbPath}
           onNavigate={navigateToFolder}
-          onSegmentDragOver={(e, segmentId) => setBreadcrumbDragOverId(segmentId)}
+          onSegmentDragOver={(e, segmentId) =>
+            setBreadcrumbDragOverId(segmentId)
+          }
           onSegmentDragLeave={() => setBreadcrumbDragOverId(null)}
           onSegmentDrop={(e, segmentId, segmentName) => {
             setBreadcrumbDragOverId(null);
@@ -536,8 +539,13 @@ export default function DrivePage() {
         {error && <p className={styles.errorText}>{error}</p>}
         {moveMode && (
           <div className={styles.moveModeBar}>
-            <span>Select a folder to move <strong>{moveMode.itemName}</strong> into</span>
-            <button className={styles.moveModeCancelButton} onClick={cancelMove}>
+            <span>
+              Select a folder to move <strong>{moveMode.itemName}</strong> into
+            </span>
+            <button
+              className={styles.moveModeCancelButton}
+              onClick={cancelMove}
+            >
               Cancel
             </button>
           </div>
