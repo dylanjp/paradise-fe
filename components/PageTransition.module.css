@@ -1,0 +1,30 @@
+@keyframes pgOut {
+  0%   { opacity: 1; }
+  40%  { opacity: 0.6; transform: translateX(4px); filter: hue-rotate(30deg); }
+  60%  { opacity: 0.6; transform: translateX(-4px); }
+  100% { opacity: 0; transform: scale(1.04); }
+}
+
+@keyframes pgIn {
+  0%   { opacity: 0; transform: scale(0.95); filter: brightness(2) saturate(0); }
+  30%  { filter: brightness(1.4) saturate(0.5); }
+  100% { opacity: 1; transform: scale(1); filter: none; }
+}
+
+.pgOut {
+  animation: pgOut 0.28s ease-in both;
+}
+
+.pgIn {
+  animation: pgIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pgOut,
+  .pgIn {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}

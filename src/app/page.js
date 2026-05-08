@@ -104,7 +104,7 @@ export default function Home() {
                 Documentation
               </Link>
               <Link
-                href="/comingsoon/"
+                href="/health/"
                 className={`${styles.navLink} ${isHealthy === false ? styles.disabledLink : ""}`}
               >
                 Pratt Health Portal

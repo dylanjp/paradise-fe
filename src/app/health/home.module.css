@@ -1,0 +1,148 @@
+/* =========================
+   HOME SCREEN STYLES
+   2×2 tile grid for the Health Portal landing page.
+   Vertically centered within the viewport (minus the fixed status bar).
+   ========================= */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 56px);
+  padding: 24px;
+  gap: 32px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.portalTitle {
+  font-family: var(--hp-font-display);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--hp-cyan);
+  letter-spacing: 4px;
+  margin: 0;
+  text-shadow: var(--hp-glow-text-cyan);
+}
+
+.subtitle {
+  font-family: var(--hp-font-display);
+  font-size: 12px;
+  color: var(--hp-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+.divider {
+  width: 80px;
+  height: 1px;
+  background: var(--hp-border-subtle);
+  margin-top: 4px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  max-width: 640px;
+  width: 100%;
+}
+
+.tileLink {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  transition: transform var(--hp-transition-speed) var(--hp-animation-easing);
+}
+
+.tileLink > * {
+  transition: box-shadow var(--hp-transition-speed) var(--hp-animation-easing),
+    border-color var(--hp-transition-speed) var(--hp-animation-easing);
+}
+
+.tileLink:hover {
+  transform: translateY(-2px);
+}
+
+.tileLink:hover > * {
+  box-shadow: 0 0 24px color-mix(in srgb, var(--tile-accent) 35%, transparent),
+    inset 0 0 24px color-mix(in srgb, var(--tile-accent) 10%, transparent);
+  border-color: color-mix(in srgb, var(--tile-accent) 70%, transparent) !important;
+}
+
+.tileLink:focus-visible {
+  outline: 2px solid var(--hp-cyan, #00e5ff);
+  outline-offset: 2px;
+}
+
+.tile {
+  min-height: 180px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.tileIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.tileIconSvg {
+  display: block;
+}
+
+.tileName {
+  font-family: var(--hp-font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--hp-text-primary);
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.tileDesc {
+  font-family: var(--hp-font-body);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.selectHint {
+  font-family: var(--hp-font-body);
+  font-size: 12px;
+  color: var(--hp-text-muted);
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+/* =========================
+   RESPONSIVE — below 640px
+   ========================= */
+
+@media (max-width: 640px) {
+  .portalTitle {
+    font-size: 24px;
+    letter-spacing: 2px;
+  }
+
+  .tile {
+    min-height: 140px;
+    padding: 18px 12px;
+  }
+
+  .grid {
+    gap: 16px;
+  }
+}
