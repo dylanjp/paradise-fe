@@ -5,7 +5,7 @@
 
 .contextMenu {
   font-family: "TechMono";
-  position: absolute;
+  position: fixed;
   background: rgba(0, 0, 0, 0.95);
   border: 2px solid #f80206;
   border-radius: 6px;

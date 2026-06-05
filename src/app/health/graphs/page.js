@@ -400,7 +400,7 @@ export default function GraphsPage() {
           </div>
         ))}
 
-        <div style={{ marginTop: 16 }}>
+        <div className={styles.addMetricSlot}>
           <TButton
             variant="secondary"
             onClick={() => setShowAddMetric(true)}

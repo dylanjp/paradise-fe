@@ -56,6 +56,10 @@
   border-left: 2px solid var(--hp-cyan);
 }
 
+.addMetricSlot {
+  margin-top: 16px;
+}
+
 /* =========================
    MAIN CONTENT AREA
    ========================= */
@@ -197,4 +201,110 @@
   font-size: 13px;
   margin-top: 4px;
   margin-bottom: 0;
+}
+
+/* =========================
+   MOBILE LAYOUT
+   Below 640px: stack vertically, sidebar collapses into a
+   horizontal scrollable strip, chart header stacks, full-width actions.
+   ========================= */
+
+@media (max-width: 640px) {
+  .page {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-shrink: 0;
+    border-right: none;
+    border-bottom: 1px solid var(--hp-border-subtle);
+    padding: 8px 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* "Metrics" heading is redundant in the mobile chip strip. */
+  .sidebarTitle {
+    display: none;
+  }
+
+  .metricItem {
+    flex-shrink: 0;
+    padding: 6px 12px;
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 12px;
+    background: rgba(0, 229, 255, 0.04);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .metricItemActive {
+    border-left: none;
+    border-bottom: 2px solid var(--hp-cyan);
+  }
+
+  .addMetricSlot {
+    margin-top: 0;
+    flex-shrink: 0;
+    margin-left: 4px;
+  }
+
+  .main {
+    padding: 12px;
+  }
+
+  .chartHeader {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .chartTitle {
+    font-size: 14px;
+  }
+
+  .chartMeta {
+    display: block;
+    margin-left: 0;
+    margin-top: 2px;
+  }
+
+  .chartActions {
+    width: 100%;
+  }
+
+  .chartActions > * {
+    width: 100%;
+  }
+
+  .chartArea {
+    min-height: 260px;
+  }
+
+  .sleepAverage {
+    font-size: 12px;
+    padding: 8px 10px;
+    margin-bottom: 12px;
+    letter-spacing: 0.3px;
+  }
+
+  .emptyState {
+    padding: 24px 12px;
+  }
+
+  .modalActions {
+    flex-direction: column-reverse;
+  }
+
+  .modalActions > * {
+    width: 100%;
+  }
 }

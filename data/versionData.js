@@ -2,50 +2,16 @@
 
 const versionData = [
   {
+    version: "v1.0.1",
+    releaseDate: "2026-03-08",
+    notes: ["BUG FIX: MyDrive Options",
+            "BUG FIX: Health Graphs sorting"
+    ],
+  },
+  {
     version: "v1.0",
     releaseDate: "2026-03-08",
-    notes: ["Fixes for Mobile", "NEW FEATURE:Pratt Health Portal"],
-  },
-  {
-    version: "v0.0.5",
-    releaseDate: "2026-03-08",
-    notes: ["Fixes for Mobile", "NEW FEATURE: Documentation!"],
-  },
-  {
-    version: "v0.0.4",
-    releaseDate: "2026-03-03",
-    notes: [
-      "NEW FEATURE: Move files and folders via drag and drop in My Drive",
-      "Drag items onto folder cards or breadcrumb segments to move them",
-      "Move confirmation modal to prevent accidental moves",
-      "Visual drag-and-drop highlighting for valid drop targets",
-      "Media Cache will load much faster",
-    ],
-  },
-  {
-    version: "v0.0.3",
-    releaseDate: "2026-02-25",
-    notes: [
-      "NEW FEATURE: My Drive!",
-      "NEW FEATURE: Upload to Plex",
-      "Fixed refresh issues on pages ",
-      "Removed some bloat",
-      "Enchanced some Mobile views",
-    ],
-  },
-  {
-    version: "v0.0.2",
-    releaseDate: "2026-02-01",
-    notes: [
-      "Fixes Task Creation Bug",
-      "Updated some infrastructure",
-      "Updated Logging",
-    ],
-  },
-  {
-    version: "v0.0.1",
-    releaseDate: "2025-12-12",
-    notes: ["First build"],
+    notes: ["Full Release"],
   },
 ];
 

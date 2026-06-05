@@ -8,6 +8,7 @@ import BreadcrumbBar from "@/components/BreadcrumbBar";
 import FileGrid from "@/components/FileGrid";
 import DriveContextMenu from "@/components/DriveContextMenu";
 import ColorPicker from "@/components/ColorPicker";
+import PopoverLayer from "@/components/PopoverLayer";
 import PlexUploadModal from "@/components/PlexUploadModal";
 import ConfirmModal from "@/components/ConfirmModal";
 import * as driveService from "@/src/lib/driveService";
@@ -598,21 +599,14 @@ export default function DrivePage() {
           />
         )}
         {contextMenu && showColorPicker && (
-          <div
-            style={{
-              position: "absolute",
-              left: contextMenu.x,
-              top: contextMenu.y,
-              zIndex: 999,
-            }}
-          >
+          <PopoverLayer x={contextMenu.x} y={contextMenu.y}>
             <ColorPicker
               onSelectColor={(color) =>
                 changeFolderColor(contextMenu.itemId, color)
               }
               onClose={closeContextMenu}
             />
-          </div>
+          </PopoverLayer>
         )}
         <PlexUploadModal
           isOpen={plexModalOpen}

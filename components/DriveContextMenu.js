@@ -1,6 +1,7 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import styles from "./DriveContextMenu.module.css";
+import useViewportPosition from "@/src/lib/useViewportPosition";
 
 export default function DriveContextMenu({
   x,
@@ -12,7 +13,7 @@ export default function DriveContextMenu({
   onMove,
   onClose,
 }) {
-  const menuRef = useRef(null);
+  const [menuRef, position] = useViewportPosition(x, y);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -34,13 +35,13 @@ export default function DriveContextMenu({
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [onClose]);
+  }, [onClose, menuRef]);
 
   return (
     <div
       ref={menuRef}
       className={styles.contextMenu}
-      style={{ left: x, top: y }}
+      style={{ left: position.left, top: position.top }}
       role="menu"
       aria-label="Context menu"
     >
