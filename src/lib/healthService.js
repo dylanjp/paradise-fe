@@ -37,6 +37,29 @@ function handleError(error, operation) {
   return new Error(`Failed to ${operation}. Please try again.`);
 }
 
+/**
+ * Normalizes a document record from the API so the UI never receives undefined
+ * display fields. A single malformed record (e.g. one missing `date`) must not be
+ * able to crash the documents list during render.
+ * @param {Object} doc - Raw document object from the API
+ * @param {Object} [options]
+ * @param {string} [options.fallbackDate] - Date (YYYY-MM-DD) to use when the record has none
+ * @returns {Object} Document with safe display fields
+ */
+function normalizeDocument(doc, { fallbackDate } = {}) {
+  const safeDoc = doc && typeof doc === "object" ? doc : {};
+  const hasValidDate =
+    typeof safeDoc.date === "string" && safeDoc.date.trim() !== "";
+  return {
+    ...safeDoc,
+    name: safeDoc.name || "Untitled document",
+    category: safeDoc.category || "Other",
+    date: hasValidDate ? safeDoc.date : (fallbackDate ?? null),
+    size: safeDoc.size || "—",
+    url: safeDoc.url || null,
+  };
+}
+
 export const healthService = {
   // --- Journal Entries ---
 
@@ -141,7 +164,8 @@ export const healthService = {
    */
   getDocuments: async (username) => {
     try {
-      return await apiClient.get(`${getBase(username)}/documents`);
+      const data = await apiClient.get(`${getBase(username)}/documents`);
+      return Array.isArray(data) ? data.map((doc) => normalizeDocument(doc)) : [];
     } catch (error) {
       throw handleError(error, "fetch documents");
     }
@@ -156,9 +180,11 @@ export const healthService = {
    * @returns {Promise<Object>} The created document record
    */
   uploadDocument: async (username, file, category) => {
+    const today = new Date().toISOString().slice(0, 10);
     const formData = new FormData();
     formData.append("file", file);
     formData.append("category", category);
+    formData.append("date", today);
 
     const token = getToken();
     const response = await fetch(
@@ -180,7 +206,7 @@ export const healthService = {
       throw new Error(errorData.message || "Upload failed");
     }
 
-    return response.json();
+    return normalizeDocument(await response.json(), { fallbackDate: today });
   },
 
   /**

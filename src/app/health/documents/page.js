@@ -81,33 +81,43 @@ export default function DocumentsPage() {
     e.stopPropagation();
     setDragActive(false);
 
-    const file = e.dataTransfer?.files?.[0];
-    if (file) {
-      await doUpload(file);
-    }
+    await doUpload(e.dataTransfer?.files);
   }
 
   async function handleFileChange(e) {
-    const file = e.target.files?.[0];
-    if (file) {
-      await doUpload(file);
-    }
-    // Reset input so the same file can be re-selected
+    await doUpload(e.target.files);
+    // Reset input so the same file(s) can be re-selected
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   }
 
-  async function doUpload(file) {
+  // Uploads every provided file sequentially, holding the uploading state for the
+  // whole batch and collecting any failures into a single error banner.
+  async function doUpload(fileList) {
+    const files = Array.from(fileList ?? []);
+    if (files.length === 0) return;
+
     setUploading(true);
     setUploadError(null);
-    try {
-      await uploadDocument(file, uploadCategory);
-    } catch (err) {
-      setUploadError(err.message || "Upload failed");
-    } finally {
-      setUploading(false);
+
+    const failures = [];
+    for (const file of files) {
+      try {
+        await uploadDocument(file, uploadCategory);
+      } catch (err) {
+        failures.push({ name: file.name, message: err.message });
+      }
     }
+
+    if (failures.length === 1) {
+      setUploadError(failures[0].message || `Failed to upload ${failures[0].name}`);
+    } else if (failures.length > 1) {
+      const names = failures.map((f) => f.name).join(", ");
+      setUploadError(`Failed to upload ${failures.length} files: ${names}`);
+    }
+
+    setUploading(false);
   }
 
   // --- Category filter handlers ---
@@ -123,6 +133,8 @@ export default function DocumentsPage() {
   // --- Document actions ---
 
   function handleDownload(doc) {
+    // A malformed/legacy record may have no file URL; don't build an href="undefined" link.
+    if (!doc.url) return;
     const link = document.createElement("a");
     link.href = doc.url;
     link.download = doc.name;
@@ -204,6 +216,7 @@ export default function DocumentsPage() {
         <input
           ref={fileInputRef}
           type="file"
+          multiple
           style={{ display: "none" }}
           onChange={handleFileChange}
           aria-hidden="true"
@@ -212,7 +225,7 @@ export default function DocumentsPage() {
         <p className={styles.uploadText}>
           {uploading
             ? "Uploading..."
-            : "Drag & drop a file here, or click to browse"}
+            : "Drag & drop files here, or click to browse"}
         </p>
 
         {/* Inline category selector */}
