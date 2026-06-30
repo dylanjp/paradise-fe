@@ -4,7 +4,8 @@
  * Health Graphs Screen
  * Sidebar listing metrics + main chart area with Chart.js visualization.
  * Supports line, bar, dual-line, and multi-line metric types.
- * Modals for adding new metrics and data points.
+ * Modals for adding/editing metrics and data points, plus a per-point list
+ * under the chart for editing and deleting individual points.
  *
  * Requirements: 4.1–4.10, 11.3
  */
@@ -14,6 +15,7 @@ import { useHealth } from "@/src/context/HealthContext";
 import TButton from "@/components/TButton";
 import TInput from "@/components/TInput";
 import TSelect from "@/components/TSelect";
+import TCard from "@/components/TCard";
 import HealthModal from "@/components/HealthModal";
 import HealthChartWrapper from "@/components/HealthChartWrapper";
 import { calculateSleepHours } from "@/utils/sleepCalculator";
@@ -65,6 +67,11 @@ function averageRecentSleep(sleepMetric, count = 7) {
  */
 function chartPrimitive(metricType) {
   return metricType === "bar" ? "bar" : "line";
+}
+
+/** True for metric types that carry a `datasets` array rather than a flat `data` array. */
+function isMultiSeries(metric) {
+  return !!metric && (metric.type === "dual-line" || metric.type === "multi-line");
 }
 
 /**
@@ -129,6 +136,10 @@ export default function GraphsPage() {
     fetchMetrics,
     createMetric,
     addDataPoint,
+    updateMetric,
+    deleteMetric,
+    updateDataPoint,
+    deleteDataPoint,
     journalEntries,
     fetchJournalEntries,
   } = useHealth();
@@ -145,22 +156,30 @@ export default function GraphsPage() {
   // Selection state
   const [selectedMetricId, setSelectedMetricId] = useState(null);
 
-  // Modal state
-  const [showAddMetric, setShowAddMetric] = useState(false);
-  const [showAddPoint, setShowAddPoint] = useState(false);
+  // Modal visibility
+  const [showMetricModal, setShowMetricModal] = useState(false);
+  const [showPointModal, setShowPointModal] = useState(false);
 
-  // Add Metric form
+  // Metric form (shared by Add + Edit). editingMetric=false → create, true → update.
   const [metricForm, setMetricForm] = useState(INITIAL_METRIC_FORM);
   const [metricErrors, setMetricErrors] = useState({});
   const [savingMetric, setSavingMetric] = useState(false);
+  const [editingMetric, setEditingMetric] = useState(false);
 
-  // Add Data Point form
+  // Data point form (shared by Add + Edit). editingPointIndex=null → add, number → edit.
   const [pointForm, setPointForm] = useState(INITIAL_POINT_FORM);
   const [pointErrors, setPointErrors] = useState({});
   const [savingPoint, setSavingPoint] = useState(false);
+  const [editingPointIndex, setEditingPointIndex] = useState(null);
 
   // Multi-series values state (keyed by dataset.label, e.g., { Systolic: "", Diastolic: "" })
   const [seriesValues, setSeriesValues] = useState({});
+
+  // Delete confirmation targets
+  const [deletePointTarget, setDeletePointTarget] = useState(null); // { index, label }
+  const [deletingPoint, setDeletingPoint] = useState(false);
+  const [deleteMetricTarget, setDeleteMetricTarget] = useState(null); // metric object
+  const [deletingMetric, setDeletingMetric] = useState(false);
 
   // Fetch metrics + journal entries on mount (journal feeds the Sleep Hours metric)
   useEffect(() => {
@@ -186,25 +205,27 @@ export default function GraphsPage() {
     [isSleepMetricSelected, sleepMetric],
   );
 
-  // Initialize seriesValues when Add Data Point modal opens for a multi-series metric
-  useEffect(() => {
-    if (showAddPoint && selectedMetric) {
-      if (selectedMetric.type === "dual-line" || selectedMetric.type === "multi-line") {
-        const initial = {};
-        (selectedMetric.datasets || []).forEach((ds) => {
-          initial[ds.label] = "";
-        });
-        setSeriesValues(initial);
-      } else {
-        setSeriesValues({});
-      }
-    }
-  }, [showAddPoint, selectedMetric]);
-
   // Chart data for selected metric
   const chartData = useMemo(() => {
     if (!selectedMetric) return null;
     return buildChartData(selectedMetric);
+  }, [selectedMetric]);
+
+  // Per-point view model for the editable list under the chart. Each entry maps to
+  // the metric's parallel-array index, which the API uses to target the point.
+  const points = useMemo(() => {
+    if (!selectedMetric || selectedMetric.derived) return [];
+    const labels = selectedMetric.labels || [];
+    const multi = isMultiSeries(selectedMetric);
+    return labels.map((label, index) => {
+      const values = multi
+        ? (selectedMetric.datasets || []).map((ds) => ({
+            name: ds.label,
+            value: ds.data ? ds.data[index] : undefined,
+          }))
+        : [{ name: selectedMetric.unit || "Value", value: (selectedMetric.data || [])[index] }];
+      return { index, label, values };
+    });
   }, [selectedMetric]);
 
   // Per-metric chart options: axis titles and an empty-data fallback so the
@@ -238,7 +259,7 @@ export default function GraphsPage() {
     };
   }, [selectedMetric]);
 
-  // --- Add Metric handlers ---
+  // --- Metric modal (add + edit) handlers ---
 
   function handleMetricFieldChange(field, value) {
     setMetricForm((prev) => ({ ...prev, [field]: value }));
@@ -259,7 +280,34 @@ export default function GraphsPage() {
     return errs;
   }
 
-  async function handleAddMetric(e) {
+  function openAddMetric() {
+    setEditingMetric(false);
+    setMetricForm(INITIAL_METRIC_FORM);
+    setMetricErrors({});
+    setShowMetricModal(true);
+  }
+
+  function openEditMetric() {
+    if (!selectedMetric) return;
+    setEditingMetric(true);
+    setMetricForm({
+      name: selectedMetric.name || "",
+      type: selectedMetric.type || "line",
+      unit: selectedMetric.unit || "",
+      color: (selectedMetric.colors && selectedMetric.colors[0]) || "#00e5ff",
+    });
+    setMetricErrors({});
+    setShowMetricModal(true);
+  }
+
+  function closeMetricModal() {
+    setShowMetricModal(false);
+    setEditingMetric(false);
+    setMetricForm(INITIAL_METRIC_FORM);
+    setMetricErrors({});
+  }
+
+  async function handleMetricSubmit(e) {
     e.preventDefault();
     const errs = validateMetricForm();
     if (Object.keys(errs).length > 0) {
@@ -269,15 +317,26 @@ export default function GraphsPage() {
 
     setSavingMetric(true);
     try {
-      await createMetric({
-        name: metricForm.name.trim(),
-        type: metricForm.type,
-        unit: metricForm.unit.trim(),
-        colors: [metricForm.color.trim()],
-      });
-      setMetricForm(INITIAL_METRIC_FORM);
-      setMetricErrors({});
-      setShowAddMetric(false);
+      if (editingMetric && selectedMetric) {
+        // Preserve any extra series colors; only the primary color is editable here.
+        const existingColors = selectedMetric.colors || [];
+        const colors = existingColors.length > 1
+          ? [metricForm.color.trim(), ...existingColors.slice(1)]
+          : [metricForm.color.trim()];
+        await updateMetric(selectedMetric.id, {
+          name: metricForm.name.trim(),
+          unit: metricForm.unit.trim(),
+          colors,
+        });
+      } else {
+        await createMetric({
+          name: metricForm.name.trim(),
+          type: metricForm.type,
+          unit: metricForm.unit.trim(),
+          colors: [metricForm.color.trim()],
+        });
+      }
+      closeMetricModal();
     } catch {
       // Error is set in context
     } finally {
@@ -285,7 +344,7 @@ export default function GraphsPage() {
     }
   }
 
-  // --- Add Data Point handlers ---
+  // --- Data point modal (add + edit) handlers ---
 
   function handlePointFieldChange(field, value) {
     setPointForm((prev) => ({ ...prev, [field]: value }));
@@ -302,11 +361,7 @@ export default function GraphsPage() {
     const errs = {};
     if (!pointForm.label.trim()) errs.label = "Label is required";
 
-    const isMultiSeries =
-      selectedMetric &&
-      (selectedMetric.type === "dual-line" || selectedMetric.type === "multi-line");
-
-    if (isMultiSeries) {
+    if (isMultiSeries(selectedMetric)) {
       (selectedMetric.datasets || []).forEach((ds) => {
         const val = seriesValues[ds.label];
         if (val === undefined || val === null || String(val).trim() === "") {
@@ -324,7 +379,53 @@ export default function GraphsPage() {
     return errs;
   }
 
-  async function handleAddPoint(e) {
+  function openAddPoint() {
+    if (!selectedMetric) return;
+    setEditingPointIndex(null);
+    setPointForm(INITIAL_POINT_FORM);
+    setPointErrors({});
+    if (isMultiSeries(selectedMetric)) {
+      const initial = {};
+      (selectedMetric.datasets || []).forEach((ds) => {
+        initial[ds.label] = "";
+      });
+      setSeriesValues(initial);
+    } else {
+      setSeriesValues({});
+    }
+    setShowPointModal(true);
+  }
+
+  function openEditPoint(point) {
+    if (!selectedMetric) return;
+    setEditingPointIndex(point.index);
+    setPointErrors({});
+    if (isMultiSeries(selectedMetric)) {
+      const initial = {};
+      point.values.forEach((v) => {
+        initial[v.name] = v.value != null ? String(v.value) : "";
+      });
+      setSeriesValues(initial);
+      setPointForm({ label: point.label || "", value: "" });
+    } else {
+      setSeriesValues({});
+      setPointForm({
+        label: point.label || "",
+        value: point.values[0]?.value != null ? String(point.values[0].value) : "",
+      });
+    }
+    setShowPointModal(true);
+  }
+
+  function closePointModal() {
+    setShowPointModal(false);
+    setEditingPointIndex(null);
+    setPointForm(INITIAL_POINT_FORM);
+    setPointErrors({});
+    setSeriesValues({});
+  }
+
+  async function handlePointSubmit(e) {
     e.preventDefault();
     if (!selectedMetric) return;
 
@@ -334,10 +435,7 @@ export default function GraphsPage() {
       return;
     }
 
-    const isMultiSeries =
-      selectedMetric.type === "dual-line" || selectedMetric.type === "multi-line";
-
-    const payload = isMultiSeries
+    const payload = isMultiSeries(selectedMetric)
       ? {
           label: pointForm.label.trim(),
           values: selectedMetric.datasets.map((ds) => ({
@@ -352,11 +450,12 @@ export default function GraphsPage() {
 
     setSavingPoint(true);
     try {
-      await addDataPoint(selectedMetric.id, payload);
-      setPointForm(INITIAL_POINT_FORM);
-      setPointErrors({});
-      setSeriesValues({});
-      setShowAddPoint(false);
+      if (editingPointIndex === null) {
+        await addDataPoint(selectedMetric.id, payload);
+      } else {
+        await updateDataPoint(selectedMetric.id, editingPointIndex, payload);
+      }
+      closePointModal();
     } catch (err) {
       if (err.errorCode === "HEALTH_VALIDATION_FAILED") {
         setPointErrors((prev) => ({ ...prev, api: err.message }));
@@ -365,6 +464,42 @@ export default function GraphsPage() {
     } finally {
       setSavingPoint(false);
     }
+  }
+
+  // --- Delete handlers ---
+
+  async function confirmDeletePoint() {
+    if (!selectedMetric || !deletePointTarget) return;
+    setDeletingPoint(true);
+    try {
+      await deleteDataPoint(selectedMetric.id, deletePointTarget.index);
+      setDeletePointTarget(null);
+    } catch {
+      // Error is set in context
+    } finally {
+      setDeletingPoint(false);
+    }
+  }
+
+  async function confirmDeleteMetric() {
+    if (!deleteMetricTarget) return;
+    setDeletingMetric(true);
+    try {
+      await deleteMetric(deleteMetricTarget.id);
+      setDeleteMetricTarget(null);
+      // Fall back to auto-selecting the first metric (Sleep Hours).
+      setSelectedMetricId(null);
+    } catch {
+      // Error is set in context
+    } finally {
+      setDeletingMetric(false);
+    }
+  }
+
+  // --- Metric selection ---
+
+  function handleSelectMetric(metricId) {
+    setSelectedMetricId(metricId);
   }
 
   // --- Render ---
@@ -385,14 +520,14 @@ export default function GraphsPage() {
             className={`${styles.metricItem}${
               selectedMetricId === metric.id ? ` ${styles.metricItemActive}` : ""
             }`}
-            onClick={() => setSelectedMetricId(metric.id)}
+            onClick={() => handleSelectMetric(metric.id)}
             role="button"
             tabIndex={0}
             aria-pressed={selectedMetricId === metric.id}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
-                setSelectedMetricId(metric.id);
+                handleSelectMetric(metric.id);
               }
             }}
           >
@@ -403,7 +538,7 @@ export default function GraphsPage() {
         <div className={styles.addMetricSlot}>
           <TButton
             variant="secondary"
-            onClick={() => setShowAddMetric(true)}
+            onClick={openAddMetric}
             ariaLabel="Add new metric"
           >
             + Add Metric
@@ -436,17 +571,33 @@ export default function GraphsPage() {
                   {selectedMetric.derived ? " · derived from journal" : ""}
                 </span>
               </div>
-              <div className={styles.chartActions}>
-                {!selectedMetric.derived && (
+              {!selectedMetric.derived && (
+                <div className={styles.chartActions}>
                   <TButton
                     variant="primary"
-                    onClick={() => setShowAddPoint(true)}
+                    onClick={openAddPoint}
                     ariaLabel="Add data point to selected metric"
                   >
                     + Add Data Point
                   </TButton>
-                )}
-              </div>
+                  <TButton
+                    variant="secondary"
+                    onClick={openEditMetric}
+                    ariaLabel="Edit this metric's settings"
+                  >
+                    Edit
+                  </TButton>
+                  {!selectedMetric.seeded && (
+                    <TButton
+                      variant="danger"
+                      onClick={() => setDeleteMetricTarget(selectedMetric)}
+                      ariaLabel="Delete this metric"
+                    >
+                      Delete
+                    </TButton>
+                  )}
+                </div>
+              )}
             </div>
 
             {isSleepMetricSelected && (
@@ -470,21 +621,72 @@ export default function GraphsPage() {
                 options={chartOptions}
               />
             </div>
+
+            {/* Editable per-point list (not shown for the read-only Sleep metric) */}
+            {!selectedMetric.derived && (
+              <div className={styles.pointsSection}>
+                <h2 className={styles.pointsTitle}>Data Points</h2>
+                {points.length === 0 ? (
+                  <p className={styles.emptyState}>
+                    No data points yet. Use “+ Add Data Point” to add one.
+                  </p>
+                ) : (
+                  <div className={styles.pointsList}>
+                    {points.map((point) => {
+                      const valueText =
+                        point.values.length === 1
+                          ? `${point.values[0].value ?? "—"}${
+                              selectedMetric.unit ? ` ${selectedMetric.unit}` : ""
+                            }`
+                          : point.values
+                              .map((v) => `${v.name}: ${v.value ?? "—"}`)
+                              .join(" · ");
+                      return (
+                        <TCard key={point.index}>
+                          <div className={styles.pointRow}>
+                            <div className={styles.pointInfo}>
+                              <span className={styles.pointDate}>
+                                {formatShortDate(point.label)}
+                              </span>
+                              <span className={styles.pointValues}>{valueText}</span>
+                            </div>
+                            <div className={styles.pointActions}>
+                              <TButton
+                                variant="ghost"
+                                onClick={() => openEditPoint(point)}
+                                ariaLabel={`Edit data point for ${formatShortDate(point.label)}`}
+                              >
+                                ✎
+                              </TButton>
+                              <TButton
+                                variant="danger"
+                                onClick={() =>
+                                  setDeletePointTarget({ index: point.index, label: point.label })
+                                }
+                                ariaLabel={`Delete data point for ${formatShortDate(point.label)}`}
+                              >
+                                ✕
+                              </TButton>
+                            </div>
+                          </div>
+                        </TCard>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
           </>
         )}
       </main>
 
-      {/* Add Metric Modal */}
+      {/* Add / Edit Metric Modal */}
       <HealthModal
-        isOpen={showAddMetric}
-        onClose={() => {
-          setShowAddMetric(false);
-          setMetricForm(INITIAL_METRIC_FORM);
-          setMetricErrors({});
-        }}
-        title="Add Metric"
+        isOpen={showMetricModal}
+        onClose={closeMetricModal}
+        title={editingMetric ? "Edit Metric" : "Add Metric"}
       >
-        <form className={styles.modalForm} onSubmit={handleAddMetric} noValidate>
+        <form className={styles.modalForm} onSubmit={handleMetricSubmit} noValidate>
           <TInput
             id="metric-name"
             label="Name"
@@ -494,16 +696,18 @@ export default function GraphsPage() {
             placeholder="e.g., Body Weight"
           />
 
-          <TSelect
-            id="metric-type"
-            label="Type"
-            value={metricForm.type}
-            onChange={(e) => handleMetricFieldChange("type", e.target.value)}
-          >
-            <option value="line">Line</option>
-            <option value="bar">Bar</option>
-            <option value="dual-line">Dual Line</option>
-          </TSelect>
+          {!editingMetric && (
+            <TSelect
+              id="metric-type"
+              label="Type"
+              value={metricForm.type}
+              onChange={(e) => handleMetricFieldChange("type", e.target.value)}
+            >
+              <option value="line">Line</option>
+              <option value="bar">Bar</option>
+              <option value="dual-line">Dual Line</option>
+            </TSelect>
+          )}
 
           <TInput
             id="metric-unit"
@@ -524,35 +728,23 @@ export default function GraphsPage() {
           />
 
           <div className={styles.modalActions}>
-            <TButton
-              variant="ghost"
-              onClick={() => {
-                setShowAddMetric(false);
-                setMetricForm(INITIAL_METRIC_FORM);
-                setMetricErrors({});
-              }}
-            >
+            <TButton variant="ghost" onClick={closeMetricModal}>
               CANCEL
             </TButton>
             <TButton type="submit" disabled={savingMetric}>
-              {savingMetric ? "SAVING..." : "CREATE"}
+              {savingMetric ? "SAVING..." : editingMetric ? "SAVE" : "CREATE"}
             </TButton>
           </div>
         </form>
       </HealthModal>
 
-      {/* Add Data Point Modal */}
+      {/* Add / Edit Data Point Modal */}
       <HealthModal
-        isOpen={showAddPoint}
-        onClose={() => {
-          setShowAddPoint(false);
-          setPointForm(INITIAL_POINT_FORM);
-          setPointErrors({});
-          setSeriesValues({});
-        }}
-        title="Add Data Point"
+        isOpen={showPointModal}
+        onClose={closePointModal}
+        title={editingPointIndex === null ? "Add Data Point" : "Edit Data Point"}
       >
-        <form className={styles.modalForm} onSubmit={handleAddPoint} noValidate>
+        <form className={styles.modalForm} onSubmit={handlePointSubmit} noValidate>
           <TInput
             id="point-label"
             label="Label (date)"
@@ -562,7 +754,7 @@ export default function GraphsPage() {
             error={pointErrors.label}
           />
 
-          {selectedMetric && (selectedMetric.type === "dual-line" || selectedMetric.type === "multi-line") ? (
+          {isMultiSeries(selectedMetric) ? (
             <div className={styles.seriesInputGroup}>
               {(selectedMetric.datasets || []).map((ds) => (
                 <div key={ds.label} className={styles.seriesInputLabel}>
@@ -603,22 +795,58 @@ export default function GraphsPage() {
           )}
 
           <div className={styles.modalActions}>
-            <TButton
-              variant="ghost"
-              onClick={() => {
-                setShowAddPoint(false);
-                setPointForm(INITIAL_POINT_FORM);
-                setPointErrors({});
-                setSeriesValues({});
-              }}
-            >
+            <TButton variant="ghost" onClick={closePointModal}>
               CANCEL
             </TButton>
             <TButton type="submit" disabled={savingPoint}>
-              {savingPoint ? "SAVING..." : "ADD POINT"}
+              {savingPoint ? "SAVING..." : editingPointIndex === null ? "ADD POINT" : "SAVE"}
             </TButton>
           </div>
         </form>
+      </HealthModal>
+
+      {/* Delete Data Point Confirmation */}
+      <HealthModal
+        isOpen={deletePointTarget !== null}
+        onClose={() => setDeletePointTarget(null)}
+        title="Delete Data Point"
+      >
+        <p>
+          Delete the data point for{" "}
+          <strong>
+            {deletePointTarget ? formatShortDate(deletePointTarget.label) : ""}
+          </strong>
+          ? This action cannot be undone.
+        </p>
+        <div className={styles.modalActions}>
+          <TButton variant="ghost" onClick={() => setDeletePointTarget(null)}>
+            CANCEL
+          </TButton>
+          <TButton variant="danger" onClick={confirmDeletePoint} disabled={deletingPoint}>
+            {deletingPoint ? "DELETING..." : "DELETE"}
+          </TButton>
+        </div>
+      </HealthModal>
+
+      {/* Delete Metric Confirmation */}
+      <HealthModal
+        isOpen={deleteMetricTarget !== null}
+        onClose={() => setDeleteMetricTarget(null)}
+        title="Delete Metric"
+      >
+        <p>
+          Delete the metric{" "}
+          <strong>{deleteMetricTarget ? deleteMetricTarget.name : ""}</strong> and all
+          of its data points? This action cannot be undone.
+        </p>
+        <div className={styles.modalActions}>
+          <TButton variant="ghost" onClick={() => setDeleteMetricTarget(null)}>
+            CANCEL
+          </TButton>
+          <TButton variant="danger" onClick={confirmDeleteMetric} disabled={deletingMetric}>
+            {deletingMetric ? "DELETING..." : "DELETE"}
+          </TButton>
+        </div>
       </HealthModal>
     </div>
   );

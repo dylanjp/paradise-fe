@@ -187,6 +187,74 @@ export function HealthProvider({ children }) {
     }
   }, []);
 
+  /**
+   * Updates an existing metric's settings (name, unit, colors).
+   */
+  const updateMetric = useCallback(async (metricId, metric) => {
+    setMetricsError(null);
+    try {
+      const updatedMetric = await healthService.updateMetric(username, metricId, metric);
+      setMetrics((prev) =>
+        prev.map((m) => (m.id === metricId ? updatedMetric : m))
+      );
+    } catch (error) {
+      setMetricsError(error.message);
+      throw error;
+    }
+  }, []);
+
+  /**
+   * Updates the data point at the given index on a metric.
+   * The API returns the full updated metric, which replaces the one in state.
+   */
+  const updateDataPoint = useCallback(async (metricId, index, point) => {
+    setMetricsError(null);
+    try {
+      const updatedMetric = await healthService.updateDataPoint(username, metricId, index, point);
+      setMetrics((prev) =>
+        prev.map((m) => (m.id === metricId ? updatedMetric : m))
+      );
+    } catch (error) {
+      setMetricsError(error.message);
+      throw error;
+    }
+  }, []);
+
+  /**
+   * Deletes the data point at the given index on a metric.
+   * The API returns the updated metric, which replaces the one in state.
+   */
+  const deleteDataPoint = useCallback(async (metricId, index) => {
+    setMetricsError(null);
+    try {
+      const updatedMetric = await healthService.deleteDataPoint(username, metricId, index);
+      setMetrics((prev) =>
+        prev.map((m) => (m.id === metricId ? updatedMetric : m))
+      );
+    } catch (error) {
+      setMetricsError(error.message);
+      throw error;
+    }
+  }, []);
+
+  /**
+   * Deletes a whole metric. Optimistic removal from local state, rollback on failure.
+   */
+  const deleteMetric = useCallback(async (metricId) => {
+    setMetricsError(null);
+    const previousMetrics = metrics;
+    // Optimistic removal
+    setMetrics((prev) => prev.filter((m) => m.id !== metricId));
+    try {
+      await healthService.deleteMetric(username, metricId);
+    } catch (error) {
+      // Rollback on failure
+      setMetrics(previousMetrics);
+      setMetricsError(error.message);
+      throw error;
+    }
+  }, [metrics]);
+
   // =====================
   // Documents Functions
   // =====================
@@ -217,6 +285,21 @@ export function HealthProvider({ children }) {
     try {
       const savedDoc = await healthService.uploadDocument(username, file, category);
       setDocuments((prev) => [...prev, savedDoc]);
+    } catch (error) {
+      setDocumentsError(error.message);
+      throw error;
+    }
+  }, []);
+
+  /**
+   * Downloads a document's file bytes (Blob) via the authenticated endpoint.
+   * Read-only — does not touch documents state; the caller turns the Blob into
+   * an object URL to trigger the browser download.
+   */
+  const downloadDocument = useCallback(async (id) => {
+    setDocumentsError(null);
+    try {
+      return await healthService.downloadDocument(username, id);
     } catch (error) {
       setDocumentsError(error.message);
       throw error;
@@ -369,6 +452,10 @@ export function HealthProvider({ children }) {
     fetchMetrics,
     createMetric,
     addDataPoint,
+    updateMetric,
+    deleteMetric,
+    updateDataPoint,
+    deleteDataPoint,
 
     // Documents
     documents,
@@ -376,6 +463,7 @@ export function HealthProvider({ children }) {
     documentsError,
     fetchDocuments,
     uploadDocument,
+    downloadDocument,
     deleteDocument,
 
     // Appointments

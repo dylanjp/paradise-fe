@@ -26,6 +26,7 @@ export default function DocumentsPage() {
     documentsError,
     fetchDocuments,
     uploadDocument,
+    downloadDocument,
     deleteDocument,
   } = useHealth();
 
@@ -35,6 +36,7 @@ export default function DocumentsPage() {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState(null);
+  const [downloadError, setDownloadError] = useState(null);
   const [dragActive, setDragActive] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -132,17 +134,24 @@ export default function DocumentsPage() {
 
   // --- Document actions ---
 
-  function handleDownload(doc) {
-    // A malformed/legacy record may have no file URL; don't build an href="undefined" link.
-    if (!doc.url) return;
-    const link = document.createElement("a");
-    link.href = doc.url;
-    link.download = doc.name;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  async function handleDownload(doc) {
+    // Document records carry no public URL — the file is served only behind auth at
+    // GET /documents/{id}/download. Fetch the bytes with the token, then hand the
+    // browser an object URL to save (same pattern as MyDrive downloads).
+    setDownloadError(null);
+    try {
+      const blob = await downloadDocument(doc.id);
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = doc.name;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setDownloadError(err.message || `Failed to download ${doc.name}`);
+    }
   }
 
   function handleDeleteClick(doc) {
@@ -198,6 +207,11 @@ export default function DocumentsPage() {
       {uploadError && (
         <div className={styles.errorBanner} role="alert">
           Upload failed: {uploadError}
+        </div>
+      )}
+      {downloadError && (
+        <div className={styles.errorBanner} role="alert">
+          Download failed: {downloadError}
         </div>
       )}
 

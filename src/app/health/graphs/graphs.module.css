@@ -204,6 +204,64 @@
 }
 
 /* =========================
+   DATA POINTS LIST
+   Editable per-point rows under the chart.
+   ========================= */
+
+.pointsSection {
+  margin-top: 24px;
+}
+
+.pointsTitle {
+  font-family: var(--hp-font-display);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--hp-text-muted);
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+
+.pointsList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pointRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.pointInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.pointDate {
+  font-family: var(--hp-font-display);
+  font-size: 13px;
+  color: var(--hp-text-primary);
+}
+
+.pointValues {
+  font-family: var(--hp-font-body);
+  font-size: 12px;
+  color: var(--hp-text-muted);
+  word-break: break-word;
+}
+
+.pointActions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* =========================
    MOBILE LAYOUT
    Below 640px: stack vertically, sidebar collapses into a
    horizontal scrollable strip, chart header stacks, full-width actions.
