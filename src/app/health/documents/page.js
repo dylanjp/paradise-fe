@@ -26,6 +26,7 @@ export default function DocumentsPage() {
     documentsError,
     fetchDocuments,
     uploadDocument,
+    downloadDocument,
     deleteDocument,
   } = useHealth();
 
@@ -35,6 +36,7 @@ export default function DocumentsPage() {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState(null);
+  const [downloadError, setDownloadError] = useState(null);
   const [dragActive, setDragActive] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -81,33 +83,43 @@ export default function DocumentsPage() {
     e.stopPropagation();
     setDragActive(false);
 
-    const file = e.dataTransfer?.files?.[0];
-    if (file) {
-      await doUpload(file);
-    }
+    await doUpload(e.dataTransfer?.files);
   }
 
   async function handleFileChange(e) {
-    const file = e.target.files?.[0];
-    if (file) {
-      await doUpload(file);
-    }
-    // Reset input so the same file can be re-selected
+    await doUpload(e.target.files);
+    // Reset input so the same file(s) can be re-selected
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   }
 
-  async function doUpload(file) {
+  // Uploads every provided file sequentially, holding the uploading state for the
+  // whole batch and collecting any failures into a single error banner.
+  async function doUpload(fileList) {
+    const files = Array.from(fileList ?? []);
+    if (files.length === 0) return;
+
     setUploading(true);
     setUploadError(null);
-    try {
-      await uploadDocument(file, uploadCategory);
-    } catch (err) {
-      setUploadError(err.message || "Upload failed");
-    } finally {
-      setUploading(false);
+
+    const failures = [];
+    for (const file of files) {
+      try {
+        await uploadDocument(file, uploadCategory);
+      } catch (err) {
+        failures.push({ name: file.name, message: err.message });
+      }
     }
+
+    if (failures.length === 1) {
+      setUploadError(failures[0].message || `Failed to upload ${failures[0].name}`);
+    } else if (failures.length > 1) {
+      const names = failures.map((f) => f.name).join(", ");
+      setUploadError(`Failed to upload ${failures.length} files: ${names}`);
+    }
+
+    setUploading(false);
   }
 
   // --- Category filter handlers ---
@@ -122,15 +134,24 @@ export default function DocumentsPage() {
 
   // --- Document actions ---
 
-  function handleDownload(doc) {
-    const link = document.createElement("a");
-    link.href = doc.url;
-    link.download = doc.name;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  async function handleDownload(doc) {
+    // Document records carry no public URL — the file is served only behind auth at
+    // GET /documents/{id}/download. Fetch the bytes with the token, then hand the
+    // browser an object URL to save (same pattern as MyDrive downloads).
+    setDownloadError(null);
+    try {
+      const blob = await downloadDocument(doc.id);
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = doc.name;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setDownloadError(err.message || `Failed to download ${doc.name}`);
+    }
   }
 
   function handleDeleteClick(doc) {
@@ -188,6 +209,11 @@ export default function DocumentsPage() {
           Upload failed: {uploadError}
         </div>
       )}
+      {downloadError && (
+        <div className={styles.errorBanner} role="alert">
+          Download failed: {downloadError}
+        </div>
+      )}
 
       {/* Upload Zone */}
       <div
@@ -204,6 +230,7 @@ export default function DocumentsPage() {
         <input
           ref={fileInputRef}
           type="file"
+          multiple
           style={{ display: "none" }}
           onChange={handleFileChange}
           aria-hidden="true"
@@ -212,7 +239,7 @@ export default function DocumentsPage() {
         <p className={styles.uploadText}>
           {uploading
             ? "Uploading..."
-            : "Drag & drop a file here, or click to browse"}
+            : "Drag & drop files here, or click to browse"}
         </p>
 
         {/* Inline category selector */}

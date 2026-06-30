@@ -37,6 +37,29 @@ function handleError(error, operation) {
   return new Error(`Failed to ${operation}. Please try again.`);
 }
 
+/**
+ * Normalizes a document record from the API so the UI never receives undefined
+ * display fields. A single malformed record (e.g. one missing `date`) must not be
+ * able to crash the documents list during render.
+ * @param {Object} doc - Raw document object from the API
+ * @param {Object} [options]
+ * @param {string} [options.fallbackDate] - Date (YYYY-MM-DD) to use when the record has none
+ * @returns {Object} Document with safe display fields
+ */
+function normalizeDocument(doc, { fallbackDate } = {}) {
+  const safeDoc = doc && typeof doc === "object" ? doc : {};
+  const hasValidDate =
+    typeof safeDoc.date === "string" && safeDoc.date.trim() !== "";
+  return {
+    ...safeDoc,
+    name: safeDoc.name || "Untitled document",
+    category: safeDoc.category || "Other",
+    date: hasValidDate ? safeDoc.date : (fallbackDate ?? null),
+    size: safeDoc.size || "—",
+    url: safeDoc.url || null,
+  };
+}
+
 export const healthService = {
   // --- Journal Entries ---
 
@@ -133,6 +156,62 @@ export const healthService = {
     }
   },
 
+  /**
+   * Updates an existing metric's settings (name, unit, colors).
+   * @param {string} metricId - Metric ID
+   * @param {Object} metric - { name, unit, colors }
+   * @returns {Promise<Object>} The updated metric
+   */
+  updateMetric: async (username, metricId, metric) => {
+    try {
+      return await apiClient.put(`${getBase(username)}/metrics/${metricId}`, metric);
+    } catch (error) {
+      throw handleError(error, "update metric");
+    }
+  },
+
+  /**
+   * Deletes a metric.
+   * @param {string} metricId - Metric ID
+   * @returns {Promise<void>}
+   */
+  deleteMetric: async (username, metricId) => {
+    try {
+      return await apiClient.delete(`${getBase(username)}/metrics/${metricId}`);
+    } catch (error) {
+      throw handleError(error, "delete metric");
+    }
+  },
+
+  /**
+   * Updates the data point at the given index on a metric.
+   * @param {string} metricId - Metric ID
+   * @param {number} index - 0-based point index (label-sorted order)
+   * @param {Object} point - Data point payload ({ label, value } or { label, values })
+   * @returns {Promise<Object>} The updated metric
+   */
+  updateDataPoint: async (username, metricId, index, point) => {
+    try {
+      return await apiClient.put(`${getBase(username)}/metrics/${metricId}/points/${index}`, point);
+    } catch (error) {
+      throw handleError(error, "update data point");
+    }
+  },
+
+  /**
+   * Deletes the data point at the given index on a metric.
+   * @param {string} metricId - Metric ID
+   * @param {number} index - 0-based point index (label-sorted order)
+   * @returns {Promise<Object>} The updated metric
+   */
+  deleteDataPoint: async (username, metricId, index) => {
+    try {
+      return await apiClient.delete(`${getBase(username)}/metrics/${metricId}/points/${index}`);
+    } catch (error) {
+      throw handleError(error, "delete data point");
+    }
+  },
+
   // --- Documents ---
 
   /**
@@ -141,7 +220,8 @@ export const healthService = {
    */
   getDocuments: async (username) => {
     try {
-      return await apiClient.get(`${getBase(username)}/documents`);
+      const data = await apiClient.get(`${getBase(username)}/documents`);
+      return Array.isArray(data) ? data.map((doc) => normalizeDocument(doc)) : [];
     } catch (error) {
       throw handleError(error, "fetch documents");
     }
@@ -156,9 +236,11 @@ export const healthService = {
    * @returns {Promise<Object>} The created document record
    */
   uploadDocument: async (username, file, category) => {
+    const today = new Date().toISOString().slice(0, 10);
     const formData = new FormData();
     formData.append("file", file);
     formData.append("category", category);
+    formData.append("date", today);
 
     const token = getToken();
     const response = await fetch(
@@ -180,7 +262,46 @@ export const healthService = {
       throw new Error(errorData.message || "Upload failed");
     }
 
-    return response.json();
+    return normalizeDocument(await response.json(), { fallbackDate: today });
+  },
+
+  /**
+   * Downloads a document's file bytes via the authenticated streaming endpoint.
+   * The document record carries no public URL — bytes are served only behind
+   * auth at GET /documents/{id}/download — so this fetches with the Bearer token
+   * and returns a Blob the caller can turn into an object URL.
+   * Uses fetch directly (not apiClient) because the response is binary, not JSON.
+   * @param {string} id - Document ID
+   * @returns {Promise<Blob>} The file contents
+   */
+  downloadDocument: async (username, id) => {
+    const token = getToken();
+    let response;
+    try {
+      response = await fetch(
+        `${process.env.NEXT_PUBLIC_PARADISE_API_BASE_URL}${getBase(username)}/documents/${id}/download`,
+        {
+          method: "GET",
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }
+      );
+    } catch (error) {
+      throw handleError(error, "download document");
+    }
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        handleUnauthorized();
+        throw new Error("Session expired");
+      }
+      const errorData = await response.json().catch(() => ({}));
+      throw handleError(
+        { status: response.status, data: errorData, message: errorData.message },
+        "download document"
+      );
+    }
+
+    return response.blob();
   },
 
   /**
