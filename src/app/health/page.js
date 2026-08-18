@@ -7,8 +7,12 @@
  * Requirements: 1.2, 1.3, 11.2, 12.4
  */
 
+import { useState } from "react";
 import Link from "next/link";
 import TCard from "@/components/TCard";
+import TButton from "@/components/TButton";
+import HsaReceiptModal from "@/components/HsaReceiptModal";
+import { useAuth } from "@/src/context/AuthContext";
 import { formatLongDate } from "@/utils/dateFormatter";
 import styles from "./home.module.css";
 
@@ -63,8 +67,22 @@ function CircleIcon({ color }) {
       aria-hidden="true"
       className={styles.tileIconSvg}
     >
-      <circle cx="16" cy="16" r="11" fill="none" stroke={color} strokeWidth="2" />
-      <circle cx="16" cy="16" r="4" fill="none" stroke={color} strokeWidth="2" />
+      <circle
+        cx="16"
+        cy="16"
+        r="11"
+        fill="none"
+        stroke={color}
+        strokeWidth="2"
+      />
+      <circle
+        cx="16"
+        cy="16"
+        r="4"
+        fill="none"
+        stroke={color}
+        strokeWidth="2"
+      />
     </svg>
   );
 }
@@ -102,6 +120,8 @@ const TILES = [
 
 export default function HealthHome() {
   const todayISO = new Date().toISOString().slice(0, 10);
+  const { isAdmin } = useAuth();
+  const [hsaOpen, setHsaOpen] = useState(false);
 
   return (
     <div className={styles.page}>
@@ -141,7 +161,23 @@ export default function HealthHome() {
         })}
       </div>
 
-      <p className={styles.selectHint} aria-hidden="true">[ SELECT MODULE ]</p>
+      {isAdmin() && (
+        <div className={styles.hsaAction}>
+          <TButton
+            variant="secondary"
+            onClick={() => setHsaOpen(true)}
+            ariaLabel="Upload an HSA receipt for future reimbursement"
+          >
+            + ADD HSA RECEIPT
+          </TButton>
+        </div>
+      )}
+
+      <p className={styles.selectHint} aria-hidden="true">
+        [ SELECT MODULE ]
+      </p>
+
+      <HsaReceiptModal isOpen={hsaOpen} onClose={() => setHsaOpen(false)} />
     </div>
   );
 }

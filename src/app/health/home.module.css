@@ -63,7 +63,8 @@
 }
 
 .tileLink > * {
-  transition: box-shadow var(--hp-transition-speed) var(--hp-animation-easing),
+  transition:
+    box-shadow var(--hp-transition-speed) var(--hp-animation-easing),
     border-color var(--hp-transition-speed) var(--hp-animation-easing);
 }
 
@@ -72,9 +73,14 @@
 }
 
 .tileLink:hover > * {
-  box-shadow: 0 0 24px color-mix(in srgb, var(--tile-accent) 35%, transparent),
+  box-shadow:
+    0 0 24px color-mix(in srgb, var(--tile-accent) 35%, transparent),
     inset 0 0 24px color-mix(in srgb, var(--tile-accent) 10%, transparent);
-  border-color: color-mix(in srgb, var(--tile-accent) 70%, transparent) !important;
+  border-color: color-mix(
+    in srgb,
+    var(--tile-accent) 70%,
+    transparent
+  ) !important;
 }
 
 .tileLink:focus-visible {
@@ -117,6 +123,11 @@
   font-size: 11px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
+}
+
+.hsaAction {
+  display: flex;
+  justify-content: center;
 }
 
 .selectHint {

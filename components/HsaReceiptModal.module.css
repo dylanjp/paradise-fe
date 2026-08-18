@@ -1,0 +1,100 @@
+/* =========================
+   HSA RECEIPT MODAL
+   Form, progress, and status styles for the receipt upload dialog.
+   Colors use the --hp-* tokens defined on .healthRoot in health.module.css.
+   ========================= */
+
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modalActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.errorBanner {
+  color: var(--hp-red, #ff4444);
+  font-family: var(--hp-font-body);
+  font-size: 13px;
+  padding: 12px;
+  border: 1px solid rgba(255, 68, 68, 0.3);
+  border-radius: var(--hp-border-radius, 2px);
+  background: rgba(255, 68, 68, 0.08);
+}
+
+/* =========================
+   FILENAME PREVIEW
+   Shows the generated name before upload, so the naming rule explains itself.
+   ========================= */
+
+.preview {
+  font-family: var(--hp-font-body);
+  font-size: 12px;
+  color: var(--hp-text-muted, rgba(0, 180, 220, 0.5));
+  letter-spacing: 1px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px dashed var(--hp-border-subtle, rgba(0, 229, 255, 0.18));
+  border-radius: var(--hp-border-radius, 2px);
+  background: rgba(0, 20, 40, 0.5);
+  overflow-wrap: anywhere;
+}
+
+.previewName {
+  color: var(--hp-amber, #ffaa00);
+}
+
+/* =========================
+   UPLOAD PROGRESS
+   ========================= */
+
+.progressTrack {
+  position: relative;
+  width: 100%;
+  height: 26px;
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid var(--hp-border-subtle, rgba(0, 229, 255, 0.18));
+  border-radius: var(--hp-border-radius, 2px);
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background: rgba(0, 229, 255, 0.25);
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.45);
+  transition: width 150ms linear;
+}
+
+.progressText {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--hp-font-body);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--hp-cyan, #00e5ff);
+}
+
+/* =========================
+   SUCCESS
+   ========================= */
+
+.success {
+  font-family: var(--hp-font-body);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--hp-green, #00ff9d);
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 255, 157, 0.3);
+  border-radius: var(--hp-border-radius, 2px);
+  background: rgba(0, 255, 157, 0.08);
+  overflow-wrap: anywhere;
+}
