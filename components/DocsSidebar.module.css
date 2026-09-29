@@ -18,9 +18,102 @@
 
 /* Sidebar header */
 .sidebarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   padding: 1rem 1rem 0.75rem;
   border-bottom: 1px solid rgba(248, 2, 6, 0.3);
   flex-shrink: 0;
+}
+
+/* Refresh button (rescans the vaults) */
+.refreshButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  font-size: 0.8rem;
+  color: var(--tron-red-primary, #f80206);
+  background: black;
+  border: 1px solid rgba(248, 2, 6, 0.6);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.refreshButton:hover:not(:disabled),
+.refreshButton:focus-visible {
+  color: #00d4ff;
+  border-color: #00d4ff;
+  box-shadow: 0 0 10px #00d4ff;
+  outline: none;
+}
+
+.refreshButton:disabled {
+  cursor: progress;
+  color: #00d4ff;
+  border-color: rgba(0, 212, 255, 0.6);
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinning {
+    animation-duration: 3s;
+  }
+}
+
+/* Refresh failure (the current tree stays usable) */
+.refreshError {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid rgba(248, 2, 6, 0.3);
+  background: rgba(248, 2, 6, 0.08);
+  flex-shrink: 0;
+}
+
+.refreshErrorText {
+  flex: 1;
+  min-width: 0;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.75rem;
+  color: var(--tron-orange-primary, #ff6600);
+  overflow-wrap: anywhere;
+}
+
+.dismissButton {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  font-size: 0.7rem;
+  color: var(--tron-red-primary, #f80206);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.dismissButton:hover,
+.dismissButton:focus-visible {
+  color: #00d4ff;
+  outline: none;
 }
 
 .sidebarTitle {
@@ -92,6 +185,19 @@
 
   .sidebarOpen {
     transform: translateX(0);
+  }
+
+  /* Larger touch targets */
+  .refreshButton {
+    width: 38px;
+    height: 38px;
+    font-size: 0.95rem;
+  }
+
+  .dismissButton {
+    width: 32px;
+    height: 32px;
+    font-size: 0.85rem;
   }
 
   .mobileToggle {

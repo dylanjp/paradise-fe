@@ -3,12 +3,18 @@ import { useEffect } from "react";
 import styles from "./DriveContextMenu.module.css";
 import useViewportPosition from "@/src/lib/useViewportPosition";
 
+/**
+ * DriveContextMenu - Right-click menu for a drive item.
+ * Files get Preview (only when onPreview is given, i.e. the file is previewable)
+ * and Download; folders get Change Color. Move and Delete apply to both.
+ */
 export default function DriveContextMenu({
   x,
   y,
   itemType,
   onChangeColor,
   onDelete,
+  onPreview,
   onDownload,
   onMove,
   onClose,
@@ -58,18 +64,32 @@ export default function DriveContextMenu({
         </button>
       )}
       {itemType === "folder" && <div className={styles.separator} />}
-      {itemType === "file" && onDownload && (
+      {itemType === "file" && (onPreview || onDownload) && (
         <>
-          <button
-            className={styles.menuItem}
-            onClick={(e) => {
-              e.stopPropagation();
-              onDownload();
-            }}
-            role="menuitem"
-          >
-            Download
-          </button>
+          {onPreview && (
+            <button
+              className={styles.menuItem}
+              onClick={(e) => {
+                e.stopPropagation();
+                onPreview();
+              }}
+              role="menuitem"
+            >
+              Preview
+            </button>
+          )}
+          {onDownload && (
+            <button
+              className={styles.menuItem}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDownload();
+              }}
+              role="menuitem"
+            >
+              Download
+            </button>
+          )}
           <div className={styles.separator} />
         </>
       )}

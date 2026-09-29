@@ -68,6 +68,19 @@
   text-overflow: ellipsis;
 }
 
+/* Vault roots ("LE Docs", "Pratt Capitol") */
+.rootRow {
+  font-family: "Orbitron", "Share Tech Mono", monospace;
+  font-size: 0.78rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.rootIcon {
+  color: #00d4ff;
+  filter: drop-shadow(0 0 4px rgba(0, 212, 255, 0.6));
+}
+
 .childrenContainer {
   /* Children animate in */
 }

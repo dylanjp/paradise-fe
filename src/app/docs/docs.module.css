@@ -21,7 +21,8 @@
 .docsLayout {
   display: flex;
   flex-direction: row;
-  flex: 1;
+  /* Fixed height (not flex-grow) so the content pane scrolls instead of the page */
+  flex: none;
   margin-top: 60px; /* Space for fixed navbar */
   height: calc(100vh - 60px);
   overflow: hidden;
@@ -52,11 +53,42 @@
   animation: pulse 1.5s ease-in-out infinite;
 }
 
+.sidebarError {
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .sidebarErrorText {
   font-family: "Share Tech Mono", monospace;
   font-size: 0.85rem;
   color: var(--tron-red-primary, #f80206);
   text-align: center;
+}
+
+.retryButton {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  padding: 6px 16px;
+  background: black;
+  color: var(--tron-red-primary, #f80206);
+  border: 1px solid var(--tron-red-primary, #f80206);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.retryButton:hover:not(:disabled),
+.retryButton:focus-visible {
+  color: #00d4ff;
+  border-color: #00d4ff;
+  box-shadow: 0 0 12px #00d4ff;
+  outline: none;
+}
+
+.retryButton:disabled {
+  opacity: 0.6;
+  cursor: progress;
 }
 
 @keyframes pulse {

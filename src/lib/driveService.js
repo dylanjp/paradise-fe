@@ -75,31 +75,115 @@ export async function deleteItem(userId, driveKey, itemId) {
   return apiClient.del(`/users/${userId}/drives/${driveKey}/items/${itemId}`);
 }
 
-/** GET /users/{userId}/drives/{driveKey}/items/{itemId}/download — returns Blob */
-export async function downloadFile(userId, driveKey, itemId) {
+/**
+ * Thrown by downloadFile() when a size-capped download (previews) exceeds maxBytes.
+ * The transfer is aborted as soon as the limit is crossed.
+ */
+export class PreviewTooLargeError extends Error {
+  constructor(maxBytes, bytes = null) {
+    super("This file is too large to preview.");
+    this.name = "PreviewTooLargeError";
+    this.maxBytes = maxBytes;
+    this.bytes = bytes;
+  }
+}
+
+/**
+ * Reads a response body into a Blob, aborting once more than maxBytes arrive.
+ * Falls back to response.blob() (then checks the size) when streams are unavailable.
+ */
+async function readCappedBlob(response, maxBytes, abort) {
+  const type = response.headers.get("content-type") || "";
+
+  const declared = Number(response.headers.get("content-length"));
+  if (Number.isFinite(declared) && declared > maxBytes) {
+    abort();
+    throw new PreviewTooLargeError(maxBytes, declared);
+  }
+
+  if (!response.body || typeof response.body.getReader !== "function") {
+    const blob = await response.blob();
+    if (blob.size > maxBytes) throw new PreviewTooLargeError(maxBytes, blob.size);
+    return blob;
+  }
+
+  const reader = response.body.getReader();
+  const chunks = [];
+  let received = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    received += value.byteLength;
+    if (received > maxBytes) {
+      reader.cancel().catch(() => {});
+      abort();
+      throw new PreviewTooLargeError(maxBytes, received);
+    }
+    chunks.push(value);
+  }
+  return new Blob(chunks, type ? { type } : undefined);
+}
+
+/**
+ * GET /users/{userId}/drives/{driveKey}/items/{itemId}/download — returns Blob
+ * @param {string} userId
+ * @param {string} driveKey
+ * @param {string} itemId
+ * @param {{signal?: AbortSignal, maxBytes?: number}} [options]
+ *   maxBytes: stream the body and abort with PreviewTooLargeError past this size
+ * @returns {Promise<Blob>}
+ */
+export async function downloadFile(
+  userId,
+  driveKey,
+  itemId,
+  { signal, maxBytes } = {},
+) {
   const url = `${API_BASE_URL}/users/${userId}/drives/${driveKey}/items/${itemId}/download`;
   const headers = {};
   const token = getToken();
   if (token) headers["Authorization"] = `Bearer ${token}`;
-  const response = await fetch(url, { method: "GET", headers });
-  if (!response.ok) {
-    if (response.status === 401) {
-      apiClient.handleUnauthorized();
-      throw new apiClient.AuthenticationError("Session expired");
-    }
-    let errorData = null;
-    try {
-      errorData = await response.json();
-    } catch {
-      /* not JSON */
-    }
-    throw new apiClient.ApiError(
-      errorData?.message || "Download failed",
-      response.status,
-      errorData,
-    );
+
+  // Own controller so an oversized preview can be cut off; follows the caller's signal
+  const controller = new AbortController();
+  const forwardAbort = () => controller.abort(signal.reason);
+  if (signal) {
+    if (signal.aborted) controller.abort(signal.reason);
+    else signal.addEventListener("abort", forwardAbort, { once: true });
   }
-  return response.blob();
+
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers,
+      signal: controller.signal,
+    });
+    if (!response.ok) {
+      if (response.status === 401) {
+        apiClient.handleUnauthorized();
+        throw new apiClient.AuthenticationError("Session expired");
+      }
+      let errorData = null;
+      try {
+        errorData = await response.json();
+      } catch {
+        /* not JSON */
+      }
+      throw new apiClient.ApiError(
+        errorData?.message || "Download failed",
+        response.status,
+        errorData,
+      );
+    }
+
+    const cap = Number(maxBytes);
+    if (maxBytes === undefined || maxBytes === null || !Number.isFinite(cap)) {
+      return await response.blob();
+    }
+    return await readCappedBlob(response, Math.max(0, cap), () => controller.abort());
+  } finally {
+    if (signal) signal.removeEventListener("abort", forwardAbort);
+  }
 }
 
 /**

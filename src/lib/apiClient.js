@@ -214,12 +214,40 @@ export async function del(endpoint) {
   return request(endpoint, { method: "DELETE" });
 }
 
+/**
+ * Authenticated GET that returns the response body as a Blob (files, images, PDFs).
+ * The JWT is sent only in the Authorization header, never in the URL.
+ * 401 triggers logout (AuthenticationError), 403 throws AuthorizationError,
+ * anything else throws ApiError with the backend's JSON message when present.
+ * @param {string} endpoint - API endpoint (relative to base URL)
+ * @param {{signal?: AbortSignal}} [options] - Optional abort signal
+ * @returns {Promise<Blob>} Response body
+ */
+export async function fetchAuthorizedBlob(endpoint, { signal } = {}) {
+  const url = `${API_BASE_URL}${endpoint}`;
+
+  const headers = {};
+  const token = getToken();
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  const response = await fetch(url, { method: "GET", headers, signal });
+
+  if (!response.ok) {
+    await handleResponseError(response);
+  }
+
+  return response.blob();
+}
+
 // Export as default object for convenience
 const apiClient = {
   get,
   post,
   put,
   delete: del,
+  fetchAuthorizedBlob,
   setLogoutCallback,
   clearLogoutCallback,
   handleUnauthorized,

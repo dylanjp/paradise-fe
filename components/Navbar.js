@@ -8,6 +8,7 @@ import { SiImmich } from "react-icons/si";
 import { SiPlex } from "react-icons/si";
 import { SiHomeassistant } from "react-icons/si";
 import { SiLetsencrypt } from "react-icons/si";
+import { SiForgejo } from "react-icons/si";
 import VersionModal from "@/components/VersionModal";
 import NotificationIcon from "@/components/NotificationIcon";
 import { useUnreadStatus } from "@/hooks/useUnreadStatus";
@@ -71,6 +72,18 @@ const Navbar = forwardRef(function Navbar(_props, ref) {
           >
             <SiLetsencrypt />
           </a>
+          {process.env.NEXT_PUBLIC_FORGEJO_URL && (
+            <a
+              href={process.env.NEXT_PUBLIC_FORGEJO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Forgejo"
+              title="Forgejo"
+              className={styles.icon}
+            >
+              <SiForgejo />
+            </a>
+          )}
           <NotificationIcon hasUnread={hasUnread} />
           <span
             className={styles.version}
@@ -141,6 +154,18 @@ const Navbar = forwardRef(function Navbar(_props, ref) {
               >
                 <SiLetsencrypt />
               </a>
+              {process.env.NEXT_PUBLIC_FORGEJO_URL && (
+                <a
+                  href={process.env.NEXT_PUBLIC_FORGEJO_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Forgejo"
+                  title="Forgejo"
+                  className={styles.icon}
+                >
+                  <SiForgejo />
+                </a>
+              )}
               <NotificationIcon
                 hasUnread={hasUnread}
                 onClick={() => setMenuOpen(false)}

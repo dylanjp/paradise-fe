@@ -1,74 +1,80 @@
 "use client";
 
-import { useMemo, useCallback, useRef, useEffect } from "react";
-import { marked } from "marked";
-import BlogAnimator from "./BlogAnimator";
+import { useRef, useEffect } from "react";
+import { FaDownload, FaExternalLinkAlt, FaFileImage } from "react-icons/fa";
+import DocsMarkdownView from "./DocsMarkdownView";
+import DocsCanvasView from "./DocsCanvasView";
+import PdfViewer from "./PdfViewer";
+import ImageViewer from "./ImageViewer";
+import {
+  allowsOpenInNewTab,
+  getExtension,
+  openBlobInNewTab,
+  saveBlobAs,
+} from "@/src/lib/fileTypes";
 import styles from "./DocsContent.module.css";
 
-marked.setOptions({ breaks: true, gfm: true });
+/** Last path segment */
+function fileNameOf(path) {
+  const clean = String(path ?? "");
+  return clean.slice(clean.lastIndexOf("/") + 1);
+}
 
-/**
- * Converts Obsidian-style [[Link]] syntax into clickable anchor tags.
- * The anchors use data-doc-link attributes so we can intercept clicks.
- */
-function convertObsidianLinks(markdown, fileLookup) {
-  return markdown.replace(/\[\[([^\]]+)\]\]/g, (match, inner) => {
-    const linkText = inner.trim();
-    if (!linkText) return match;
+/** Image doc: name, Download / Open in new tab, and the fit/1:1 viewer */
+function DocsImageView({ doc }) {
+  const name = fileNameOf(doc.path);
+  const ext = getExtension(doc.path);
+  const canOpenInTab = !!doc.blob && allowsOpenInNewTab("image", ext);
 
-    const key = linkText.toLowerCase();
-    const resolvedPath =
-      fileLookup[key] || fileLookup[key.replace(/\.md$/, "")] || null;
-
-    if (resolvedPath) {
-      return `<a href="#" class="docs-internal-link" data-doc-link="${resolvedPath}">${linkText}</a>`;
-    }
-    // No match found — render as plain styled text
-    return `<span class="docs-unresolved-link">${linkText}</span>`;
-  });
+  return (
+    <div className={styles.viewerContainer}>
+      <div className={styles.fileToolbar} role="toolbar" aria-label="Image actions">
+        <span className={styles.fileName} title={name}>
+          <FaFileImage className={styles.fileIcon} aria-hidden="true" />
+          {name}
+        </span>
+        <div className={styles.fileActions}>
+          {canOpenInTab && (
+            <button
+              type="button"
+              className={styles.actionButton}
+              onClick={() => openBlobInNewTab(doc.blob, ext)}
+            >
+              <FaExternalLinkAlt aria-hidden="true" />
+              <span>Open in new tab</span>
+            </button>
+          )}
+          <button
+            type="button"
+            className={styles.actionButton}
+            onClick={() => doc.blob && saveBlobAs(doc.blob, name)}
+            disabled={!doc.blob}
+          >
+            <FaDownload aria-hidden="true" />
+            <span>Download</span>
+          </button>
+        </div>
+      </div>
+      <div className={styles.imageArea}>
+        <ImageViewer url={doc.displayUrl} alt={name} />
+      </div>
+    </div>
+  );
 }
 
 /**
- * DocsContent - Renders markdown documentation content with decode animation.
- * Supports Obsidian [[link]] syntax for navigating between documents.
+ * DocsContent - Shows the selected document, dispatching on its kind:
+ * markdown (decode animation + embeds), canvas, PDF or image.
+ * The empty, loading and error states are shared by every kind.
  *
- * @param {string|null} content - Raw markdown string
- * @param {boolean} isLoading - Whether content is being fetched
- * @param {string|null} error - Error message if fetch failed
+ * @param {object|null} doc - Loaded document from useDocumentation
+ *   ({path, kind, text | blob + displayUrl, cache, error})
  * @param {string|null} selectedPath - Currently selected file path
+ * @param {object} index - Docs index (buildDocsIndex) for link resolution
  * @param {function} onSelectFile - Callback to navigate to a linked document
- * @param {object} fileLookup - Map of lowercase file names to paths
  */
-export default function DocsContent({
-  content,
-  isLoading,
-  error,
-  selectedPath,
-  onSelectFile,
-  fileLookup = {},
-}) {
+export default function DocsContent({ doc, selectedPath, index, onSelectFile }) {
   const contentRef = useRef(null);
-
-  const htmlContent = useMemo(() => {
-    if (!content) return null;
-    const processed = convertObsidianLinks(content, fileLookup);
-    return marked.parse(processed);
-  }, [content, fileLookup]);
-
-  // Intercept clicks on Obsidian-style internal links
-  const handleContentClick = useCallback(
-    (e) => {
-      const link = e.target.closest("[data-doc-link]");
-      if (link) {
-        e.preventDefault();
-        const docPath = link.getAttribute("data-doc-link");
-        if (docPath && onSelectFile) {
-          onSelectFile(docPath);
-        }
-      }
-    },
-    [onSelectFile],
-  );
 
   // Scroll to top when a new file is selected
   useEffect(() => {
@@ -92,8 +98,8 @@ export default function DocsContent({
     );
   }
 
-  // Loading state
-  if (isLoading) {
+  // Loading state (also while the previous doc is still in state)
+  if (!doc || doc.path !== selectedPath) {
     return (
       <div className={styles.contentArea} ref={contentRef}>
         <div className={styles.loadingState}>
@@ -104,31 +110,83 @@ export default function DocsContent({
   }
 
   // Error state
-  if (error) {
+  if (doc.error) {
     return (
       <div className={styles.contentArea} ref={contentRef}>
         <div className={styles.errorState}>
           <p className={styles.errorTitle}>ACCESS DENIED</p>
-          <p className={styles.errorMessage}>{error}</p>
+          <p className={styles.errorMessage}>{doc.error}</p>
         </div>
       </div>
     );
   }
 
-  // Render markdown content with decode animation
-  return (
-    <div
-      className={styles.contentArea}
-      ref={contentRef}
-      onClick={handleContentClick}
-    >
-      <main className={styles.markdownContainer}>
-        <BlogAnimator
-          key={selectedPath}
-          htmlContent={htmlContent}
-          enableAnimation={true}
-        />
-      </main>
-    </div>
-  );
+  switch (doc.kind) {
+    case "markdown":
+      return (
+        <div className={styles.contentArea} ref={contentRef}>
+          <main className={styles.markdownContainer}>
+            <DocsMarkdownView
+              key={doc.path}
+              path={doc.path}
+              text={doc.text}
+              index={index}
+              cache={doc.cache}
+              onSelectFile={onSelectFile}
+              scrollRef={contentRef}
+            />
+          </main>
+        </div>
+      );
+
+    case "canvas":
+      return (
+        <div
+          className={`${styles.contentArea} ${styles.canvasArea}`}
+          ref={contentRef}
+        >
+          <DocsCanvasView
+            key={doc.path}
+            path={doc.path}
+            text={doc.text}
+            index={index}
+            cache={doc.cache}
+            onSelectFile={onSelectFile}
+          />
+        </div>
+      );
+
+    case "pdf":
+      return (
+        <div className={styles.contentArea} ref={contentRef}>
+          <div className={styles.viewerContainer}>
+            <PdfViewer
+              key={doc.path}
+              blob={doc.blob}
+              url={doc.displayUrl}
+              fileName={fileNameOf(doc.path)}
+            />
+          </div>
+        </div>
+      );
+
+    case "image":
+      return (
+        <div className={styles.contentArea} ref={contentRef}>
+          <DocsImageView key={doc.path} doc={doc} />
+        </div>
+      );
+
+    default:
+      return (
+        <div className={styles.contentArea} ref={contentRef}>
+          <div className={styles.errorState}>
+            <p className={styles.errorTitle}>UNSUPPORTED FILE</p>
+            <p className={styles.errorMessage}>
+              This file type can&apos;t be previewed.
+            </p>
+          </div>
+        </div>
+      );
+  }
 }

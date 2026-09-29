@@ -1,0 +1,63 @@
+/*
+ * DocsMarkdownView — extras on top of MarkdownBody for docs content built during
+ * embed hydration: embedded-note titles and the PDF download fallback.
+ * .embedExtras is also applied to the canvas view's markdown containers.
+ */
+
+.embedExtras {
+  min-width: 0;
+}
+
+/* ========================= */
+/* EMBEDDED NOTES            */
+/* ========================= */
+.embedExtras :global(.docs-embed-note-title) {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  font-family: "Orbitron", "Share Tech Mono", monospace;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.embedExtras :global(.docs-embed-note-body > :last-child) {
+  margin-bottom: 0;
+}
+
+/* Keyboard focus on embedded images (they open the lightbox) */
+.embedExtras :global(img.docs-embed-image:focus-visible) {
+  outline: 2px solid #00d4ff;
+  outline-offset: 2px;
+}
+
+/* ========================= */
+/* PDF DOWNLOAD FALLBACK     */
+/* ========================= */
+.embedExtras :global(.docs-embed-pdf-name) {
+  display: inline-block;
+  margin-right: 0.75rem;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.85rem;
+  color: #ff6600;
+  overflow-wrap: anywhere;
+}
+
+.embedExtras :global(.docs-embed-download) {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.85rem;
+  padding: 6px 14px;
+  background: black;
+  color: #f80206;
+  border: 1px solid #f80206;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.embedExtras :global(.docs-embed-download:hover),
+.embedExtras :global(.docs-embed-download:focus-visible) {
+  color: #00d4ff;
+  border-color: #00d4ff;
+  box-shadow: 0 0 12px #00d4ff;
+  outline: none;
+}
