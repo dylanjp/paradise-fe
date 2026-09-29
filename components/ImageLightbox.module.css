@@ -1,0 +1,123 @@
+@font-face {
+  font-family: "TechMono";
+  src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
+}
+
+/* ========================= */
+/* OVERLAY                   */
+/* ========================= */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.9);
+  animation: lightboxFadeIn 0.3s ease-out;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(95vw, 1600px);
+  max-height: 95vh;
+  outline: none;
+  animation: lightboxPopIn 0.35s ease-out;
+}
+
+/* ========================= */
+/* HEADER                    */
+/* ========================= */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  align-self: stretch;
+}
+
+.caption {
+  min-width: 0;
+  font-family: "TechMono", monospace;
+  font-size: 0.9rem;
+  color: #ff6600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.closeButton {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  font-size: 1.1rem;
+  color: #f80206;
+  background: black;
+  border: 2px solid #f80206;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.closeButton:hover,
+.closeButton:focus-visible {
+  color: #00d4ff;
+  border-color: #00d4ff;
+  box-shadow: 0 0 12px #00d4ff;
+  outline: none;
+}
+
+/* ========================= */
+/* IMAGE AREA                */
+/* ========================= */
+.body {
+  display: flex;
+  justify-content: center;
+  min-height: 0;
+  max-height: calc(95vh - 44px);
+  --image-viewer-max-height: calc(95vh - 60px);
+}
+
+/* Cap the viewer so "actual size" scrolls inside the lightbox, not the page */
+.body > * {
+  max-height: calc(95vh - 44px);
+  box-shadow: 0 0 20px rgba(248, 2, 6, 0.35);
+}
+
+/* ========================= */
+/* ANIMATIONS                */
+/* ========================= */
+@keyframes lightboxFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lightboxPopIn {
+  0% {
+    transform: scale(0.92);
+    opacity: 0;
+    filter: brightness(1.8);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .panel {
+    animation: none;
+  }
+}

@@ -1,16 +1,16 @@
 /**
  * Documentation Service
- * Handles fetching documentation tree and file content from the backend API.
+ * Handles fetching the documentation tree, doc text and binary files (PDFs, images,
+ * embedded attachments) from the backend API.
+ *
+ * Protected files are always fetched with the Authorization header and turned into
+ * Blobs; callers create object URLs from them. Tokens never go in URLs.
  */
 
-import { get } from "./apiClient";
-import { getToken } from "./tokenStorage";
-import { handleUnauthorized } from "./apiClient";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_PARADISE_API_BASE_URL || "";
+import { get, post, fetchAuthorizedBlob } from "./apiClient";
 
 /**
- * Fetches the full documentation file tree.
+ * Fetches the documentation file tree (admin-only vault roots are filtered server-side).
  * @returns {Promise<DocsTreeNode>} The root tree node
  */
 export async function fetchDocsTree() {
@@ -18,37 +18,60 @@ export async function fetchDocsTree() {
 }
 
 /**
- * Fetches the raw markdown content of a documentation file.
- * Uses a custom fetch since apiClient.get() JSON-parses all responses.
- * @param {string} relativePath - Relative path from the docs root (e.g. "guides/getting-started.md")
- * @returns {Promise<string>} Raw markdown string
+ * Re-scans the documentation roots on the backend and returns the fresh tree.
+ * @returns {Promise<DocsTreeNode>} The root tree node
  */
-export async function fetchDocsFile(relativePath) {
-  const url = `${API_BASE_URL}/docs/file?path=${encodeURIComponent(relativePath)}`;
+export async function refreshDocsTree() {
+  return post("/docs/refresh");
+}
 
-  const headers = {};
-  const token = getToken();
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
+/**
+ * Fetches the text content of a markdown or canvas file.
+ * @param {string} relativePath - Tree path (e.g. "guides/getting-started.md")
+ * @param {{signal?: AbortSignal}} [options] - Optional abort signal
+ * @returns {Promise<string>} File text (UTF-8)
+ */
+export async function fetchDocsFile(relativePath, { signal } = {}) {
+  const blob = await fetchAuthorizedBlob(
+    `/docs/file?path=${encodeURIComponent(relativePath)}`,
+    { signal },
+  );
+  return blob.text();
+}
 
-  const response = await fetch(url, { method: "GET", headers });
+/**
+ * Fetches a binary file from the tree (PDF or image) as a Blob.
+ * @param {string} relativePath - Tree path
+ * @param {{signal?: AbortSignal}} [options] - Optional abort signal
+ * @returns {Promise<Blob>} File contents
+ */
+export async function fetchDocsRawBlob(relativePath, { signal } = {}) {
+  return fetchAuthorizedBlob(
+    `/docs/raw?path=${encodeURIComponent(relativePath)}`,
+    {
+      signal,
+    },
+  );
+}
 
-  if (response.status === 401) {
-    handleUnauthorized();
-    throw new Error("Session expired");
-  }
-
-  if (!response.ok) {
-    let message = "Failed to fetch document";
-    try {
-      const errorData = await response.json();
-      message = errorData.message || message;
-    } catch {
-      // Response may not be JSON
-    }
-    throw new Error(message);
-  }
-
-  return response.text();
+/**
+ * Fetches a file embedded by a doc (![[image.png]], canvas file nodes ...).
+ * The backend resolves the target relative to the embedding doc's vault and only
+ * serves attachments that doc actually references.
+ * @param {string} from - Tree path of the doc containing the embed
+ * @param {string} target - Embed target as written in the doc
+ * @param {{literal?: boolean, signal?: AbortSignal}} [options]
+ *   literal: true keeps "#", "|" and "^" as part of the file name (canvas file nodes)
+ * @returns {Promise<Blob>} File contents
+ */
+export async function fetchDocsEmbedBlob(
+  from,
+  target,
+  { literal = false, signal } = {},
+) {
+  const query =
+    `from=${encodeURIComponent(from)}` +
+    `&target=${encodeURIComponent(target)}` +
+    `&literal=${encodeURIComponent(literal ? "true" : "false")}`;
+  return fetchAuthorizedBlob(`/docs/embed?${query}`, { signal });
 }

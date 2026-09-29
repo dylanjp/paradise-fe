@@ -13,6 +13,100 @@
   padding: 2rem;
 }
 
+/* Canvas docs: the canvas fills the area and handles its own pan/zoom */
+.canvasArea {
+  overflow: hidden;
+  position: relative;
+}
+
+/* ========================= */
+/* PDF / IMAGE VIEWERS       */
+/* ========================= */
+.viewerContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 0;
+  padding: 1rem 1.5rem;
+}
+
+.fileToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border: 1px solid rgba(248, 2, 6, 0.5);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 8px rgba(248, 2, 6, 0.25);
+}
+
+.fileName {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.9rem;
+  color: var(--tron-orange-primary, #ff6600);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fileIcon {
+  flex-shrink: 0;
+  color: var(--tron-red-primary, #f80206);
+  filter: drop-shadow(0 0 4px #f80206);
+}
+
+.fileActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.85rem;
+  padding: 6px 14px;
+  background: black;
+  color: var(--tron-red-primary, #f80206);
+  border: 1px solid var(--tron-red-primary, #f80206);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.actionButton:hover:not(:disabled),
+.actionButton:focus-visible {
+  color: #00d4ff;
+  border-color: #00d4ff;
+  box-shadow: 0 0 12px #00d4ff;
+  outline: none;
+}
+
+.actionButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Image fills the rest of the area; "fit" mode stays within it */
+.imageArea {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  --image-viewer-max-height: calc(100vh - 60px - 7rem);
+}
+
 /* ========================= */
 /* OBSIDIAN INTERNAL LINKS   */
 /* ========================= */
@@ -152,6 +246,20 @@
 
   .markdownContainer {
     padding: 1.25rem 1rem;
+  }
+
+  /* Leave room for the floating sidebar toggle (bottom-left) */
+  .viewerContainer {
+    padding: 0.75rem 0.75rem 5rem;
+  }
+
+  .actionButton {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+
+  .imageArea {
+    --image-viewer-max-height: calc(100vh - 60px - 11rem);
   }
 
   .emptyText {

@@ -12,14 +12,16 @@ import styles from "./docs.module.css";
 export default function DocsPage() {
   const {
     tree,
+    index,
     selectedPath,
-    content,
+    doc,
     isTreeLoading,
-    isContentLoading,
     treeError,
-    contentError,
+    isRefreshing,
+    refreshError,
     selectFile,
-    fileLookup,
+    refreshTree,
+    dismissRefreshError,
   } = useDocumentation();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -39,9 +41,20 @@ export default function DocsPage() {
             <aside className={styles.sidebarLoading}>
               <span className={styles.sidebarLoadingText}>LOADING TREE...</span>
             </aside>
-          ) : treeError ? (
+          ) : treeError && !tree ? (
             <aside className={styles.sidebarError}>
               <span className={styles.sidebarErrorText}>{treeError}</span>
+              <button
+                type="button"
+                className={styles.retryButton}
+                onClick={refreshTree}
+                disabled={isRefreshing}
+              >
+                {isRefreshing ? "RETRYING..." : "RETRY"}
+              </button>
+              {refreshError && (
+                <span className={styles.sidebarErrorText}>{refreshError}</span>
+              )}
             </aside>
           ) : (
             <DocsSidebar
@@ -50,16 +63,18 @@ export default function DocsPage() {
               onSelectFile={selectFile}
               isOpen={isSidebarOpen}
               onToggle={toggleSidebar}
+              onRefresh={refreshTree}
+              isRefreshing={isRefreshing}
+              refreshError={refreshError}
+              onDismissRefreshError={dismissRefreshError}
             />
           )}
 
           <DocsContent
-            content={content}
-            isLoading={isContentLoading}
-            error={contentError}
+            doc={doc}
             selectedPath={selectedPath}
+            index={index}
             onSelectFile={selectFile}
-            fileLookup={fileLookup}
           />
         </div>
       </div>

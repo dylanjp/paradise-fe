@@ -1,0 +1,156 @@
+@font-face {
+  font-family: "TechMono";
+  src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/Orbitron-Bold.ttf") format("truetype");
+}
+
+/* ========================= */
+/* LAYOUT                    */
+/* ========================= */
+.pdfViewer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 60vh;
+  gap: 10px;
+}
+
+/* ========================= */
+/* TOOLBAR                   */
+/* ========================= */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  border: 1px solid rgba(248, 2, 6, 0.5);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 8px rgba(248, 2, 6, 0.25);
+}
+
+.fileName {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-family: "TechMono", monospace;
+  font-size: 0.9rem;
+  color: #ff6600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fileIcon {
+  flex-shrink: 0;
+  color: #f80206;
+  filter: drop-shadow(0 0 4px #f80206);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "TechMono", monospace;
+  font-size: 0.85rem;
+  padding: 6px 14px;
+  background: black;
+  color: #f80206;
+  border: 1px solid #f80206;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.actionButton:hover:not(:disabled),
+.actionButton:focus-visible {
+  color: #00d4ff;
+  border-color: #00d4ff;
+  box-shadow: 0 0 12px #00d4ff;
+  outline: none;
+}
+
+.actionButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ========================= */
+/* PDF FRAME                 */
+/* ========================= */
+.frame {
+  flex: 1;
+  width: 100%;
+  min-height: 60vh;
+  border: 1px solid rgba(0, 212, 255, 0.4);
+  border-radius: 6px;
+  background: #111;
+  box-shadow: 0 0 12px rgba(0, 212, 255, 0.15);
+}
+
+/* ========================= */
+/* UNSUPPORTED NOTICE        */
+/* ========================= */
+.notice {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 2rem 1rem;
+  text-align: center;
+  border: 1px dashed rgba(248, 2, 6, 0.5);
+  border-radius: 6px;
+}
+
+.noticeIcon {
+  font-size: 2.5rem;
+  color: #f80206;
+  opacity: 0.6;
+  filter: drop-shadow(0 0 10px #f80206);
+}
+
+.noticeTitle {
+  margin: 0;
+  font-family: "Orbitron", monospace;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  color: #f80206;
+  text-shadow: 0 0 8px #f80206;
+}
+
+.noticeText {
+  margin: 0 0 6px;
+  font-family: "TechMono", monospace;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ========================= */
+/* MOBILE RESPONSIVE         */
+/* ========================= */
+@media (max-width: 768px) {
+  .toolbar {
+    padding: 6px 8px;
+  }
+
+  .actionButton {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+}

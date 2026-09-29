@@ -11,8 +11,16 @@ import ColorPicker from "@/components/ColorPicker";
 import PopoverLayer from "@/components/PopoverLayer";
 import PlexUploadModal from "@/components/PlexUploadModal";
 import ConfirmModal from "@/components/ConfirmModal";
+import FilePreviewModal from "@/components/FilePreviewModal";
 import * as driveService from "@/src/lib/driveService";
 import { buildBreadcrumbPath, collectDescendants } from "@/src/lib/driveUtils";
+import {
+  canPreview,
+  getExtension,
+  getFileKind,
+  parseSizeString,
+  saveBlobAs,
+} from "@/src/lib/fileTypes";
 import { useAuth } from "@/src/context/AuthContext";
 import styles from "./drive.module.css";
 
@@ -22,6 +30,19 @@ const DRIVE_LABELS = {
   adminDrive: "Admin Drive",
   mediaCache: "Media Cache",
 };
+
+/** Lower-case extension of a drive file (the backend's fileType, else from the name) */
+function getItemExtension(item) {
+  if (!item) return "";
+  return item.fileType ? String(item.fileType).toLowerCase() : getExtension(item.name);
+}
+
+/** Whether a drive file opens in the previewer (known kind and within its size limit) */
+function isPreviewableFile(item) {
+  if (!item || item.type !== "file") return false;
+  const kind = getFileKind(getItemExtension(item));
+  return !!kind && canPreview(kind, parseSizeString(item.size));
+}
 
 export default function DrivePage() {
   const { isAdmin, isLoading: authLoading, username } = useAuth();
@@ -44,8 +65,15 @@ export default function DrivePage() {
   const [error, setError] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [previewItemId, setPreviewItemId] = useState(null);
 
   const isMediaCache = activeDrive === "mediaCache";
+
+  // The previewed file, or null once it no longer exists in the loaded drive
+  const previewItem =
+    previewItemId && driveData?.[previewItemId]?.type === "file"
+      ? driveData[previewItemId]
+      : null;
 
   const colorPickerTransition = useRef(false);
 
@@ -110,18 +138,31 @@ export default function DrivePage() {
     return () => document.removeEventListener("click", handleClick);
   }, [contextMenu, closeContextMenu]);
 
+  // Close the preview whenever the drive or folder changes (navigateToFolder and
+  // switchDrive also close it directly; this covers delete/move/drive reloads)
+  useEffect(() => {
+    setPreviewItemId(null);
+  }, [activeDrive, currentFolderId]);
+
+  // ...and forget it once its file disappears (deleted, moved, refreshed away)
+  useEffect(() => {
+    if (previewItemId && !previewItem) setPreviewItemId(null);
+  }, [previewItemId, previewItem]);
+
   function navigateToFolder(folderId) {
     const targetId = driveData[folderId] ? folderId : "root";
     setCurrentFolderId(targetId);
     setBreadcrumbPath(buildBreadcrumbPath(driveData, targetId));
     closeContextMenu();
     setNewFolderMode(false);
+    setPreviewItemId(null);
   }
 
   function switchDrive(driveKey) {
     setActiveDrive(driveKey);
     closeContextMenu();
     setNewFolderMode(false);
+    setPreviewItemId(null);
   }
 
   async function createFolder(name) {
@@ -250,7 +291,7 @@ export default function DrivePage() {
   }
 
   async function handleFileDownload(itemId) {
-    const item = driveData[itemId];
+    const item = driveData?.[itemId];
     if (!item || item.type !== "file") return;
     setError(null);
     try {
@@ -259,17 +300,57 @@ export default function DrivePage() {
         activeDrive,
         itemId,
       );
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = item.name;
-      link.click();
-      URL.revokeObjectURL(url);
+      // Saved as octet-stream; the URL is revoked later (revoking right away can cancel it)
+      saveBlobAs(blob, item.name);
     } catch (err) {
       setError(driveService.getErrorMessage(err));
       if (driveService.getErrorCode(err) === "DRIVE_ITEM_NOT_FOUND") {
         await refreshDriveContents();
       }
+    }
+  }
+
+  /** Opens a file: previews it when possible, otherwise downloads it */
+  function handleFileOpen(itemId) {
+    const item = driveData?.[itemId];
+    if (!item || item.type !== "file") return;
+    if (isPreviewableFile(item)) {
+      setError(null);
+      closeContextMenu();
+      setPreviewItemId(itemId);
+    } else {
+      handleFileDownload(itemId);
+    }
+  }
+
+  function closePreview() {
+    setPreviewItemId(null);
+  }
+
+  /** Full (uncapped) download from the preview, e.g. when it's too large to preview */
+  function handlePreviewDownload() {
+    const itemId = previewItemId;
+    setPreviewItemId(null);
+    if (itemId) handleFileDownload(itemId);
+  }
+
+  /** Size-capped fetch for the preview modal */
+  async function loadPreviewBlob(itemId, { signal, maxBytes }) {
+    try {
+      return await driveService.downloadFile(username, activeDrive, itemId, {
+        signal,
+        maxBytes,
+      });
+    } catch (err) {
+      const notFound =
+        driveService.getErrorCode(err) === "DRIVE_ITEM_NOT_FOUND" ||
+        err?.status === 404;
+      if (notFound && !signal?.aborted) {
+        // The file is gone: explain on the page and refresh (which closes the preview)
+        setError(driveService.getErrorMessage(err));
+        refreshDriveContents();
+      }
+      throw err;
     }
   }
 
@@ -555,7 +636,7 @@ export default function DrivePage() {
           <FileGrid
             items={getCurrentItems()}
             onFolderClick={navigateToFolder}
-            onFileClick={handleFileDownload}
+            onFileClick={handleFileOpen}
             onContextMenu={handleContextMenu}
             newFolderMode={newFolderMode}
             onNewFolderSubmit={createFolder}
@@ -590,6 +671,11 @@ export default function DrivePage() {
               setShowColorPicker(true);
             }}
             onDelete={() => deleteItem(contextMenu.itemId)}
+            onPreview={
+              isPreviewableFile(driveData?.[contextMenu.itemId])
+                ? () => handleFileOpen(contextMenu.itemId)
+                : undefined
+            }
             onDownload={() => {
               handleFileDownload(contextMenu.itemId);
               closeContextMenu();
@@ -630,6 +716,20 @@ export default function DrivePage() {
               : ""
           }
           confirmLabel="Yes"
+        />
+        <FilePreviewModal
+          isOpen={previewItem !== null}
+          itemKey={previewItem ? `${activeDrive}/${previewItem.id}` : null}
+          name={previewItem?.name || ""}
+          ext={getItemExtension(previewItem)}
+          sizeLabel={previewItem?.size || ""}
+          loadBlob={
+            previewItem
+              ? (options) => loadPreviewBlob(previewItem.id, options)
+              : undefined
+          }
+          onDownload={handlePreviewDownload}
+          onClose={closePreview}
         />
       </div>
     </div>

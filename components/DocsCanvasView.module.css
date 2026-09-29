@@ -1,0 +1,437 @@
+@font-face {
+  font-family: "TechMono";
+  src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/Orbitron-Bold.ttf") format("truetype");
+}
+
+/* ========================= */
+/* VIEWPORT + WORLD          */
+/* ========================= */
+.canvasView {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+/* Clips the world; all panning/zooming is handled in JS (touch-action: none) */
+.viewport {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  touch-action: none;
+  overscroll-behavior: contain;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: grab;
+  outline: none;
+  background-color: rgba(0, 0, 0, 0.55);
+  background-image: radial-gradient(rgba(248, 2, 6, 0.22) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.viewport:focus-visible {
+  box-shadow: inset 0 0 0 1px #00d4ff;
+}
+
+.panning,
+.panning * {
+  cursor: grabbing !important;
+}
+
+/* Moved with translate()/scale() from JS; children use world coordinates */
+.world {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  transform-origin: 0 0;
+}
+
+/* ========================= */
+/* GROUPS                    */
+/* ========================= */
+.group {
+  position: absolute;
+  box-sizing: border-box;
+  border: 2px solid var(--node-color, rgba(248, 2, 6, 0.45));
+  border-radius: 12px;
+  background: var(--node-tint, rgba(248, 2, 6, 0.04));
+}
+
+.groupLabel {
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  margin-bottom: 6px;
+  padding: 2px 10px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: "Orbitron", "TechMono", monospace;
+  font-size: 22px;
+  letter-spacing: 1px;
+  color: var(--node-color, #f80206);
+  background: rgba(0, 0, 0, 0.75);
+  border-radius: 6px;
+  text-shadow: 0 0 8px var(--node-glow, rgba(248, 2, 6, 0.6));
+}
+
+/* ========================= */
+/* EDGES                     */
+/* ========================= */
+.edges {
+  position: absolute;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.edgePath {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+
+.edgeLabel {
+  font-family: "TechMono", monospace;
+  font-size: 16px;
+  fill: #e8f9ff;
+  stroke: #000;
+  stroke-width: 5px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+}
+
+/* ========================= */
+/* NODES                     */
+/* ========================= */
+.node {
+  position: absolute;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 2px solid var(--node-color, rgba(248, 2, 6, 0.6));
+  border-radius: 8px;
+  /* Opaque base with the node color tinted on top, so edges don't show through */
+  background-color: #080808;
+  background-image: linear-gradient(
+    var(--node-tint, transparent),
+    var(--node-tint, transparent)
+  );
+  box-shadow: 0 0 10px var(--node-glow, rgba(248, 2, 6, 0.2));
+}
+
+/* Text nodes: never touch-scrolled, so a finger drag always pans the canvas */
+.textContent {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 10px 14px;
+  font-size: 16px;
+  touch-action: none;
+  overscroll-behavior: contain;
+}
+
+.textContent :global(*) {
+  touch-action: none;
+}
+
+/* ---- Markdown file nodes ---- */
+.noteNode {
+  background-color: #060606;
+}
+
+.nodeHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  border-bottom: 1px solid rgba(248, 2, 6, 0.35);
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--node-color, #f80206);
+  font-family: "Orbitron", "TechMono", monospace;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.nodeHeader:hover,
+.nodeHeader:focus-visible {
+  color: #00d4ff;
+  outline: none;
+  text-shadow: 0 0 8px #00d4ff;
+}
+
+.nodeHeaderIcon {
+  flex-shrink: 0;
+}
+
+.nodeHeaderText {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Scrolls on its own; vertical finger drags scroll it, horizontal ones pan */
+.noteBody {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 10px 14px;
+  font-size: 16px;
+  touch-action: pan-y;
+  overscroll-behavior: contain;
+}
+
+.nodeStatus {
+  padding: 10px 14px;
+  font-family: "TechMono", monospace;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ---- Image file nodes ---- */
+.imageNode {
+  border-color: var(--node-color, transparent);
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.nodeImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  cursor: zoom-in;
+  -webkit-user-drag: none;
+}
+
+/* ---- PDF / canvas cards ---- */
+.fileCard {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border: none;
+  background: transparent;
+  color: #ff6600;
+  font-family: "TechMono", monospace;
+  font-size: 15px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.fileCardIcon {
+  font-size: 28px;
+  color: #f80206;
+  filter: drop-shadow(0 0 6px #f80206);
+  transition: all 0.2s ease;
+}
+
+.fileCard:hover .fileCardIcon,
+.fileCard:focus-visible .fileCardIcon {
+  color: #00d4ff;
+  filter: drop-shadow(0 0 6px #00d4ff);
+}
+
+.fileCard:focus-visible {
+  outline: 1px solid #00d4ff;
+  outline-offset: -4px;
+}
+
+.fileCardName {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.fileCardHint {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ---- Link nodes ---- */
+.linkCard {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 14px;
+  overflow: hidden;
+  color: #00d4ff;
+  text-decoration: none;
+  font-family: "TechMono", monospace;
+}
+
+.linkCard:hover .linkHost,
+.linkCard:focus-visible .linkHost {
+  text-shadow: 0 0 8px #00d4ff;
+}
+
+.linkCard:focus-visible {
+  outline: 1px solid #00d4ff;
+  outline-offset: -4px;
+}
+
+.linkHost {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Orbitron", "TechMono", monospace;
+  font-size: 15px;
+  letter-spacing: 1px;
+  overflow-wrap: anywhere;
+}
+
+.linkIcon {
+  flex-shrink: 0;
+  font-size: 13px;
+}
+
+.linkUrl {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  overflow-wrap: anywhere;
+}
+
+/* ---- Placeholders (not loaded yet, missing, unsupported) ---- */
+.placeholder {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px;
+  overflow: hidden;
+  text-align: center;
+  font-family: "TechMono", monospace;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.placeholderIcon {
+  font-size: 22px;
+  color: rgba(248, 2, 6, 0.6);
+}
+
+.placeholderName {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.placeholderNote {
+  font-size: 12px;
+  color: #ff6600;
+}
+
+/* ========================= */
+/* OVERLAYS                  */
+/* ========================= */
+.message {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  pointer-events: none;
+}
+
+.messageTitle {
+  margin: 0 0 0.5rem;
+  font-family: "Orbitron", "TechMono", monospace;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  color: #f80206;
+  text-shadow: 0 0 8px #f80206;
+}
+
+.messageText {
+  margin: 0;
+  font-family: "TechMono", monospace;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.controls {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 2;
+  display: flex;
+  gap: 8px;
+  cursor: default;
+}
+
+.controlButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 10px;
+  font-family: "Orbitron", "TechMono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  color: #f80206;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid #f80206;
+  border-radius: 6px;
+  box-shadow: 0 0 8px rgba(248, 2, 6, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.controlButton:hover,
+.controlButton:focus-visible {
+  color: #00d4ff;
+  border-color: #00d4ff;
+  box-shadow: 0 0 12px #00d4ff;
+  outline: none;
+}
+
+/* ========================= */
+/* MOBILE RESPONSIVE         */
+/* ========================= */
+@media (max-width: 768px) {
+  /* Bottom-right, clear of the sidebar toggle in the bottom-left corner */
+  .controls {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .controlButton {
+    min-width: 44px;
+    height: 44px;
+  }
+}

@@ -1,0 +1,390 @@
+/*
+ * MarkdownBody — shared styles for rendered (sanitized) markdown.
+ * Used by canvas text nodes, embedded notes and Drive markdown previews, and
+ * alongside BlogAnimator's blogContent in the docs view. Matches the
+ * blogPost/DocsContent look: TechMono amber body text, red glowing headings.
+ *
+ * Deliberately no white-space: pre-wrap here (marked already emits <br> for line
+ * breaks); the animated docs view keeps blogPost.module.css's pre-wrap.
+ */
+
+@font-face {
+  font-family: "TechMono";
+  src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/Orbitron-Bold.ttf") format("truetype");
+}
+
+.markdownBody {
+  font-family: "TechMono", monospace;
+  line-height: 1.7;
+  color: var(--tron-orange-primary, #ff6600);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+/* ========================= */
+/* TEXT BLOCKS               */
+/* ========================= */
+.markdownBody :global(p) {
+  margin: 0 0 1rem;
+}
+
+.markdownBody > :global(:first-child) {
+  margin-top: 0;
+}
+
+.markdownBody > :global(:last-child) {
+  margin-bottom: 0;
+}
+
+.markdownBody :global(h1),
+.markdownBody :global(h2),
+.markdownBody :global(h3),
+.markdownBody :global(h4),
+.markdownBody :global(h5),
+.markdownBody :global(h6) {
+  color: var(--tron-red-primary, #f80206);
+  line-height: 1.3;
+  margin: 1.4rem 0 0.75rem;
+  scroll-margin-top: 1rem;
+}
+
+.markdownBody :global(h1) {
+  font-size: 1.8em;
+  text-shadow: 0 0 10px #f80206;
+}
+
+.markdownBody :global(h2) {
+  font-size: 1.45em;
+  text-shadow: 0 0 8px #f80206;
+}
+
+.markdownBody :global(h3) {
+  font-size: 1.2em;
+  text-shadow: 0 0 6px #f80206;
+}
+
+.markdownBody :global(h4),
+.markdownBody :global(h5),
+.markdownBody :global(h6) {
+  font-size: 1em;
+  text-shadow: 0 0 4px #f80206;
+}
+
+.markdownBody :global(strong) {
+  color: #ff8c33;
+}
+
+.markdownBody :global(em) {
+  font-style: italic;
+}
+
+.markdownBody :global(del),
+.markdownBody :global(s) {
+  opacity: 0.6;
+}
+
+.markdownBody :global(mark) {
+  color: #ffe08a;
+  background: rgba(255, 176, 0, 0.22);
+  border-radius: 3px;
+  padding: 0 3px;
+  box-shadow: 0 0 6px rgba(255, 176, 0, 0.25);
+}
+
+.markdownBody :global(a) {
+  color: var(--tron-orange-primary, #ff6600);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 102, 0, 0.4);
+}
+
+.markdownBody :global(a:hover) {
+  color: #00d4ff;
+  border-bottom-color: #00d4ff;
+}
+
+.markdownBody :global(hr) {
+  border: none;
+  border-top: 1px solid rgba(248, 2, 6, 0.6);
+  box-shadow: 0 0 8px rgba(248, 2, 6, 0.5);
+  margin: 1.5rem 0;
+}
+
+.markdownBody :global(blockquote) {
+  margin: 0 0 1rem;
+  padding: 0.5rem 1rem;
+  border-left: 3px solid var(--tron-red-primary, #f80206);
+  background: rgba(248, 2, 6, 0.06);
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.markdownBody :global(blockquote > :last-child) {
+  margin-bottom: 0;
+}
+
+/* ========================= */
+/* LISTS                     */
+/* ========================= */
+.markdownBody :global(ul),
+.markdownBody :global(ol) {
+  margin: 0 0 1rem;
+  padding-left: 1.6rem;
+}
+
+.markdownBody :global(li) {
+  margin: 0.2rem 0;
+}
+
+.markdownBody :global(li::marker) {
+  color: var(--tron-red-primary, #f80206);
+}
+
+.markdownBody :global(li > ul),
+.markdownBody :global(li > ol) {
+  margin-bottom: 0;
+}
+
+.markdownBody :global(input[type="checkbox"]) {
+  accent-color: #f80206;
+  margin: 0 0.4rem 0 0;
+  vertical-align: middle;
+}
+
+/* ========================= */
+/* CODE                      */
+/* ========================= */
+.markdownBody :global(code) {
+  font-family: "TechMono", monospace;
+  font-size: 0.92em;
+  color: #00d4ff;
+  background: rgba(0, 212, 255, 0.08);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+}
+
+.markdownBody :global(pre) {
+  margin: 0 0 1rem;
+  padding: 0.9rem 1rem;
+  background: #050505;
+  border: 1px solid rgba(0, 212, 255, 0.35);
+  border-radius: 6px;
+  box-shadow: inset 0 0 12px rgba(0, 212, 255, 0.08);
+  overflow-x: auto;
+  white-space: pre;
+  overflow-wrap: normal;
+}
+
+.markdownBody :global(pre code) {
+  display: block;
+  padding: 0;
+  background: none;
+  border: none;
+  color: #9ee9ff;
+  line-height: 1.5;
+}
+
+/* ========================= */
+/* TABLES                    */
+/* ========================= */
+.markdownBody :global(table) {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 0 0 1rem;
+}
+
+.markdownBody :global(th),
+.markdownBody :global(td) {
+  border: 1px solid rgba(248, 2, 6, 0.4);
+  padding: 0.4rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.markdownBody :global(th) {
+  font-family: "Orbitron", "TechMono", monospace;
+  font-size: 0.85em;
+  letter-spacing: 1px;
+  color: var(--tron-red-primary, #f80206);
+  background: rgba(248, 2, 6, 0.08);
+}
+
+.markdownBody :global(th[align="center"]),
+.markdownBody :global(td[align="center"]) {
+  text-align: center;
+}
+
+.markdownBody :global(th[align="right"]),
+.markdownBody :global(td[align="right"]) {
+  text-align: right;
+}
+
+.markdownBody :global(tr:nth-child(even) td) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* ========================= */
+/* IMAGES                    */
+/* ========================= */
+.markdownBody :global(img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 0.5rem 0;
+  vertical-align: middle;
+}
+
+/* ========================= */
+/* OBSIDIAN: LINKS AND TAGS  */
+/* ========================= */
+
+/* Resolved links - clickable, styled like the Tron theme */
+.markdownBody :global(.docs-internal-link) {
+  color: var(--tron-amber-primary, #ffb000);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 176, 0, 0.4);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.markdownBody :global(.docs-internal-link:hover) {
+  color: var(--tron-yellow-active, #ffff00);
+  border-bottom-color: var(--tron-yellow-active, #ffff00);
+  text-shadow: 0 0 8px rgba(255, 255, 0, 0.5);
+}
+
+/* Unresolved links - dimmed, not clickable */
+.markdownBody :global(.docs-unresolved-link) {
+  color: rgba(255, 255, 255, 0.35);
+  font-style: italic;
+  cursor: default;
+}
+
+/* Canvas / nested-note embeds shown as a link card */
+.markdownBody :global(.docs-embed-link) {
+  display: inline-block;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid rgba(255, 176, 0, 0.45);
+  border-radius: 6px;
+  background: rgba(255, 176, 0, 0.06);
+}
+
+.markdownBody :global(.docs-tag) {
+  display: inline-block;
+  font-size: 0.85em;
+  line-height: 1.4;
+  padding: 0 0.5em;
+  margin: 0.1em 0;
+  color: #00d4ff;
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.45);
+  border-radius: 999px;
+  text-shadow: 0 0 4px rgba(0, 212, 255, 0.5);
+  white-space: nowrap;
+}
+
+/* ========================= */
+/* OBSIDIAN: EMBEDS          */
+/* ========================= */
+.markdownBody :global(.docs-embed-image) {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0.75rem 0;
+  border: 1px solid rgba(248, 2, 6, 0.35);
+  box-shadow: 0 0 10px rgba(248, 2, 6, 0.2);
+  cursor: zoom-in;
+}
+
+/* Embedded image before its URL arrives */
+.markdownBody :global(.docs-embed-image:not([src])) {
+  min-height: 3rem;
+  min-width: 6rem;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Missing embed (image or PDF that couldn't be loaded) */
+.markdownBody :global(.docs-embed-missing) {
+  display: inline-block;
+  padding: 0.4rem 0.75rem;
+  margin: 0.5rem 0;
+  font-size: 0.85em;
+  color: rgba(255, 255, 255, 0.45);
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  cursor: default;
+  box-shadow: none;
+}
+
+.markdownBody :global(.docs-embed-pdf) {
+  margin: 0.75rem 0;
+}
+
+.markdownBody :global(.docs-embed-pdf iframe) {
+  display: block;
+  width: 100%;
+  height: 70vh;
+  border: 1px solid rgba(0, 212, 255, 0.4);
+  border-radius: 6px;
+  background: #111;
+}
+
+/* Download fallback built by the embed hydrator where inline PDFs aren't supported */
+.markdownBody :global(.docs-embed-pdf button) {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "TechMono", monospace;
+  font-size: 0.85rem;
+  padding: 6px 14px;
+  background: black;
+  color: #f80206;
+  border: 1px solid #f80206;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.markdownBody :global(.docs-embed-pdf button:hover),
+.markdownBody :global(.docs-embed-pdf button:focus-visible) {
+  color: #00d4ff;
+  border-color: #00d4ff;
+  box-shadow: 0 0 12px #00d4ff;
+  outline: none;
+}
+
+.markdownBody :global(.docs-embed-note) {
+  margin: 0.75rem 0 1rem;
+  padding: 0.75rem 1rem;
+  border-left: 3px solid #00d4ff;
+  background: rgba(0, 212, 255, 0.04);
+  border-radius: 0 6px 6px 0;
+}
+
+.markdownBody :global(.docs-embed-note > :last-child) {
+  margin-bottom: 0;
+}
+
+/* Empty paragraphs left behind when a block embed splits a <p> */
+.markdownBody :global(p:empty) {
+  display: none;
+}
+
+/* ========================= */
+/* MOBILE RESPONSIVE         */
+/* ========================= */
+@media (max-width: 768px) {
+  .markdownBody :global(pre) {
+    padding: 0.75rem;
+  }
+
+  .markdownBody :global(.docs-embed-pdf iframe) {
+    height: 60vh;
+  }
+}
