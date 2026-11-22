@@ -335,7 +335,28 @@
   background: #111;
 }
 
-/* Download fallback built by the embed hydrator where inline PDFs aren't supported */
+/* pdf.js pages and Download bar built by the embed hydrator where inline PDFs aren't supported */
+.markdownBody :global(.docs-embed-pdf-bar) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.markdownBody :global(.docs-embed-pdf-pages) {
+  height: 70vh;
+  box-sizing: border-box;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  border: 1px solid rgba(0, 212, 255, 0.4);
+  border-radius: 6px;
+  background: #111;
+}
+
+/* Download button next to the PDF name */
 .markdownBody :global(.docs-embed-pdf button) {
   display: inline-flex;
   align-items: center;
@@ -384,7 +405,8 @@
     padding: 0.75rem;
   }
 
-  .markdownBody :global(.docs-embed-pdf iframe) {
+  .markdownBody :global(.docs-embed-pdf iframe),
+  .markdownBody :global(.docs-embed-pdf-pages) {
     height: 60vh;
   }
 }

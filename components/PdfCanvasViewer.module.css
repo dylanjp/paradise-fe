@@ -1,0 +1,157 @@
+@font-face {
+  font-family: "TechMono";
+  src: url("/fonts/ShareTechMono-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/Orbitron-Bold.ttf") format("truetype");
+}
+
+/* ========================= */
+/* LAYOUT                    */
+/* ========================= */
+.viewer {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 60vh;
+}
+
+/* Scroll box the pages are drawn into (children are managed by pdfCanvas.js) */
+.pages {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 60vh;
+  box-sizing: border-box;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  border: 1px solid rgba(0, 212, 255, 0.4);
+  border-radius: 6px;
+  background: #111;
+  box-shadow: 0 0 12px rgba(0, 212, 255, 0.15);
+}
+
+.pages:focus-visible {
+  outline: 1px solid #00d4ff;
+  outline-offset: 2px;
+}
+
+/* ========================= */
+/* LOADING / ERROR           */
+/* ========================= */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 2rem 1rem;
+  text-align: center;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.85);
+}
+
+.overlayIcon {
+  font-size: 2.5rem;
+  color: #f80206;
+  opacity: 0.6;
+  filter: drop-shadow(0 0 10px #f80206);
+}
+
+.overlayTitle {
+  margin: 0;
+  font-family: "Orbitron", monospace;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  color: #f80206;
+  text-shadow: 0 0 8px #f80206;
+}
+
+.overlayText {
+  margin: 0 0 6px;
+  font-family: "TechMono", monospace;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "TechMono", monospace;
+  font-size: 0.85rem;
+  padding: 6px 14px;
+  background: black;
+  color: #f80206;
+  border: 1px solid #f80206;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.button:hover,
+.button:focus-visible {
+  color: #00d4ff;
+  border-color: #00d4ff;
+  box-shadow: 0 0 12px #00d4ff;
+  outline: none;
+}
+
+/* ========================= */
+/* ZOOM                      */
+/* ========================= */
+.zoomBar {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid rgba(0, 212, 255, 0.5);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.25);
+}
+
+.zoomButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  font-size: 1rem;
+  background: black;
+  color: #00d4ff;
+  border: 1px solid rgba(0, 212, 255, 0.6);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.zoomButton:hover:not(:disabled),
+.zoomButton:focus-visible {
+  border-color: #00d4ff;
+  box-shadow: 0 0 8px #00d4ff;
+  outline: none;
+}
+
+.zoomButton:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.zoomLevel {
+  min-width: 3.2em;
+  text-align: center;
+  font-family: "TechMono", monospace;
+  font-size: 0.8rem;
+  color: #00d4ff;
+}

@@ -64,9 +64,10 @@ describe("Preservation — Error handling unchanged (Property 2)", () => {
    * Property: For any random operation string, handleError with a
    * TypeError("Failed to fetch") always returns "Unable to connect to server. Please try again."
    */
-  it("PBT: TypeError('Failed to fetch') always returns network error message for any operation", () => {
-    fc.assert(
-      fc.property(
+  it("PBT: TypeError('Failed to fetch') always returns network error message for any operation", async () => {
+    // asyncProperty + await so each run's mockRejectedValueOnce is consumed by that run
+    await fc.assert(
+      fc.asyncProperty(
         fc.string({ minLength: 1, maxLength: 50 }),
         async (operation) => {
           // Make apiClient.get throw a TypeError("Failed to fetch")
@@ -95,9 +96,9 @@ describe("Preservation — Error handling unchanged (Property 2)", () => {
    * Property: For any random error status in [404, 500+], handleError returns
    * the expected user-friendly message.
    */
-  it("PBT: error status codes map to correct user-friendly messages", () => {
-    fc.assert(
-      fc.property(
+  it("PBT: error status codes map to correct user-friendly messages", async () => {
+    await fc.assert(
+      fc.asyncProperty(
         fc.oneof(
           // 404 errors
           fc.constant({ status: 404, expectedMsg: "Resource not found." }),

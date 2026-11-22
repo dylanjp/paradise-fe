@@ -27,7 +27,7 @@ const FILE_ICONS = {
 
 /**
  * DocsTreeNode - Recursive tree node for documentation file/folder navigation.
- * Vault roots (node.root, e.g. "LE Docs") get a book icon. A folder expands by
+ * Vault sections (node.root, e.g. "Home and Family") get a book icon. A folder expands by
  * itself when the selected file lies inside it (e.g. after following a link).
  *
  * @param {object} node - Tree node with { name, type, path, children, root? }

@@ -80,40 +80,26 @@ export function HealthProvider({ children }) {
   }, []);
 
   /**
-   * Saves a journal entry (upsert). If the entry has an id, updates it.
-   * Otherwise, checks if an entry with the same date exists (upsert by date).
-   * If no match, creates a new entry.
+   * Saves a journal entry. The backend upserts by date (POST /journal), so
+   * saving on a date that already has an entry overwrites that entry.
+   * The local list replaces any entry with the same id or date.
    * Requirements: 2.2, 2.6
    */
   const saveJournalEntry = useCallback(async (entry) => {
     setJournalError(null);
     try {
-      let savedEntry;
-
-      if (entry.id) {
-        // Update existing entry by id
-        savedEntry = await healthService.updateJournalEntry(username, entry.id, entry);
-        setJournalEntries((prev) =>
-          prev.map((e) => (e.id === savedEntry.id ? savedEntry : e))
-        );
-      } else {
-        // Check if an entry with the same date already exists (upsert by date)
-        const existing = journalEntries.find((e) => e.date === entry.date);
-        if (existing) {
-          savedEntry = await healthService.updateJournalEntry(username, existing.id, entry);
-          setJournalEntries((prev) =>
-            prev.map((e) => (e.id === savedEntry.id ? savedEntry : e))
-          );
-        } else {
-          savedEntry = await healthService.createJournalEntry(username, entry);
-          setJournalEntries((prev) => [savedEntry, ...prev]);
-        }
-      }
+      const savedEntry = await healthService.createJournalEntry(username, entry);
+      setJournalEntries((prev) => [
+        savedEntry,
+        ...prev.filter(
+          (e) => e.id !== savedEntry.id && e.date !== savedEntry.date
+        ),
+      ]);
     } catch (error) {
       setJournalError(error.message);
       throw error;
     }
-  }, [journalEntries]);
+  }, [username]);
 
   /**
    * Deletes a journal entry. Optimistic removal from local state, then API call.

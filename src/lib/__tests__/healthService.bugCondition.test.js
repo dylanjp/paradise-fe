@@ -32,6 +32,10 @@ vi.mock("../apiClient", () => {
     capturedUrl = url;
     return {};
   });
+  const mockPatch = vi.fn(async (url) => {
+    capturedUrl = url;
+    return {};
+  });
   const mockDel = vi.fn(async (url) => {
     capturedUrl = url;
     return undefined;
@@ -42,11 +46,13 @@ vi.mock("../apiClient", () => {
       get: mockGet,
       post: mockPost,
       put: mockPut,
+      patch: mockPatch,
       delete: mockDel,
     },
     get: mockGet,
     post: mockPost,
     put: mockPut,
+    patch: mockPatch,
     delete: mockDel,
     handleUnauthorized: vi.fn(),
     setLogoutCallback: vi.fn(),
@@ -83,9 +89,11 @@ describe("Bug Condition Exploration — Health API URLs use user-scoped path", (
    * Property: For any valid username, every apiClient-based healthService
    * function constructs a URL starting with `/users/{username}/health`.
    */
-  it("Property 1: apiClient-based functions use /users/{username}/health URLs", () => {
-    fc.assert(
-      fc.property(
+  it("Property 1: apiClient-based functions use /users/{username}/health URLs", async () => {
+    // asyncProperty + await: each run must finish before the next one starts,
+    // because every run writes the shared capturedUrl
+    await fc.assert(
+      fc.asyncProperty(
         fc.stringMatching(/^[a-zA-Z][a-zA-Z0-9]{0,19}$/),
         async (username) => {
           const expectedPrefix = `/users/${username}/health`;
@@ -94,7 +102,6 @@ describe("Bug Condition Exploration — Health API URLs use user-scoped path", (
           const calls = [
             ["getJournalEntries", () => healthService.getJournalEntries(username)],
             ["createJournalEntry", () => healthService.createJournalEntry(username, { title: "t" })],
-            ["updateJournalEntry", () => healthService.updateJournalEntry(username, "id1", { title: "u" })],
             ["deleteJournalEntry", () => healthService.deleteJournalEntry(username, "id1")],
             ["getMetrics", () => healthService.getMetrics(username)],
             ["createMetric", () => healthService.createMetric(username, { name: "w" })],
@@ -103,9 +110,11 @@ describe("Bug Condition Exploration — Health API URLs use user-scoped path", (
             ["deleteDocument", () => healthService.deleteDocument(username, "d1")],
             ["getAppointments", () => healthService.getAppointments(username)],
             ["createAppointment", () => healthService.createAppointment(username, { doctor: "Dr. A" })],
+            ["updateAppointment", () => healthService.updateAppointment(username, "a1", { notes: "n" })],
             ["deleteAppointment", () => healthService.deleteAppointment(username, "a1")],
             ["getReminders", () => healthService.getReminders(username)],
             ["createReminder", () => healthService.createReminder(username, { text: "r" })],
+            ["updateReminder", () => healthService.updateReminder(username, "r1", { completed: true })],
             ["deleteReminder", () => healthService.deleteReminder(username, "r1")],
           ];
 
@@ -129,9 +138,9 @@ describe("Bug Condition Exploration — Health API URLs use user-scoped path", (
    * Property: For any valid username, uploadDocument (which uses global fetch
    * instead of apiClient) constructs a URL containing `/users/{username}/health/documents`.
    */
-  it("Property 1: uploadDocument fetch URL uses /users/{username}/health/documents", () => {
-    fc.assert(
-      fc.property(
+  it("Property 1: uploadDocument fetch URL uses /users/{username}/health/documents", async () => {
+    await fc.assert(
+      fc.asyncProperty(
         fc.stringMatching(/^[a-zA-Z][a-zA-Z0-9]{0,19}$/),
         async (username) => {
           let fetchedUrl = "";

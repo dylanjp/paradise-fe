@@ -198,8 +198,8 @@ function createPathMap() {
 
 /**
  * Builds a lookup index of every file in the docs tree.
- * Top-level folders flagged root=true (extra vault roots such as "LE Docs") give
- * their files a rootLabel; files of the main DOCS_PATH root get rootLabel "".
+ * Top-level folders flagged root=true (vault sections such as "Home and Family")
+ * give their files a rootLabel; files outside any such folder get rootLabel "".
  * @param {object|null} tree - Root DocsTreeNode ({name, type, path, children, root?})
  * @returns {{files: Array<{path, key, rootLabel, name, ext, kind}>, byPath: object,
  *            byKey: Map, byName: Map, rootLabels: string[]}}
@@ -257,15 +257,6 @@ export function buildDocsIndex(tree) {
   return { files, byPath, byKey, byName, rootLabels };
 }
 
-/** Root label ("" for the main root) that a tree path belongs to */
-function rootLabelOf(path, index) {
-  if (!path) return "";
-  const entry = index.byPath.get(path);
-  if (entry) return entry.rootLabel;
-  const first = String(path).split("/")[0];
-  return (index.rootLabels || []).includes(first) ? first : "";
-}
-
 /** Directory segments of a normalized key */
 function dirSegments(key) {
   const parts = key.split("/");
@@ -299,10 +290,11 @@ function resolveRelativeKey(key, fromDir) {
 /**
  * Resolves a wikilink/markdown link target to a tree path, the way Obsidian does:
  * the candidate's path must equal the target or end with "/target" (".md" implied
- * when the target has no known extension). Only files in the same root as the
- * linking doc are considered, since separate vaults never link to each other.
- * Ties go to the file sharing the longest directory prefix with the linking doc,
- * then the shortest path.
+ * when the target has no known extension). Every section of the tree comes from
+ * one Obsidian vault, and section labels are the vault's own top-level folder
+ * names, so a link may resolve into any section the user can see. Ties go to the
+ * file sharing the longest directory prefix with the linking doc (so the doc's
+ * own section first), then the shortest path.
  * @param {string} target - Link target (no "#heading" / "|alias")
  * @param {string|null} fromPath - Tree path of the doc containing the link
  * @param {object} index - Result of buildDocsIndex()
@@ -316,7 +308,6 @@ export function resolveDocLink(target, fromPath, index) {
     .replace(/\/{2,}/g, "/");
   if (!t) return null;
 
-  const fromRoot = rootLabelOf(fromPath, index);
   const fromDir = fromPath ? dirSegments(normalizeKey(fromPath)) : [];
   const ext = getExtension(t);
   const withExt = (k) => (ext && DOC_EXTENSIONS.has(ext) ? k : `${k}.md`);
@@ -325,7 +316,7 @@ export function resolveDocLink(target, fromPath, index) {
   if (/^\.\.?\//.test(t)) {
     const relKey = resolveRelativeKey(withExt(t), fromDir);
     const hit = relKey ? index.byKey.get(relKey) : null;
-    if (hit && hit.rootLabel === fromRoot) return hit.path;
+    if (hit) return hit.path;
     t = t.replace(/^(?:\.\.?\/)+/, "");
   }
 
@@ -333,7 +324,7 @@ export function resolveDocLink(target, fromPath, index) {
   if (!t || t.endsWith("/")) return null;
 
   const candidates = (index.byName.get(basename(t)) || []).filter(
-    (f) => f.rootLabel === fromRoot && (f.key === t || f.key.endsWith(`/${t}`)),
+    (f) => f.key === t || f.key.endsWith(`/${t}`),
   );
   if (candidates.length === 0) return null;
 

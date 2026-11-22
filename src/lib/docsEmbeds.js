@@ -6,7 +6,7 @@
  * - images  (img[data-embed-target]): src from the resource cache; a file that can't
  *   be loaded is replaced by a ".docs-embed-missing" label
  * - PDFs    ([data-embed-pdf]): an inline iframe where the browser can show PDFs,
- *   otherwise a Download button
+ *   otherwise (phones, tablets) the pages drawn with pdf.js plus a Download button
  * - notes   ([data-embed-note]): the note's text is fetched, rendered with
  *   embedDepth 1, currentPath = the embedded note and its own heading idPrefix,
  *   sanitized, inserted and hydrated in turn. Only note embeds of the host doc
@@ -23,6 +23,7 @@
  */
 
 import { renderObsidianMarkdown } from "./obsidian";
+import { hasInlinePdfViewer, mountPdfPages } from "./pdfCanvas";
 import { sanitizeHtml, HEADING_ID_RE } from "./sanitizeHtml";
 
 /** Set on an embed element once its final content is in place */
@@ -85,15 +86,6 @@ function isAbortError(err) {
   return !!err && err.name === "AbortError";
 }
 
-/** Whether the browser can show PDFs inline (false on most phones) */
-function detectPdfViewer() {
-  try {
-    return typeof navigator === "undefined" || navigator.pdfViewerEnabled !== false;
-  } catch {
-    return true;
-  }
-}
-
 /**
  * Replaces an element's children with already-sanitized HTML.
  * The HTML is parsed in an inert DOMParser document and the nodes are imported,
@@ -135,6 +127,7 @@ function downloadUrl(doc, url, name) {
  * @param {boolean} [options.lazy=true] - Defer images/PDFs until they near the viewport
  *   (only when IntersectionObserver exists; otherwise everything loads right away)
  * @param {boolean} [options.pdfViewerEnabled] - Override inline-PDF detection
+ * @param {Function} [options.mountPdf] - Test seam for mountPdfPages
  * @returns {() => void} Cancel function: stops pending work and ignores late results
  */
 export function hydrateDocsEmbeds(root, cache, options = {}) {
@@ -142,7 +135,8 @@ export function hydrateDocsEmbeds(root, cache, options = {}) {
     index = null,
     scrollRoot = null,
     lazy = true,
-    pdfViewerEnabled = detectPdfViewer(),
+    pdfViewerEnabled = hasInlinePdfViewer(),
+    mountPdf = mountPdfPages,
   } = options;
 
   if (!root || !cache || typeof root.querySelectorAll !== "function") {
@@ -152,6 +146,7 @@ export function hydrateDocsEmbeds(root, cache, options = {}) {
   const doc = root.ownerDocument;
   const seen = new WeakSet();
   const lazyJobs = new Map();
+  const pdfViews = [];
   let cancelled = false;
   let observer = null;
 
@@ -278,6 +273,8 @@ export function hydrateDocsEmbeds(root, cache, options = {}) {
             frame.setAttribute("src", url);
             el.replaceChildren(frame);
           } else {
+            const bar = doc.createElement("div");
+            bar.className = "docs-embed-pdf-bar";
             const note = doc.createElement("span");
             note.className = "docs-embed-pdf-name";
             note.textContent = name;
@@ -287,7 +284,29 @@ export function hydrateDocsEmbeds(root, cache, options = {}) {
             button.textContent = "Download PDF";
             button.setAttribute("aria-label", `Download ${name}`);
             button.addEventListener("click", () => downloadUrl(doc, url, name));
-            el.replaceChildren(note, button);
+            bar.append(note, button);
+
+            // The pages, drawn with pdf.js; the Download button stays as the fallback
+            const pages = doc.createElement("div");
+            pages.className = "docs-embed-pdf-pages";
+            pages.setAttribute("role", "region");
+            pages.setAttribute("aria-label", name);
+            pages.tabIndex = 0;
+            el.replaceChildren(bar, pages);
+            pdfViews.push(
+              mountPdf(pages, url, {
+                onStatus: (state) => {
+                  if (state.status !== "error" || cancelled) return;
+                  const failed = doc.createElement("span");
+                  failed.className = "docs-embed-missing";
+                  failed.textContent =
+                    state.error && state.error.name === "PasswordException"
+                      ? "This PDF is password-protected."
+                      : "This PDF couldn't be displayed.";
+                  pages.replaceWith(failed);
+                },
+              }),
+            );
           }
           el.setAttribute(DONE_ATTR, "");
         },
@@ -380,5 +399,6 @@ export function hydrateDocsEmbeds(root, cache, options = {}) {
     cancelled = true;
     lazyJobs.clear();
     if (observer) observer.disconnect();
+    for (const view of pdfViews.splice(0)) view.destroy();
   };
 }

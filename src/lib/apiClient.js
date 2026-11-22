@@ -206,6 +206,19 @@ export async function put(endpoint, data) {
 }
 
 /**
+ * PATCH request (partial update). The backend allows PATCH in its CORS config.
+ * @param {string} endpoint - API endpoint
+ * @param {any} data - Request body data (only the fields to change)
+ * @returns {Promise<any>} Response data
+ */
+export async function patch(endpoint, data) {
+  return request(endpoint, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+}
+
+/**
  * DELETE request
  * @param {string} endpoint - API endpoint
  * @returns {Promise<void>}
@@ -246,6 +259,7 @@ const apiClient = {
   get,
   post,
   put,
+  patch,
   delete: del,
   fetchAuthorizedBlob,
   setLogoutCallback,
