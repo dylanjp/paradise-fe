@@ -76,29 +76,17 @@ export const healthService = {
   },
 
   /**
-   * Creates a new journal entry.
-   * @param {Object} entry - Journal entry data
-   * @returns {Promise<Object>} The created journal entry
+   * Saves a journal entry. The backend upserts on the entry's `date`: if the
+   * user already has an entry for that date it is overwritten, otherwise a new
+   * one is created. There is no update-by-id endpoint.
+   * @param {Object} entry - Journal entry data (must include `date`)
+   * @returns {Promise<Object>} The saved journal entry
    */
   createJournalEntry: async (username, entry) => {
     try {
       return await apiClient.post(`${getBase(username)}/journal`, entry);
     } catch (error) {
       throw handleError(error, "save journal entry");
-    }
-  },
-
-  /**
-   * Updates an existing journal entry.
-   * @param {string} id - Journal entry ID
-   * @param {Object} entry - Updated journal entry data
-   * @returns {Promise<Object>} The updated journal entry
-   */
-  updateJournalEntry: async (username, id, entry) => {
-    try {
-      return await apiClient.put(`${getBase(username)}/journal/${id}`, entry);
-    } catch (error) {
-      throw handleError(error, "update journal entry");
     }
   },
 
@@ -345,6 +333,21 @@ export const healthService = {
   },
 
   /**
+   * Partially updates an appointment (PATCH). Only the fields present in
+   * `changes` are modified: doctor, specialty, apptDate, type, notes.
+   * @param {string} id - Appointment ID
+   * @param {Object} changes - Fields to change
+   * @returns {Promise<Object>} The updated appointment
+   */
+  updateAppointment: async (username, id, changes) => {
+    try {
+      return await apiClient.patch(`${getBase(username)}/appointments/${id}`, changes);
+    } catch (error) {
+      throw handleError(error, "update appointment");
+    }
+  },
+
+  /**
    * Deletes an appointment.
    * @param {string} id - Appointment ID
    * @returns {Promise<void>}
@@ -381,6 +384,21 @@ export const healthService = {
       return await apiClient.post(`${getBase(username)}/reminders`, reminder);
     } catch (error) {
       throw handleError(error, "create reminder");
+    }
+  },
+
+  /**
+   * Partially updates a reminder (PATCH). Only the fields present in
+   * `changes` are modified: title, description, dueAt, completed.
+   * @param {string} id - Reminder ID
+   * @param {Object} changes - Fields to change
+   * @returns {Promise<Object>} The updated reminder
+   */
+  updateReminder: async (username, id, changes) => {
+    try {
+      return await apiClient.patch(`${getBase(username)}/reminders/${id}`, changes);
+    } catch (error) {
+      throw handleError(error, "update reminder");
     }
   },
 

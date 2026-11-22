@@ -18,27 +18,28 @@ const ERROR_MESSAGES = {
     "The drive service is temporarily unavailable. Please try again later.",
   DRIVE_ITEM_CONFLICT:
     "An item with that name already exists in the destination folder, or the move would create a circular reference.",
-  DRIVE_ROOT_DELETION: "The root folder cannot be deleted.",
-  DRIVE_ROOT_MOVE: "The root folder cannot be moved.",
-  DRIVE_ACCESS_DENIED: "You do not have permission to move this item.",
+  // The backend uses DRIVE_ROOT_DELETION for both deleting and moving the root
+  DRIVE_ROOT_DELETION: "The root folder cannot be moved or deleted.",
   DOWNLOAD_FOLDER: "Folders cannot be downloaded.",
 };
+
+/**
+ * Returns the error code from an API error, if present.
+ * The backend sends it as `errorCode` in its ErrorResponse body.
+ */
+export function getErrorCode(error) {
+  return error?.data?.errorCode || null;
+}
 
 /**
  * Extracts a user-facing error message from an API error.
  */
 export function getErrorMessage(error) {
-  if (error?.data?.code && ERROR_MESSAGES[error.data.code]) {
-    return ERROR_MESSAGES[error.data.code];
+  const code = getErrorCode(error);
+  if (code && ERROR_MESSAGES[code]) {
+    return ERROR_MESSAGES[code];
   }
   return error?.message || "An unexpected error occurred.";
-}
-
-/**
- * Returns the error code from an API error, if present.
- */
-export function getErrorCode(error) {
-  return error?.data?.code || null;
 }
 
 /** GET /users/{userId}/drives/{driveKey} */

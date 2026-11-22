@@ -238,10 +238,65 @@ describe("hydrateDocsEmbeds", () => {
     expect(frame.getAttribute("title")).toBe("Manual.pdf");
   });
 
-  it("falls back to a Download button without a PDF viewer", async () => {
+  it("draws the pages with pdf.js, plus a Download button, without a PDF viewer", async () => {
+    const root = mount("![[Manual.pdf]]");
+    const mounts = [];
+    const mountPdf = vi.fn((el, source, opts) => {
+      const view = { el, source, opts, destroy: vi.fn() };
+      mounts.push(view);
+      return view;
+    });
+
+    const cancel = hydrateDocsEmbeds(root, fakeCache(), {
+      pdfViewerEnabled: false,
+      mountPdf,
+    });
+    await flush();
+
+    expect(root.querySelector("iframe")).toBeNull();
+    expect(mounts).toHaveLength(1);
+    expect(mounts[0].source).toBe("blob:test/Manual.pdf");
+    expect(mounts[0].el.classList.contains("docs-embed-pdf-pages")).toBe(true);
+    expect(mounts[0].el.getAttribute("aria-label")).toBe("Manual.pdf");
+    expect(root.querySelector(".docs-embed-pdf .docs-embed-pdf-bar .docs-embed-pdf-name").textContent).toBe(
+      "Manual.pdf",
+    );
+
+    cancel();
+    expect(mounts[0].destroy).toHaveBeenCalledTimes(1);
+  });
+
+  it("replaces the pages with a label when pdf.js can't open the PDF", async () => {
+    const root = mount("![[Locked.pdf]]");
+    let report = null;
+    hydrateDocsEmbeds(root, fakeCache(), {
+      pdfViewerEnabled: false,
+      mountPdf: (el, source, opts) => {
+        report = opts.onStatus;
+        return { destroy() {} };
+      },
+    });
+    await flush();
+
+    const error = new Error("Need password");
+    error.name = "PasswordException";
+    report({ status: "error", error });
+
+    expect(root.querySelector(".docs-embed-pdf-pages")).toBeNull();
+    expect(root.querySelector(".docs-embed-pdf .docs-embed-missing").textContent).toBe(
+      "This PDF is password-protected.",
+    );
+    // The Download button stays
+    expect(root.querySelector(".docs-embed-pdf button.docs-embed-download")).not.toBeNull();
+  });
+
+  it("keeps a working Download button without a PDF viewer", async () => {
     const root = mount("![[Manual.pdf]]");
 
-    hydrateDocsEmbeds(root, fakeCache(), { pdfViewerEnabled: false });
+    hydrateDocsEmbeds(root, fakeCache(), {
+      pdfViewerEnabled: false,
+      mountPdf: () => ({ destroy() {} }),
+    });
     await flush();
 
     expect(root.querySelector("iframe")).toBeNull();

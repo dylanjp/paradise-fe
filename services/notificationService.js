@@ -39,15 +39,19 @@ function handleApiError(error, operation) {
     );
   }
 
+  // The backend sends its error code as `errorCode` (ErrorResponse)
+  const code = apiError.data?.errorCode;
+
+  // POST /{id}/action on a notification the user already converted → 409 ALREADY_ACTIONED
+  if (apiError.status === 409 && code === "ALREADY_ACTIONED") {
+    return new NotificationError(
+      "A TODO has already been created from this notification.",
+      "ACTION_ALREADY_CREATED",
+      409,
+    );
+  }
+
   if (apiError.status === 400) {
-    const code = apiError.data?.code;
-    if (code === "ACTION_ALREADY_CREATED") {
-      return new NotificationError(
-        "A TODO has already been created from this notification.",
-        "ACTION_ALREADY_CREATED",
-        400,
-      );
-    }
     if (code === "NOTIFICATION_EXPIRED") {
       return new NotificationError(
         "Cannot perform this action on an expired notification.",

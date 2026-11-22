@@ -1,9 +1,11 @@
 /**
  * Tests for the Obsidian markdown renderer and link resolution.
  *
- * The fixture tree mirrors the real vault layouts: the main DOCS_PATH root plus
- * the admin-only "LE Docs" and "Pratt Capitol" roots, nested vaults with
- * vault-relative paths, and duplicate note names (Amira, Daken, Human).
+ * The fixture tree is generic: top-level files plus two root=true sections
+ * ("LE Docs" and "Pratt Capitol" stand in for any vault sections, such as
+ * "LLCs"), former nested vaults with vault-relative paths, and duplicate note
+ * names (Amira, Daken, Human). All of it is one vault, so links may cross
+ * sections.
  */
 
 import { describe, it, expect } from "vitest";
@@ -311,18 +313,43 @@ describe("resolveDocLink", () => {
     );
   });
 
-  it("never crosses roots", () => {
-    expect(resolveDocLink("Faithkeeper", "Welcome.md", INDEX)).toBeNull();
+  it("resolves across sections of the one vault, preferring the doc's own section", () => {
+    // The doc's own section wins a tie
     expect(
       resolveDocLink("Faithkeeper", "Pratt Capitol/Faithkeeper.md", INDEX),
     ).toBe("Pratt Capitol/Faithkeeper.md");
-    expect(resolveDocLink("Network", AMIRA_PATH, INDEX)).toBeNull();
-    expect(resolveDocLink("Network", "Insurance/Insurance.md", INDEX)).toBe(
+    expect(resolveDocLink("Faithkeeper", AMIRA_PATH, INDEX)).toBe(
+      `${SB}/Worldbuilding/Object & Artifacts/Faithkeeper.md`,
+    );
+    // With no shared folders, the shortest path wins
+    expect(resolveDocLink("Faithkeeper", "Welcome.md", INDEX)).toBe(
+      "Pratt Capitol/Faithkeeper.md",
+    );
+    // A note found only in another section still resolves
+    expect(resolveDocLink("Network", AMIRA_PATH, INDEX)).toBe(
       "Home (Tessa)/Network/Network.md",
     );
     expect(
       resolveDocLink("LE Docs/Amira Artwork", "Welcome.md", INDEX),
-    ).toBeNull();
+    ).toBe(`${LE}/Amira Artwork.md`);
+    expect(
+      resolveDocLink(
+        "../Pratt Capitol/Faithkeeper",
+        `${LE}/Amira Artwork.md`,
+        INDEX,
+      ),
+    ).toBe("Pratt Capitol/Faithkeeper.md");
+  });
+
+  it("never resolves to a section missing from the user's tree", () => {
+    // A non-admin's tree has no admin-only sections, so links into them stay unresolved
+    const userIndex = buildDocsIndex(
+      buildTree(FILE_PATHS.filter((p) => !p.startsWith(`${LE}/`))),
+    );
+    expect(resolveDocLink("Amira Artwork", "Welcome.md", userIndex)).toBeNull();
+    expect(resolveDocLink("Faithkeeper", "Welcome.md", userIndex)).toBe(
+      "Pratt Capitol/Faithkeeper.md",
+    );
   });
 
   it("matches case-insensitively and across unicode forms", () => {
